@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungchoi <jungchoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 16:27:24 by jungchoi          #+#    #+#             */
-/*   Updated: 2022/03/23 21:12:08 by jungchoi         ###   ########.fr       */
+/*   Updated: 2022/12/25 01:45:15 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
+	if (!str)
+		return 0;
 	i = 0;
 	while (str[i])
 		i++;
