@@ -59,6 +59,7 @@ static char	*ft_join_and_free(char *buffer, char *buf)
 	return (temp);
 }
 
+// parser 1
 void replace_env(t_list *lexer_token, t_env *env_list)
 {
 	t_list *temp;
@@ -91,13 +92,34 @@ void replace_env(t_list *lexer_token, t_env *env_list)
 	}
 }
 
+//parser 2
+void remove_quote(char *str, t_list *lexer_token)
+{
+	// t_list	*temp;
+	// char 	*quote;
+
+	// quote = str;
+	// temp = lexer_token;
+	// while (temp != NULL)
+	// {
+	// 	if (temp->content[0] == '\'' || temp->content[0] == '\"')
+	// 	{
+	// 		quote = ft_strchr(quote, temp->content[0]); // "13231" 앞에 공백이 없는지 검사
+	// 		if (quote != str && *(quote - 1) != ' ')
+			
+	// 	}
+	// 	temp = temp->next;
+	// }
+	
+}
+
 int	main(int argc, char *argv[], char *envp[]) {
 	argc++; argc--;
 	argv += 0;
 	t_list *lexer_token = NULL;
 	// lexer("  cat <<eof >file1 && cat file1 && abc || wc <file1 | cat >file2 ", &lexer_token);
 	
-	char str[100] = "echo $USER $PATH asdf123";
+	char str[100] = "echo \"$USER \" $PATH asdf123";
 	
 	lexer(str, &lexer_token);
 	
