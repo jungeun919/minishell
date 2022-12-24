@@ -1,3 +1,4 @@
+
 NAME = minishell
 
 CC = cc
@@ -6,40 +7,42 @@ CFLAGS = -Wall -Wextra -Werror -g
 INCLUDES_DIR = includes
 LIBS_DIR = libs
 SRCS_DIR = srcs
-OBJS_DIR = objs
+
+# srcs directory
+BUILTIN_DIR = builtin
+ENV_DIR = env
+
+BUILTIN_SRCS = env.c
+ENV_SRCS = init_env.c utils.c
 
 # readline
-LDFLAGS = -L/opt/homebrew/opt/readline/lib
-CPPFLAGS = -I/opt/homebrew/opt/readline/include
-# LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
-# CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
+# LDFLAGS = -L/opt/homebrew/opt/readline/lib
+# CPPFLAGS = -I/opt/homebrew/opt/readline/include
+LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
+CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
 READ_LIB = -lreadline
 
 LIBFT_DIR = libs/libft
 LIBFT = libft.a
 LIBFT_LIB = -lft
 
-SRCS = $(addprefix $(SRCS_DIR)/, \
-	main.c)
+SRCS = $(addprefix $(SRCS_DIR)/, main.c) \
+	$(addprefix $(SRCS_DIR)/$(BUILTIN_DIR)/, $(BUILTIN_SRCS)) \
+	$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV_SRCS))
 
-OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
+OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
 
-$(NAME) : $(LIBFT) $(OBJS)
+$(NAME) : $(OBJS)
 	make -C $(LIBFT_DIR) all
 	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) $(LDFLAGS) $(CPPFLAGS) $(READ_LIB) -L $(LIBFT_DIR) $(LIBFT_LIB) -o $@
-
-$(LIBFT) :
-	make -C $(LIBFT_DIR) all
 	
-$(OBJS_DIR)/%.o : $(SRCS_DIR)/%.c
-	@mkdir -p $(OBJS_DIR)
-	@mkdir $(OBJS_DIR) 2> /dev/null || true
+%.o : %.c
 	$(CC) $(CFLAGS) -I $(INCLUDES_DIR) -I $(LIBFT_DIR) -c $< -o $@
 
 clean :
-	rm -rf $(OBJS_DIR)
+	rm -rf $(OBJS)
 	make -C $(LIBFT_DIR) clean
 
 fclean : clean
