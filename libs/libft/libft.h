@@ -6,7 +6,7 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:40:00 by jungchoi          #+#    #+#             */
-/*   Updated: 2022/12/24 16:46:21 by hajeong          ###   ########.fr       */
+/*   Updated: 2022/12/25 18:04:28 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 typedef struct s_list
 {
 	char			*content;
+	int				label;
 	struct s_list	*next;
 }	t_list;
 

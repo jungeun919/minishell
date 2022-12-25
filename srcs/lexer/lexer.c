@@ -1,27 +1,38 @@
 
 #include "minishell.h"
 
+# define NOMAL_STRING 0
+# define DOUBLE_QUOTE 1
+# define SINGLE_QUOTE 2
+# define BLANK 3
+# define PIPE 4
+# define REDIR_IN 5
+# define REDIR_HEREDOC 6
+# define REDIR_OUT 7
+# define REDIR_DOUBLE_OUT 8
+
+
 t_env	*init_env_list(char **envp);
 t_env	*make_env_node(char *key, char *value);
 void	env_list_add_node(t_env **list, t_env *node);
 char	*get_env_value(t_env *env_list, char *key);
 
-void free_temp_clear_and_exit(t_list **lexer_tokens, char *temp)
+void free_temp_clear_and_exit(t_list **lexer_token, char *temp)
 {
 	free(temp);
-	ft_lstclear(lexer_tokens, free);
+	ft_lstclear(lexer_token, free);
 	// env_list 도 free 해줄것
 	exit(0);
 }
 
-void clear_and_exit(t_list **lexer_tokens)
+void clear_and_exit(t_list **lexer_token)
 {
-	ft_lstclear(lexer_tokens, free);
+	ft_lstclear(lexer_token, free);
 	// env_list 도 free 해줄것
 	exit(0);
 }
 
-void lexer(char *str, t_list **lexer_tokens)
+void lexer(char *str, t_list **lexer_token)
 {
 	int		i;
 	char	*temp;
@@ -36,82 +47,227 @@ void lexer(char *str, t_list **lexer_tokens)
 	else if ((str[0] == '<' && str[1] == '<') || (str[0] == '>' && str[1] == '>'))
 		i++;
 	else if (ft_strchr("\t\n\v\f\r ", str[0]))
-		return lexer(str+1, lexer_tokens);
+		;
+		// return lexer(str+1, lexer_token);
 	else if (str[0] != '<' && str[0] != '>' && str[0] != '|')
 		while (!ft_strchr("|\'\"><\t\n\v\f\r ", str[i + 1]))
 			i++;
 	temp = ft_substr(str, 0, i+1);
 	new = ft_lstnew(temp);
 	if (temp == NULL || new == NULL)
-		free_temp_clear_and_exit(lexer_tokens, temp); // ft_lstclear(lexer_tokens, free); // temp free하기 + exit() 하는 함수 필요
-	ft_lstadd_back(lexer_tokens, new);
+		free_temp_clear_and_exit(lexer_token, temp); // ft_lstclear(lexer_token, free); // temp free하기 + exit() 하는 함수 필요
+	ft_lstadd_back(lexer_token, new);
 	if (str[i] == '\0')
 		return ;
-	lexer(str+i+1, lexer_tokens);
+	lexer(str+i+1, lexer_token);
 }
 
-static char	*ft_join_and_free(char *buffer, char *buf)
+void labeling(t_list *lexer_token)
 {
-	char	*temp;
+	t_list	*temp;
+	char	ch;
 
-	temp = ft_strjoin(buffer, buf);
-	free(buffer);
-	return (temp);
+	temp = lexer_token;
+	while (temp != NULL)
+	{
+		ch = temp->content[0];
+		if (ch == '\"')
+			temp->label = DOUBLE_QUOTE;
+		else if (ch == '\'')
+			temp->label = SINGLE_QUOTE;
+		else if (ft_strchr("\t\n\v\f\r ",ch))
+			temp->label = BLANK;
+		else if (ch == '|')
+			temp->label = PIPE;
+		else if (ch == '<')
+		{
+			temp->label = REDIR_IN;
+			if (temp->content[1] == '<')
+				temp->label = REDIR_HEREDOC;
+		}
+		else if (ch == '>')
+		{
+			temp->label = REDIR_OUT;
+			if (temp->content[1] == '>')
+				temp->label = REDIR_DOUBLE_OUT;
+		}
+		temp = temp->next;
+	}
 }
 
-// parser 1
+static char	*ft_join_env_and_free(char *before,  char *value, char *after)
+{
+	char *str;
+	char *join;
+
+	if (!value)
+		value = ft_strdup("");
+	if (!before | !value | !after)
+		return (0);
+	str = (char *)malloc(sizeof(char) * (ft_strlen(before) + ft_strlen(value) + ft_strlen(after) + 1));
+	if (!str)
+		return 0;
+	join = str;
+	while (*before && *before != '$')
+		*join++ = *before++;
+	while (*value)
+		*join++ = *value++;
+	while (*after)
+		*join++ = *after++;
+	*join = '\0';
+	return (str);
+}
+
+// parser 1 -> 환경변수 교체
 void replace_env(t_list *lexer_token, t_env *env_list)
 {
 	t_list *temp;
 	char	*key;
 	char	*key_end;
+	char	*str;
 	
 	temp = lexer_token;
 	while (temp != NULL)
 	{
-		if (temp->content[0] !='\'' && ft_strchr(temp->content, '$'))
+		if (temp->label != SINGLE_QUOTE && ft_strchr(temp->content, '$'))
 		{
 			key = ft_strchr(temp->content, '$'); // $의 인덱스
+			// *key = '\0';
+			// key_idx = (int)(key - temp->content);
 			key_end = key + 1; // 환경변수 끝 하나 뒤 인덱스 ("012$PATH 345") <- key = '$', key_end = ' '
 			while (ft_isalnum(*key_end))
 				key_end++;
-			temp->content = ft_substr(temp->content, 0, (int)(key - temp->content));
-			// substr 할당 실패시 temp->content = NULL -> ft_join_and_free에서 0 리턴 -> join_and_free에서 0리턴 -> temp->content = NULL [ft_lstclear로 초기화 하고 exit]
 			key = ft_substr(key, 1, (int)(key_end - key - 1)); // $다음 인덱스 부터 저장
-			// ft_substr에서 할당 실패시 -> key = NULL -> get_env_value NULL 리턴 -> ft_join_and_free에서 0 리턴 -> join_and_free에서 0리턴 -> temp->content = NULL [ft_lstclear로 초기화 하고 exit]
-			temp->content = ft_join_and_free(temp->content, ft_strdup(get_env_value(env_list, key)));
-			// ft_join_and_free에서 실패시  temp->content = NULL -> join_and_free에서 0리턴 -> temp->content = NULL [ft_lstclear로 초기화 하고 exit]
+			str = ft_join_env_and_free(temp->content, get_env_value(env_list,key), key_end);
+			temp->content = str;
 			free(key);
-			temp->content = ft_join_and_free(temp->content, ft_strdup(key_end));
 			// join_and_free 실패시 -> temp->content = NULL [ft_lstclear로 초기화 하고 exit]
 			if (temp->content == NULL)
 				clear_and_exit(&lexer_token);
 		}
-		if (!ft_strchr(temp->content, '$') || temp->content[0] =='\'')
+		if (!ft_strchr(temp->content, '$') || temp->label == SINGLE_QUOTE)
 			temp = temp->next;
 	}
 }
 
-//parser 2
-void remove_quote(char *str, t_list *lexer_token)
+// parser 2-1 -> 따옴표 지우기
+void remove_quote(t_list **lexer_token)
 {
-	// t_list	*temp;
-	// char 	*quote;
+	t_list	*temp;
 
-	// quote = str;
-	// temp = lexer_token;
-	// while (temp != NULL)
-	// {
-	// 	if (temp->content[0] == '\'' || temp->content[0] == '\"')
-	// 	{
-	// 		quote = ft_strchr(quote, temp->content[0]); // "13231" 앞에 공백이 없는지 검사
-	// 		if (quote != str && *(quote - 1) != ' ')
-			
-	// 	}
-	// 	temp = temp->next;
-	// }
-	
+	temp = *lexer_token;
+	while (temp != NULL)
+	{
+		if (temp->label == SINGLE_QUOTE || temp->label == DOUBLE_QUOTE)
+		{
+			ft_memmove(temp->content, temp->content + 1, ft_strlen(temp->content) - 2);
+			temp->content[ft_strlen(temp->content) - 2] = '\0';
+			temp->label = NOMAL_STRING;
+		}
+		temp = temp->next;
+	}
 }
+
+// parser 2-2 -> 문자열 병합
+void merge_string(t_list **lexer_token)
+{
+	t_list	*temp;
+	t_list	*colony;
+	char	*str;
+
+	temp = *lexer_token;
+	while (temp != NULL)
+	{
+		if (temp->label == NOMAL_STRING)
+		{
+			colony = temp->next;
+			while (colony->label == NOMAL_STRING)
+			{
+				str = ft_strjoin(temp->content, colony->content);
+				free(temp->content);
+				temp->content = str;
+				temp->next = colony->next;
+				ft_lstdelone(colony, free);
+				colony = temp->next;
+			}
+		}
+		temp = temp->next;
+	}
+}
+
+// parser 2-3 -> blank 중복 제거
+void delete_duplicate_blank(t_list **lexer_token)
+{
+	t_list	*prev;
+	t_list	*temp;
+	t_list	*del;
+
+	temp = *lexer_token;
+	prev = temp;
+	while (temp->next != NULL)
+	{
+		if (temp->label == BLANK)
+		{
+			if (temp->next->label == BLANK)
+			{
+				del = temp->next;
+				temp->next = del->next;
+				ft_lstdelone(del, free);
+				temp = prev;
+				continue ;
+			}
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+
+//parser 2 -> 따옴표 제거 하면서 공백이 없었다면 붙여주기 -> 너무 어렵다...
+// void remove_quote(t_list **lexer_token, char *str, char *quote_pointer)
+// {
+// 	t_list	*before;
+// 	t_list	*now;
+// 	char 	quote;
+
+// 	now = *lexer_token;
+// 	before = now;
+// 	while (now != NULL) // before 뒤의 문자열의 따옴표 검사
+// 	{
+// 		quote = now->content[0];
+// 		if (quote == '\'' || quote == '\"')
+// 		{
+// 			if (quote != now->content[ft_strlen(before->content) - 1])
+// 				; // single quote error!
+// 			quote_pointer = ft_strchr(quote_pointer + 1, quote);
+// 			ft_memmove(now->content, now->content + 1, ft_strlen(now->content) - 2);
+// 			// before->content = ft_join_and_free(before->content, ft_substr(now->content, 1, ft_strlen(now->content) - 1));
+// 			now->content[ft_strlen(now->content) - 2] = '\0';
+// 			// printf(" str[(int)(quote - str) - 1] == [%c],  (int)(quote - str) - 1 = [%d]\n",str[(int)(quote - str) - 1] ,(int)(quote - str) - 1);
+// 			if (!ft_strchr(" \t\n\v\f\r|<>", str[(int)(quote_pointer - str) - 1]))
+// 			{
+// 				before->next = now->next;
+// 				before->content = ft_strjoin(before->content, now->content);
+// 				ft_lstdelone(now, free);
+// 				now = now->next;
+// 				// quote_pointer = ft_strchr(quote_pointer + 1, quote);
+// 				// // continue ;
+// 			}
+// 			printf("%c %d\n", str[(int)(quote_pointer - str) - 1], (int)(quote_pointer - str));
+// 			if (!ft_strchr(" \t\n\v\f\r|<>", str[(int)(quote_pointer - str) - 1]))
+// 			{
+// 				before->next = now->next;
+// 				before->content = ft_strjoin(before->content, now->content);
+// 				ft_lstdelone(now, free);
+// 				now = now->next;
+// 			}
+// 			quote_pointer = ft_strchr(quote_pointer + 1, quote);
+// 			continue;
+// 		}
+// 		before = now;
+// 		now = now->next;
+// 	}
+// }
 
 int	main(int argc, char *argv[], char *envp[]) {
 	argc++; argc--;
@@ -119,15 +275,21 @@ int	main(int argc, char *argv[], char *envp[]) {
 	t_list *lexer_token = NULL;
 	// lexer("  cat <<eof >file1 && cat file1 && abc || wc <file1 | cat >file2 ", &lexer_token);
 	
-	char str[100] = "echo \"$USER \" $PATH asdf123";
+	char str[100] = "echo    '321'$USER     \"123\"\"$PATH\"   \'$USER\' $USER$USER\"$USER$USER\" ";
 	
 	lexer(str, &lexer_token);
-	
+	labeling(lexer_token);
 	t_env	*env_list;
 	env_list = init_env_list(envp);
 	
 	replace_env(lexer_token, env_list);
+
+	remove_quote(&lexer_token);
+
+	merge_string(&lexer_token);
 	
+	delete_duplicate_blank(&lexer_token);
+
 	t_list *temp = lexer_token;
 	int node_index = 0;
 	while (temp != NULL)
