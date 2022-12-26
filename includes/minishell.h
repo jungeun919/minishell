@@ -1,3 +1,4 @@
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -16,6 +17,17 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+// lexer
+void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
+void	clear_and_exit(t_list **lexer_token);
+void	lexer(char *str, t_list **lexer_token);
+void	labeling(t_list *lexer_token);
+int		check_odd_quote(t_list *lexer_token);
+void	replace_env(t_list *lexer_token, t_env *env_list);
+void	remove_quote(t_list **lexer_token);
+void	merge_string(t_list **lexer_token);
+void	delete_blank(t_list **lexer_token);
 
 // builtin
 void	ft_env(t_env *list);

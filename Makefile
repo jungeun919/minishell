@@ -9,19 +9,21 @@ LIBS_DIR = libs
 SRCS_DIR = srcs
 
 # srcs directory
+LEXER_DIR = lexer
 BUILTIN_DIR = builtin
 ENV_DIR = env
 UTILS_DIR = utils
 
+LEXER_SRCS = lexer.c
 BUILTIN_SRCS = env.c
 ENV_SRCS = init_env.c utils.c
 UTILS_SRCS = signal.c
 
 # readline
-LDFLAGS = -L/opt/homebrew/opt/readline/lib
-CPPFLAGS = -I/opt/homebrew/opt/readline/include
-# LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
-# CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
+# LDFLAGS = -L/opt/homebrew/opt/readline/lib
+# CPPFLAGS = -I/opt/homebrew/opt/readline/include
+LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
+CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
 READ_LIB = -lreadline
 
 LIBFT_DIR = libs/libft
@@ -29,6 +31,7 @@ LIBFT = libft.a
 LIBFT_LIB = -lft
 
 SRCS = $(addprefix $(SRCS_DIR)/, main.c) \
+	$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER_SRCS)) \
 	$(addprefix $(SRCS_DIR)/$(BUILTIN_DIR)/, $(BUILTIN_SRCS)) \
 	$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV_SRCS)) \
 	$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS_SRCS))
@@ -38,7 +41,7 @@ OBJS = $(SRCS:.c=.o)
 all : $(NAME)
 
 $(NAME) : $(OBJS)
-	make -C $(LIBFT_DIR) all
+	make -C $(LIBFT_DIR) bonus
 	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) $(READ_LIB) $(LDFLAGS) $(CPPFLAGS) -L $(LIBFT_DIR) $(LIBFT_LIB) -o $@
 	
 %.o : %.c
