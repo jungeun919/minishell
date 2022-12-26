@@ -6,7 +6,7 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2022/12/26 11:28:44 by hajeong          ###   ########.fr       */
+/*   Updated: 2022/12/26 14:30:54 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,27 +215,28 @@ void merge_string(t_list **lexer_token)
 	}
 }
 
-// parser 2-3 -> blank 중복 제거
-void delete_duplicate_blank(t_list **lexer_token)
+// parser 2-3 -> blank 제거
+void delete_blank(t_list **lexer_token)
 {
 	t_list	*prev;
 	t_list	*temp;
-	t_list	*del;
 
+	while ((*lexer_token)->label == BLANK)
+	{
+		prev = *lexer_token;
+		*lexer_token = (*lexer_token)->next;
+		ft_lstdelone(prev, free);
+	}
 	temp = *lexer_token;
 	prev = temp;
-	while (temp->next != NULL)
+	while (temp != NULL)
 	{
 		if (temp->label == BLANK)
 		{
-			if (temp->next->label == BLANK)
-			{
-				del = temp->next;
-				temp->next = del->next;
-				ft_lstdelone(del, free);
-				temp = prev;
-				continue ;
-			}
+			prev->next = temp->next;
+			ft_lstdelone(temp, free);
+			temp = prev->next;
+			continue;
 		}
 		prev = temp;
 		temp = temp->next;
@@ -277,7 +278,7 @@ int	main(int argc, char *argv[], char *envp[])
 		replace_env(lexer_token, env_list);
 		remove_quote(&lexer_token);
 		merge_string(&lexer_token);
-		delete_duplicate_blank(&lexer_token);
+		delete_blank(&lexer_token);
 
 		temp = lexer_token;
 		node_index = 0;
