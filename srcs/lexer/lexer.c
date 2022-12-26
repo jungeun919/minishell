@@ -6,7 +6,7 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2022/12/26 10:25:12 by hajeong          ###   ########.fr       */
+/*   Updated: 2022/12/26 11:28:44 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,6 @@ void replace_env(t_list *lexer_token, t_env *env_list)
 		if (lexer_token->label != SINGLE_QUOTE && ft_strchr(lexer_token->content, '$'))
 		{
 			key = ft_strchr(lexer_token->content, '$'); // $의 인덱스
-			// *key = '\0';
-			// key_idx = (int)(key - lexer_token->content);
 			key_end = key + 1; // 환경변수 끝 하나 뒤 인덱스 ("012$PATH 345") <- key = '$', key_end = ' '
 			while (ft_isalnum(*key_end))
 				key_end++;
@@ -164,7 +162,6 @@ void replace_env(t_list *lexer_token, t_env *env_list)
 			str = ft_join_env(lexer_token->content, get_env_value(env_list,key), key_end);
 			lexer_token->content = str;
 			free(key);
-			// join_and_free 실패시 -> lexer_token->content = NULL [ft_lstclear로 초기화 하고 exit]
 			if (lexer_token->content == NULL)
 				clear_and_exit(&lexer_token);
 		}
