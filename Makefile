@@ -11,15 +11,17 @@ SRCS_DIR = srcs
 # srcs directory
 BUILTIN_DIR = builtin
 ENV_DIR = env
+UTILS_DIR = utils
 
 BUILTIN_SRCS = env.c
 ENV_SRCS = init_env.c utils.c
+UTILS_SRCS = signal.c
 
 # readline
-# LDFLAGS = -L/opt/homebrew/opt/readline/lib
-# CPPFLAGS = -I/opt/homebrew/opt/readline/include
-LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
-CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
+LDFLAGS = -L/opt/homebrew/opt/readline/lib
+CPPFLAGS = -I/opt/homebrew/opt/readline/include
+# LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
+# CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
 READ_LIB = -lreadline
 
 LIBFT_DIR = libs/libft
@@ -28,7 +30,8 @@ LIBFT_LIB = -lft
 
 SRCS = $(addprefix $(SRCS_DIR)/, main.c) \
 	$(addprefix $(SRCS_DIR)/$(BUILTIN_DIR)/, $(BUILTIN_SRCS)) \
-	$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV_SRCS))
+	$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV_SRCS)) \
+	$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS_SRCS))
 
 OBJS = $(SRCS:.c=.o)
 
@@ -36,10 +39,10 @@ all : $(NAME)
 
 $(NAME) : $(OBJS)
 	make -C $(LIBFT_DIR) all
-	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) $(LDFLAGS) $(CPPFLAGS) $(READ_LIB) -L $(LIBFT_DIR) $(LIBFT_LIB) -o $@
+	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) $(READ_LIB) $(LDFLAGS) $(CPPFLAGS) -L $(LIBFT_DIR) $(LIBFT_LIB) -o $@
 	
 %.o : %.c
-	$(CC) $(CFLAGS) -I $(INCLUDES_DIR) -I $(LIBFT_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I $(INCLUDES_DIR) $(CPPFLAGS) -c $< -o $@
 
 clean :
 	rm -rf $(OBJS)

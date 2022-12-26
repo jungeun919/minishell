@@ -1,11 +1,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <signal.h>
+# include <termios.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "../libs/libft/libft.h"
 
 typedef struct s_env
@@ -24,5 +26,9 @@ t_env	*make_env_node(char *key, char *value);
 void	env_list_add_node(t_env **list, t_env *node);
 
 char	*get_env_value(t_env *env_list, char *key);
+
+// utils
+void	setting_signal(void);
+void	sig_handler(int signal);
 
 #endif
