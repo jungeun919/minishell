@@ -33,6 +33,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		cmd = readline("minishell$ ");
+		// cmd = "echo << $USER";
 
 		if (!cmd) // ctrl + d
 		{
@@ -49,6 +50,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 		lexer(cmd, &lexer_token);
 		labeling(lexer_token);
+		labeling_after_heredoc(lexer_token);
 		if (check_odd_quote(lexer_token))
 		{
 			ft_lstclear(&lexer_token, free);
@@ -75,6 +77,9 @@ int	main(int argc, char *argv[], char *envp[])
 			else if (temp->label == 6) ft_strlcpy( node_label , "REDIR_HEREDOC",20);
 			else if (temp->label == 7) ft_strlcpy( node_label , "REDIR_OUT",20);
 			else if (temp->label == 8) ft_strlcpy( node_label , "REDIR_DOUBLE_OUT",20);
+			else if (temp->label == 9) ft_strlcpy( node_label , "AFTER_HEREDOC",20);
+			else if (temp->label == 10) ft_strlcpy( node_label , "AFTER_HEREDOC_DQ",20);
+			else if (temp->label == 11) ft_strlcpy( node_label , "AFTER_HEREDOC_SQ",20);
 			
 			printf("%2d 번째 노드 : [%s] <- (%s)\n", node_index++, temp->content, node_label);
 			temp = temp->next;

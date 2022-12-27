@@ -23,6 +23,7 @@ void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
 void	clear_and_exit(t_list **lexer_token);
 void	lexer(char *str, t_list **lexer_token);
 void	labeling(t_list *lexer_token);
+void	labeling_after_heredoc(t_list *lexer_token);
 int		check_odd_quote(t_list *lexer_token);
 void	replace_env(t_list *lexer_token, t_env *env_list);
 void	remove_quote(t_list **lexer_token);

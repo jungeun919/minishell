@@ -21,6 +21,9 @@
 # define REDIR_HEREDOC 6
 # define REDIR_OUT 7
 # define REDIR_DOUBLE_OUT 8
+# define AFTER_HEREDOC 9
+# define AFTER_HEREDOC_DQ 10
+# define AFTER_HEREDOC_SQ 11
 
 void free_temp_clear_and_exit(t_list **lexer_token, char *temp)
 {
@@ -78,17 +81,36 @@ void labeling(t_list *lexer_token)
 			lexer_token->label = BLANK;
 		else if (lexer_token->content[0] == '|')
 			lexer_token->label = PIPE;
-		else if (lexer_token->content[0] == '<')
+		else if (lexer_token->content[0] == '<' || lexer_token->content[0] == '>')
 		{
 			lexer_token->label = REDIR_IN;
-			if (lexer_token->content[1] == '<')
-				lexer_token->label = REDIR_HEREDOC;
+			if (lexer_token->content[0] == '>')
+				lexer_token->label = REDIR_OUT;
+			if (lexer_token->content[0] == lexer_token->content[1])
+				(lexer_token->label)++;
 		}
-		else if (lexer_token->content[0] == '>')
+		lexer_token = lexer_token->next;
+	}
+}
+
+void labeling_after_heredoc(t_list *lexer_token)
+{
+	int flag;
+
+	flag = 0;
+	while (lexer_token != NULL)
+	{
+		if (lexer_token->label == REDIR_HEREDOC)
+			flag = 1;
+		else if (flag == 1 && (lexer_token->label == NOMAL_STRING || lexer_token->label == DOUBLE_QUOTE || lexer_token->label == SINGLE_QUOTE))
 		{
-			lexer_token->label = REDIR_OUT;
-			if (lexer_token->content[1] == '>')
-				lexer_token->label = REDIR_DOUBLE_OUT;
+			while (lexer_token != NULL && (lexer_token->label == NOMAL_STRING || lexer_token->label == DOUBLE_QUOTE || lexer_token->label == SINGLE_QUOTE))
+			{
+				lexer_token->label += AFTER_HEREDOC;
+				lexer_token = lexer_token->next;
+			}
+			flag = 0;
+			continue ;
 		}
 		lexer_token = lexer_token->next;
 	}
@@ -99,8 +121,8 @@ int check_odd_quote(t_list *lexer_token) // 0 : 짝수 따옴표, 1 : 홀수 따
 	int len;
 
 	while (lexer_token != NULL)
-	{
-		if (lexer_token->label == DOUBLE_QUOTE || lexer_token->label == SINGLE_QUOTE)
+	{ // 9 == AFTER_HEREDOC
+		if (lexer_token->label % 9 == DOUBLE_QUOTE || lexer_token->label % 9 == SINGLE_QUOTE)
 		{
 			len = ft_strlen(lexer_token->content);
 			if (len < 2)
@@ -145,7 +167,9 @@ void replace_env(t_list *lexer_token, t_env *env_list)
 	
 	while (lexer_token != NULL)
 	{
-		if (lexer_token->label != SINGLE_QUOTE && ft_strchr(lexer_token->content, '$'))
+		while (lexer_token != NULL && lexer_token->label >= AFTER_HEREDOC)
+			lexer_token = lexer_token->next;
+		if (lexer_token != NULL && lexer_token->label != SINGLE_QUOTE && ft_strchr(lexer_token->content, '$'))
 		{
 			key = ft_strchr(lexer_token->content, '$'); // $의 인덱스
 			key_end = key + 1; // 환경변수 끝 하나 뒤 인덱스 ("012$PATH 345") <- key = '$', key_end = ' '
@@ -153,12 +177,13 @@ void replace_env(t_list *lexer_token, t_env *env_list)
 				key_end++;
 			key = ft_substr(key, 1, (int)(key_end - key - 1)); // $다음 인덱스 부터 저장
 			str = ft_join_env(lexer_token->content, get_env_value(env_list,key), key_end);
+			free(lexer_token->content);
 			lexer_token->content = str;
 			free(key);
 			if (lexer_token->content == NULL)
 				clear_and_exit(&lexer_token);
 		}
-		if (!ft_strchr(lexer_token->content, '$') || lexer_token->label == SINGLE_QUOTE)
+		if (lexer_token != NULL && (!ft_strchr(lexer_token->content, '$') || lexer_token->label == SINGLE_QUOTE))
 			lexer_token = lexer_token->next;
 	}
 }
@@ -171,11 +196,12 @@ void remove_quote(t_list **lexer_token)
 	temp = *lexer_token;
 	while (temp != NULL)
 	{
-		if (temp->label == SINGLE_QUOTE || temp->label == DOUBLE_QUOTE)
+		if (temp->label % 9 == SINGLE_QUOTE || temp->label % 9 == DOUBLE_QUOTE)
 		{
 			ft_memmove(temp->content, temp->content + 1, ft_strlen(temp->content) - 2);
 			temp->content[ft_strlen(temp->content) - 2] = '\0';
-			temp->label = NOMAL_STRING;
+			// temp->label = NOMAL_STRING;
+			temp->label = 9 * (temp->label / 9);
 		}
 		temp = temp->next;
 	}
@@ -191,10 +217,11 @@ void merge_string(t_list **lexer_token)
 	temp = *lexer_token;
 	while (temp != NULL)
 	{
-		if (temp->label == NOMAL_STRING)
+		if (temp->label % 9 == NOMAL_STRING)
 		{
+			temp->label = NOMAL_STRING;
 			colony = temp->next;
-			while (colony != NULL && colony->label == NOMAL_STRING)
+			while (colony != NULL && colony->label % 9 == NOMAL_STRING)
 			{
 				str = ft_strjoin(temp->content, colony->content);
 				free(temp->content);
@@ -235,6 +262,7 @@ void delete_blank(t_list **lexer_token)
 		temp = temp->next;
 	}
 }
+
 
 // int	main(int argc, char *argv[], char *envp[])
 // {
