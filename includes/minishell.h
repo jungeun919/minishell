@@ -18,6 +18,35 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+
+
+/* builtin test */
+typedef struct s_execute_unit
+{
+	char					*command;
+	// char					*type;
+	struct s_execute_unit	*next;
+}	t_execute_unit;
+
+// env
+int		ft_env(t_execute_unit *argv, t_env *env_list);
+void	print_env_list(t_env *env_list);
+
+// export
+int		ft_export(t_execute_unit *argv, t_env *env_list);
+void	execute_export(char *key, char *value, t_env *env_list);
+int		is_key_in_env_list(char *key, t_env *env_list);
+int		is_valid_format_key(char *key);
+void	update_value(char *key, char *value, t_env **env_list);
+
+// unset
+int		ft_unset(t_execute_unit *argv, t_env *env_list);
+void	delete_node(char *key, t_env **env_list);
+t_env	*get_node(char *key, t_env *env_list);
+/* builtin test */
+
+
+
 // lexer
 void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
 void	clear_and_exit(t_list **lexer_token);
@@ -29,9 +58,6 @@ void	replace_env(t_list *lexer_token, t_env *env_list);
 void	remove_quote(t_list **lexer_token);
 void	merge_string(t_list **lexer_token);
 void	delete_blank(t_list **lexer_token);
-
-// builtin
-void	ft_env(t_env *list);
 
 // env
 t_env	*init_env_list(char **envp);

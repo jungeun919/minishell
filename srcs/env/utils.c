@@ -16,3 +16,16 @@ char	*get_env_value(t_env *env_list, char *key)
 	}
 	return (NULL);
 }
+
+void	free_env_list(t_env *env_list)
+{
+	t_env	*temp;
+
+	while (env_list != NULL)
+	{
+		temp = env_list->next;
+		free(env_list);
+		env_list = NULL;
+		env_list = temp;
+	}
+}
