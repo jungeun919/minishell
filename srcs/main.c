@@ -63,12 +63,18 @@ int	main(int argc, char *argv[], char *envp[])
 		remove_quote(&lexer_token);
 		merge_string(&lexer_token);
 		delete_blank(&lexer_token);
+		if (check_redirection(lexer_token))
+		{
+			ft_lstclear(&lexer_token, free);
+			printf("no string after redirection!\n");
+			continue ;
+		}
 
 		temp = lexer_token;
 		node_index = 0;
 		while (temp != NULL)
 		{
-			if		(temp->label == 0) ft_strlcpy( node_label , "NOMAL_STRING",20);
+			if		(temp->label == 0) ft_strlcpy( node_label , "NORMAL_STRING",20);
 			else if (temp->label == 1) ft_strlcpy( node_label , "DOUBLE_QUOTE",20);
 			else if (temp->label == 2) ft_strlcpy( node_label , "SINGLE_QUOTE",20);
 			else if (temp->label == 3) ft_strlcpy( node_label , "BLANK",20);

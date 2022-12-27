@@ -29,6 +29,7 @@ void	replace_env(t_list *lexer_token, t_env *env_list);
 void	remove_quote(t_list **lexer_token);
 void	merge_string(t_list **lexer_token);
 void	delete_blank(t_list **lexer_token);
+int		check_redirection(t_list *lexer_token);
 
 // builtin
 void	ft_env(t_env *list);
