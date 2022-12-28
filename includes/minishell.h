@@ -28,6 +28,9 @@ typedef struct s_execute_unit
 	struct s_execute_unit	*next;
 }	t_execute_unit;
 
+int		is_builtin(t_list *lexer_token);
+void	exec_builtin(t_list *lexer_token, t_env *env_list);
+
 // env
 int		ft_env(t_execute_unit *argv, t_env *env_list);
 void	print_env_list(t_env *env_list);

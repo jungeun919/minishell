@@ -11,19 +11,21 @@ SRCS_DIR = srcs
 # srcs directory
 LEXER_DIR = lexer
 BUILTIN_DIR = builtin
+EXEC_DIR = execute
 ENV_DIR = env
 UTILS_DIR = utils
 
 LEXER_SRCS = lexer.c
 BUILTIN_SRCS = env.c export.c unset.c
+EXEC_SRCS = exec_builtin.c exec_cmd.c
 ENV_SRCS = init_env.c utils.c
 UTILS_SRCS = signal.c
 
 # readline
-LDFLAGS = -L/opt/homebrew/opt/readline/lib
-CPPFLAGS = -I/opt/homebrew/opt/readline/include
-# LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
-# CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
+# LDFLAGS = -L/opt/homebrew/opt/readline/lib
+# CPPFLAGS = -I/opt/homebrew/opt/readline/include
+LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
+CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
 READ_LIB = -lreadline
 
 LIBFT_DIR = libs/libft
@@ -33,6 +35,7 @@ LIBFT_LIB = -lft
 SRCS = $(addprefix $(SRCS_DIR)/, main.c) \
 	$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER_SRCS)) \
 	$(addprefix $(SRCS_DIR)/$(BUILTIN_DIR)/, $(BUILTIN_SRCS)) \
+	$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC_SRCS)) \
 	$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV_SRCS)) \
 	$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS_SRCS))
 
