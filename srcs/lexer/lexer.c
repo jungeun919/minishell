@@ -241,7 +241,7 @@ void delete_blank(t_list **lexer_token)
 	t_list	*prev;
 	t_list	*temp;
 
-	while ((*lexer_token)->label == BLANK)
+	while ((*lexer_token) != NULL && (*lexer_token)->label == BLANK)
 	{
 		prev = *lexer_token;
 		*lexer_token = (*lexer_token)->next;
@@ -277,4 +277,98 @@ int check_redirection(t_list *lexer_token)
 		lexer_token = lexer_token->next;
 	}
 	return (0);
+}
+
+int check_double_pipe(t_list *lexer_token)
+{
+	if (lexer_token != NULL && lexer_token->label == PIPE)
+		return (1); // 맨앞에 파이프인경우 1 리턴
+	while (lexer_token != NULL)
+	{
+		if (lexer_token->label == PIPE)
+		{
+			if (lexer_token->next == NULL || lexer_token->next->label == PIPE)
+			{
+				return (1);
+			}
+		}
+		lexer_token = lexer_token->next;
+	}
+	return (0);
+}
+
+int parser_token_size(t_list *lexer_token)
+{
+	int len;
+
+	len = 1;
+	while (lexer_token != NULL)
+	{
+		if (lexer_token->label == PIPE)
+			len++;
+		lexer_token = lexer_token->next;
+	}
+	return (len);
+}
+
+t_parser_token *init_parser_token(int size)
+{
+	t_parser_token	*parser_token;
+	int				i;
+
+	parser_token = (t_parser_token *)malloc(sizeof(t_parser_token) * size);
+	if (parser_token == NULL)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		parser_token[i].cmd = NULL;
+		parser_token[i].in = NULL;
+		parser_token[i].out = NULL;
+		i++;
+	}
+	return (parser_token);
+}
+
+void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token)
+{
+	t_list	*prev;
+	t_list	*temp;
+	t_list	*del;
+	int		i;
+
+	temp = *lexer_token;
+	prev = temp;
+	parser_token[0].cmd = temp;
+	i = 0;
+	while (temp != NULL)
+	{
+		if (temp->label == PIPE)
+		{
+			del = temp;
+			parser_token[++i].cmd = temp->next;
+			prev->next = NULL;
+			ft_lstdelone(del, free);
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+void	free_parser_token(t_parser_token *parser_token, int len)
+{
+	int		i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (parser_token[i].cmd != NULL)
+			ft_lstclear(&(parser_token[i].cmd), free);
+		if (parser_token[i].in != NULL)
+			ft_lstclear(&(parser_token[i].in), free);
+		if (parser_token[i].out != NULL)
+			ft_lstclear(&(parser_token[i].out), free);
+		i++;
+	}
+	free(parser_token);
 }

@@ -18,6 +18,13 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_parser_token
+{
+	t_list *cmd;
+	t_list *in;
+	t_list *out;
+}	t_parser_token;
+
 // lexer
 void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
 void	clear_and_exit(t_list **lexer_token);
@@ -30,6 +37,11 @@ void	remove_quote(t_list **lexer_token);
 void	merge_string(t_list **lexer_token);
 void	delete_blank(t_list **lexer_token);
 int		check_redirection(t_list *lexer_token);
+int		check_double_pipe(t_list *lexer_token);
+int		parser_token_size(t_list *lexer_token);
+t_parser_token *init_parser_token(int size);
+void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token);
+void	free_parser_token(t_parser_token *parser_token, int len);
 
 // builtin
 void	ft_env(t_env *list);

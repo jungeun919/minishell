@@ -29,6 +29,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_list	*temp;
 	int		node_index;
 	char	node_label[20];
+	t_parser_token	*parser_token;
 
 	while (1)
 	{
@@ -63,10 +64,10 @@ int	main(int argc, char *argv[], char *envp[])
 		remove_quote(&lexer_token);
 		merge_string(&lexer_token);
 		delete_blank(&lexer_token);
-		if (check_redirection(lexer_token))
+		if (check_redirection(lexer_token) || check_double_pipe(lexer_token))
 		{
+			printf("no string after redirection! or double pipe\n");
 			ft_lstclear(&lexer_token, free);
-			printf("no string after redirection!\n");
 			continue ;
 		}
 
@@ -90,9 +91,26 @@ int	main(int argc, char *argv[], char *envp[])
 			printf("%2d 번째 노드 : [%s] <- (%s)\n", node_index++, temp->content, node_label);
 			temp = temp->next;
 		}
-
-		ft_lstclear(&lexer_token, free);
+		// ft_lstclear(&lexer_token, free);
 		/* lexer main */
+
+		int len = parser_token_size(lexer_token);
+		printf("len : %d\n", len);
+		parser_token = init_parser_token(len);
+		if (parser_token == NULL)
+			clear_and_exit(&lexer_token);// 에러처리 필요
+		make_parser_token(&lexer_token, parser_token);
+		for (int i = 0; i < len; i++){
+			temp = parser_token[i].cmd;
+			printf("%d 번째 파서 토큰 : ", i);
+			while (temp != NULL)
+			{
+				printf("[%s]->", temp->content);
+				temp = temp->next;
+			}
+			printf("(null)\n");
+		}
+		free_parser_token(parser_token, len);
 
 
 		if (ft_strncmp(cmd, "env", 4) == 0)
