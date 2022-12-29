@@ -22,10 +22,10 @@ ENV_SRCS = init_env.c utils.c
 UTILS_SRCS = signal.c
 
 # readline
-# LDFLAGS = -L/opt/homebrew/opt/readline/lib
-# CPPFLAGS = -I/opt/homebrew/opt/readline/include
-LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
-CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
+LDFLAGS = -L/opt/homebrew/opt/readline/lib
+CPPFLAGS = -I/opt/homebrew/opt/readline/include
+# LDFLAGS = -L/goinfre/jungchoi/.brew/opt/readline/lib
+# CPPFLAGS = -I/goinfre/jungchoi/.brew/opt/readline/include
 READ_LIB = -lreadline
 
 LIBFT_DIR = libs/libft

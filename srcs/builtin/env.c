@@ -3,7 +3,7 @@
 
 int	ft_env(t_execute_unit *argv, t_env *env_list)
 {
-	if (argv->next != NULL)
+	if (argv->command[1] != NULL)
 		return (0); // too many argument
 	print_env_list(env_list);
 	return (0);

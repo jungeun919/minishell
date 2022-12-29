@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungchoi <jungchoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 14:17:25 by jungchoi          #+#    #+#             */
-/*   Updated: 2022/12/28 14:25:04 by jungchoi         ###   ########.fr       */
+/*   Updated: 2022/12/29 16:14:28 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,87 +32,94 @@ void	exec_builtin(t_list *lexer_token, t_env *env_list)
 	cmd = lexer_token->content;
 	if (ft_strncmp(cmd, "env", 4) == 0)
 	{
-		t_execute_unit	*cmd;
-		cmd = ft_calloc(0, sizeof(t_execute_unit));
+		t_execute_unit	*temp;
+		temp = malloc(sizeof(t_execute_unit));
+		temp->command = (char **)malloc(999);
+		temp->command[0] = (char *)malloc(999);
+		temp->command[1] = (char *)malloc(999);
 
-		cmd->command = "env";
-		cmd->next = NULL;
-
-		ft_env(cmd, env_list);
+		temp->command[0] = "env";
+		temp->command[1] = NULL;
+		
+		ft_env(temp, env_list);
 	}
 
 	else if (ft_strncmp(cmd, "export", 7) == 0)
 	{
-		t_execute_unit	*cmd;
-		t_execute_unit	*cmd2;
-		cmd = ft_calloc(0, sizeof(t_execute_unit));
-		cmd2 = ft_calloc(0, sizeof(t_execute_unit));
+		t_execute_unit	*temp;
+		temp = malloc(sizeof(t_execute_unit));
+		temp->command = (char **)malloc(999);
+		temp->command[0] = (char *)malloc(999);
+		temp->command[1] = (char *)malloc(999);
+		temp->command[2] = (char *)malloc(999);
 
 		// invalid key test
-		cmd->command = "export";
-		cmd->next = cmd2;
-		cmd2->command = "+testkey=testvalue";
-		cmd2->next = NULL;
+		temp->command[0] = "export";
+		temp->command[1] = "+testkey=testvalue";
+		temp->command[2] = NULL;
 
-		ft_export(cmd, env_list);
+		ft_export(temp, env_list);
 		print_env_list(env_list);
 		printf("\n\n\n\n");
 
 		// add node test
-		cmd->command = "export";
-		cmd->next = cmd2;
-		cmd2->command = "_testkey=testvalue";
-		cmd2->next = NULL;
+		temp->command[0] = "export";
+		temp->command[1] = "_testkey=testvalue";
+		temp->command[2] = NULL;
 
-		ft_export(cmd, env_list);
+		ft_export(temp, env_list);
 		print_env_list(env_list);
 		printf("\n\n\n\n");
 
 		// update value test
-		cmd->command = "export";
-		cmd->next = cmd2;
-		cmd2->command = "_testkey=updatevalue";
-		cmd2->next = NULL;
+		temp->command[0] = "export";
+		temp->command[1] = "_testkey=updatevalue";
+		temp->command[2] = NULL;
 
-		ft_export(cmd, env_list);
+		ft_export(temp, env_list);
 		print_env_list(env_list);
 	}
 
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
 	{
-		t_execute_unit	*cmd;
-		t_execute_unit	*cmd2;
-		t_execute_unit	*cmd3;
-		t_execute_unit	*cmd4;
-		t_execute_unit	*cmd5;
-		t_execute_unit	*cmd6;
-		cmd = ft_calloc(0, sizeof(t_execute_unit));
-		cmd2 = ft_calloc(0, sizeof(t_execute_unit));
-		cmd3 = ft_calloc(0, sizeof(t_execute_unit));
-		cmd4 = ft_calloc(0, sizeof(t_execute_unit));
-		cmd5 = ft_calloc(0, sizeof(t_execute_unit));
-		cmd6 = ft_calloc(0, sizeof(t_execute_unit));
+		t_execute_unit	*temp;
+		t_execute_unit	*temp2;
+		t_execute_unit	*temp3;
+		temp = malloc(sizeof(t_execute_unit));
+		temp2 = malloc(sizeof(t_execute_unit));
+		temp3 = malloc(sizeof(t_execute_unit));
+		temp->command = (char **)malloc(999);
+		temp->command[0] = (char *)malloc(999);
+		temp->command[1] = (char *)malloc(999);
+		temp->command[2] = (char *)malloc(999);
+
+		temp2->command = (char **)malloc(999);
+		temp2->command[0] = (char *)malloc(999);
+		temp2->command[1] = (char *)malloc(999);
+		temp2->command[2] = (char *)malloc(999);
+
+		temp3->command = (char **)malloc(999);
+		temp3->command[0] = (char *)malloc(999);
+		temp3->command[1] = (char *)malloc(999);
+		temp3->command[2] = (char *)malloc(999);
 
 		// add node1
-		cmd->command = "export";
-		cmd->next = cmd2;
-		cmd2->command = "_testkey1=testvalue1";
-		cmd2->next = NULL;
-		ft_export(cmd, env_list);
+		temp->command[0] = "export";
+		temp->command[1] = "_testkey1=testvalue1";
+		temp->command[2] = NULL;
+		ft_export(temp, env_list);
 
 		// add node 2
-		cmd3->command = "export";
-		cmd3->next = cmd4;
-		cmd4->command = "_testkey2=testvalue2";
-		cmd4->next = NULL;
-		ft_export(cmd3, env_list);
+		temp2->command[0] = "export";
+		temp2->command[1] = "_testkey2=testvalue2";
+		temp2->command[2] = NULL;
+		ft_export(temp2, env_list);
 
 		// delete node test
-		cmd5->command = "unset";
-		cmd5->next = cmd6;
-		cmd6->command = "_testkey1";
-		cmd6->next = NULL;
-		ft_unset(cmd5, env_list);
+		temp3->command[0] = "unset";
+		temp3->command[1] = "_testkey1";
+		temp3->command[2] = NULL;
+		ft_unset(temp3, env_list);
 		print_env_list(env_list);
 	}
 }

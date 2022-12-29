@@ -4,25 +4,25 @@
 // 리턴값 정의 필요
 int	ft_export(t_execute_unit *argv, t_env *env_list)
 {
-	t_execute_unit	*temp;
 	int				i;
+	int				j;
 	char			*key;
 	char			*value;
 
-	temp = argv->next;
-	if (temp == NULL) // export만 입력했을 때 목록 표시
+	if (argv->command[1] == NULL) // export만 입력했을 때 목록 표시
 		print_env_list(env_list);
-	while (temp)
+	i = 1;
+	while (argv->command[i] != NULL)
 	{
-		i = 0;
-		while (temp->command[i] && temp->command[i] != '=')
-			i++;
-		key = ft_substr(temp->command, 0, i); // 할당 실패했을 때 처리할건지? 일단 함수 안에서 널 체크하는 정도로만 작성
-		value = ft_substr(temp->command, i + 1, ft_strlen(temp->command) - i - 1);
+		j = 0;
+		while (argv->command[i][j] && argv->command[i][j] != '=')
+			j++;
+		key = ft_substr(argv->command[i], 0, j); // 할당 실패했을 때 처리할건지? 일단 함수 안에서 널 체크하는 정도로만 작성
+		value = ft_substr(argv->command[i], j + 1, ft_strlen(argv->command[i]) - j - 1);
 		execute_export(key, value, env_list);
-		temp = temp->next;
+		i++;
 	}
-	return (0);
+	return (1);
 }
 
 void	execute_export(char *key, char *value, t_env *env_list)

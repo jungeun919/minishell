@@ -3,16 +3,16 @@
 
 int	ft_unset(t_execute_unit *argv, t_env *env_list)
 {
-	t_execute_unit	*temp;
+	int	i;
 
-	temp = argv->next;
-	if (temp == NULL) // not enough arguments
+	if (argv->command[1] == NULL) // not enough arguments
 		return (0);
-	while (temp)
+	i = 1;
+	while (argv->command[i])
 	{
-		if (is_key_in_env_list(temp->command, env_list))
-			delete_node(temp->command, &env_list);
-		temp = temp->next;
+		if (is_key_in_env_list(argv->command[i], env_list))
+			delete_node(argv->command[i], &env_list);
+		i++;
 	}
 	return (1);
 }

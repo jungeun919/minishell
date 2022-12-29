@@ -23,9 +23,8 @@ typedef struct s_env
 /* builtin test */
 typedef struct s_execute_unit
 {
-	char					*command;
+	char					**command;
 	// char					*type;
-	struct s_execute_unit	*next;
 }	t_execute_unit;
 
 int		is_builtin(t_list *lexer_token);
