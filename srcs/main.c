@@ -120,6 +120,7 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(cmd);
 		free(cmd);
 		cmd = NULL;
+		system("leaks minishell");
 	}
 	/* get command line */
 

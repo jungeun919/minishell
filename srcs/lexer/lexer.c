@@ -263,6 +263,7 @@ void delete_blank(t_list **lexer_token)
 	}
 }
 
+// 리다이랙션 뒤에 스트링 없으면 오류
 int check_redirection(t_list *lexer_token)
 {
 	while (lexer_token != NULL)
@@ -279,6 +280,7 @@ int check_redirection(t_list *lexer_token)
 	return (0);
 }
 
+// 파이푸 두개 (| |) 연속으로 있으면 오류
 int check_double_pipe(t_list *lexer_token)
 {
 	if (lexer_token != NULL && lexer_token->label == PIPE)
@@ -297,6 +299,7 @@ int check_double_pipe(t_list *lexer_token)
 	return (0);
 }
 
+// 파이프 갯수로 파서 토큰 갯수 얻기
 int parser_token_size(t_list *lexer_token)
 {
 	int len;
@@ -311,6 +314,7 @@ int parser_token_size(t_list *lexer_token)
 	return (len);
 }
 
+// 파서토큰 메모리 할당 받기
 t_parser_token *init_parser_token(int size)
 {
 	t_parser_token	*parser_token;
@@ -330,6 +334,7 @@ t_parser_token *init_parser_token(int size)
 	return (parser_token);
 }
 
+// 파서토큰 연결해주기 (우선 각 파서토큰의 cmd에 모든 연결리스트 노드 연결)
 void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token)
 {
 	t_list	*prev;
@@ -355,6 +360,7 @@ void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token)
 	}
 }
 
+// 파서 토큰 할당 해제 해주는 함수
 void	free_parser_token(t_parser_token *parser_token, int len)
 {
 	int		i;
@@ -371,4 +377,31 @@ void	free_parser_token(t_parser_token *parser_token, int len)
 		i++;
 	}
 	free(parser_token);
+}
+
+// cmd에 있는 노드들에 리다이랙션 기호들이 있으면 in, out 으로 옮겨주기
+void sort_redirection(t_parser_token *parser_token, int len)
+{ // 미완성
+	int		i;
+	t_list	*temp;
+	t_list	*prev;
+
+	i = 0;
+	while (i < len)
+	{
+		temp = parser_token[i].cmd;
+		prev = temp;
+		while (temp != NULL)
+		{
+			if (REDIR_IN <= temp->label && temp->label <= REDIR_DOUBLE_OUT)
+			{
+				// 
+			}
+			prev = temp;
+			temp = temp->next;
+		}
+		
+
+		i++;
+	}
 }
