@@ -42,6 +42,7 @@ int		parser_token_size(t_list *lexer_token);
 t_parser_token *init_parser_token(int size);
 void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token);
 void	free_parser_token(t_parser_token *parser_token, int len);
+void	sort_redirection(t_parser_token *parser_token, int len);
 
 // builtin
 void	ft_env(t_env *list);

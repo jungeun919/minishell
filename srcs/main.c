@@ -73,7 +73,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 		temp = lexer_token;
 		node_index = 0;
-		while (temp != NULL)
+		while (temp != NULL) // for test
 		{
 			if		(temp->label == 0) ft_strlcpy( node_label , "NORMAL_STRING",20);
 			else if (temp->label == 1) ft_strlcpy( node_label , "DOUBLE_QUOTE",20);
@@ -90,9 +90,7 @@ int	main(int argc, char *argv[], char *envp[])
 			
 			printf("%2d 번째 노드 : [%s] <- (%s)\n", node_index++, temp->content, node_label);
 			temp = temp->next;
-		}
-		// ft_lstclear(&lexer_token, free);
-		/* lexer main */
+		} // for test
 
 		int len = parser_token_size(lexer_token);
 		printf("len : %d\n", len);
@@ -100,16 +98,37 @@ int	main(int argc, char *argv[], char *envp[])
 		if (parser_token == NULL)
 			clear_and_exit(&lexer_token);// 에러처리 필요
 		make_parser_token(&lexer_token, parser_token);
-		for (int i = 0; i < len; i++){
-			temp = parser_token[i].cmd;
-			printf("%d 번째 파서 토큰 : ", i);
+
+		sort_redirection(parser_token, len);
+
+		for (int i = 0; i < len; i++){ // for test
+			printf("%d 번째 파서 토큰 ------------------------ \n", i);
+			printf("cmd : ");
+			temp = parser_token[i].cmd; // cmd
 			while (temp != NULL)
 			{
 				printf("[%s]->", temp->content);
 				temp = temp->next;
 			}
 			printf("(null)\n");
-		}
+			printf("in : ");
+			temp = parser_token[i].in; // in
+			while (temp != NULL)
+			{
+				printf("[%s]->", temp->content);
+				temp = temp->next;
+			}
+			printf("(null)\n");
+			printf("out : ");
+			temp = parser_token[i].out; // out
+			while (temp != NULL)
+			{
+				printf("[%s]->", temp->content);
+				temp = temp->next;
+			}
+			printf("(null)\n");
+		} // for test
+
 		free_parser_token(parser_token, len);
 
 
@@ -120,7 +139,7 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(cmd);
 		free(cmd);
 		cmd = NULL;
-		system("leaks minishell");
+		// system("leaks minishell");
 	}
 	/* get command line */
 

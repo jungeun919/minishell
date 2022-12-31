@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungchoi <jungchoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2022/12/26 15:32:06 by jungchoi         ###   ########.fr       */
+/*   Updated: 2022/12/31 19:35:38 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,29 +379,95 @@ void	free_parser_token(t_parser_token *parser_token, int len)
 	free(parser_token);
 }
 
+static void move_front_in_redirection(t_parser_token *parser_token)
+{
+	t_list	*prev;
+
+	parser_token->in = parser_token->cmd;
+	prev = parser_token->cmd->next;
+	while (prev->next != NULL && (prev->next->label == REDIR_IN || prev->next->label == REDIR_HEREDOC))
+		prev = prev->next->next;
+	parser_token->cmd = prev->next;
+	prev->next = NULL;
+}
+
+static void move_in_redirection(t_parser_token *parser_token)
+{
+	t_list	*temp;
+	t_list	*prev;
+	
+	if (parser_token->cmd->label == REDIR_IN || parser_token->cmd->label == REDIR_HEREDOC) // | | 사이에 아무것도 없는 경우 없음
+		move_front_in_redirection(parser_token);
+	if (parser_token->cmd == NULL)
+		return ;
+	prev = parser_token->cmd;
+	temp = parser_token->cmd->next;
+	while (temp != NULL)
+	{
+		if (temp->label == REDIR_IN || temp->label == REDIR_HEREDOC)
+		{
+			prev->next = temp->next->next;
+			ft_lstadd_back(&(parser_token->in), temp);
+			temp->next->next = NULL;
+			temp = prev;
+			continue ;
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+static void move_front_out_redirection(t_parser_token *parser_token)
+{
+	t_list	*prev;
+
+	parser_token->out = parser_token->cmd;
+	prev = parser_token->cmd->next;
+	while (prev->next != NULL && (prev->next->label == REDIR_OUT || prev->next->label == REDIR_DOUBLE_OUT))
+		prev = prev->next->next;
+	parser_token->cmd = prev->next;
+	prev->next = NULL;
+}
+
+static void move_out_redirection(t_parser_token *parser_token)
+{
+	t_list	*temp;
+	t_list	*prev;
+	
+	if (parser_token->cmd->label == REDIR_OUT || parser_token->cmd->label == REDIR_DOUBLE_OUT) // | | 사이에 아무것도 없는 경우 없음
+		move_front_out_redirection(parser_token);
+	if (parser_token->cmd == NULL)
+		return ;
+	prev = parser_token->cmd;
+	temp = parser_token->cmd->next;
+	while (temp != NULL)
+	{
+		if (temp->label == REDIR_OUT || temp->label == REDIR_DOUBLE_OUT)
+		{
+			prev->next = temp->next->next;
+			ft_lstadd_back(&(parser_token->out), temp);
+			temp->next->next = NULL;
+			temp = prev;
+			continue ;
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+
 // cmd에 있는 노드들에 리다이랙션 기호들이 있으면 in, out 으로 옮겨주기
 void sort_redirection(t_parser_token *parser_token, int len)
 { // 미완성
 	int		i;
-	t_list	*temp;
-	t_list	*prev;
+	t_parser_token	*temp;
 
 	i = 0;
 	while (i < len)
 	{
-		temp = parser_token[i].cmd;
-		prev = temp;
-		while (temp != NULL)
-		{
-			if (REDIR_IN <= temp->label && temp->label <= REDIR_DOUBLE_OUT)
-			{
-				// 
-			}
-			prev = temp;
-			temp = temp->next;
-		}
-		
-
+		temp = &parser_token[i];
+		move_in_redirection(temp);
+		move_out_redirection(temp);
 		i++;
 	}
 }
