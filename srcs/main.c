@@ -91,10 +91,10 @@ int	main(int argc, char *argv[], char *envp[])
 		/* execute cmd */
 		if (is_builtin(lexer_token)) // lexer_token 나중에 넘길 구조체로 변경할 것
 			exec_builtin(lexer_token, env_list);
-		// else
-		// 	exec_cmd();
+		else
+			exec_cmd(lexer_token, env_list);
 		/* execute cmd */
-
+		
 		if (ft_strlen(cmd) >= 1)
 			add_history(cmd);
 		free(cmd);

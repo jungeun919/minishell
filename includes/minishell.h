@@ -23,9 +23,12 @@ typedef struct s_env
 /* builtin test */
 typedef struct s_execute_unit
 {
-	char					**command;
-	// char					*type;
+	char	**command;
+	// char	*type;
+	int		in_fd;
+	int		out_fd;
 }	t_execute_unit;
+
 
 int		is_builtin(t_list *lexer_token);
 void	exec_builtin(t_list *lexer_token, t_env *env_list);
@@ -46,6 +49,18 @@ int		ft_unset(t_execute_unit *argv, t_env *env_list);
 void	delete_node(char *key, t_env **env_list);
 t_env	*get_node(char *key, t_env *env_list);
 /* builtin test */
+
+/* execve test */
+void	exec_cmd(t_list *lexer_token, t_env *env_list);
+char    **convert_token_to_str_list(t_execute_unit *token);
+void	run_execve_cmd(char **cmd_list, t_env *env_list);
+char	**convert_env_list_to_str_list(t_env *env_list);
+void    join_key_and_value(char **env_str, t_env *env_list);
+char	*get_path(char *cmd, char **env);
+void	free_split(char **str);
+void	error_exit(char *str, int status);
+/* execve test */
+
 
 
 
