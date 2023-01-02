@@ -11,6 +11,19 @@
 # include <readline/history.h>
 # include "../libs/libft/libft.h"
 
+# define NORMAL_STRING 0
+# define DOUBLE_QUOTE 1
+# define SINGLE_QUOTE 2
+# define BLANK 3
+# define PIPE 4
+# define REDIR_IN 5
+# define REDIR_HEREDOC 6
+# define REDIR_OUT 7
+# define REDIR_DOUBLE_OUT 8
+# define AFTER_HEREDOC 9
+# define AFTER_HEREDOC_DQ 10
+# define AFTER_HEREDOC_SQ 11
+
 typedef struct s_env
 {
 	char			*key;
@@ -77,6 +90,9 @@ void	lexer(char *str, t_list **lexer_token);
 void	labeling(t_list *lexer_token);
 void	labeling_after_heredoc(t_list *lexer_token);
 int		check_odd_quote(t_list *lexer_token);
+
+//parser
+char	*join_env(char *before, char *value, char *after);
 void	replace_env(t_list *lexer_token, t_env *env_list);
 void	remove_quote(t_list **lexer_token);
 void	merge_string(t_list **lexer_token);
