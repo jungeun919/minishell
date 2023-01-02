@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungchoi <jungchoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2022/12/26 15:32:06 by jungchoi         ###   ########.fr       */
+/*   Updated: 2022/12/31 20:18:05 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-# define NOMAL_STRING 0
+# define NORMAL_STRING 0
 # define DOUBLE_QUOTE 1
 # define SINGLE_QUOTE 2
 # define BLANK 3
@@ -102,9 +102,9 @@ void labeling_after_heredoc(t_list *lexer_token)
 	{
 		if (lexer_token->label == REDIR_HEREDOC)
 			flag = 1;
-		else if (flag == 1 && (lexer_token->label == NOMAL_STRING || lexer_token->label == DOUBLE_QUOTE || lexer_token->label == SINGLE_QUOTE))
+		else if (flag == 1 && (lexer_token->label == NORMAL_STRING || lexer_token->label == DOUBLE_QUOTE || lexer_token->label == SINGLE_QUOTE))
 		{
-			while (lexer_token != NULL && (lexer_token->label == NOMAL_STRING || lexer_token->label == DOUBLE_QUOTE || lexer_token->label == SINGLE_QUOTE))
+			while (lexer_token != NULL && (lexer_token->label == NORMAL_STRING || lexer_token->label == DOUBLE_QUOTE || lexer_token->label == SINGLE_QUOTE))
 			{
 				lexer_token->label += AFTER_HEREDOC;
 				lexer_token = lexer_token->next;
@@ -200,7 +200,7 @@ void remove_quote(t_list **lexer_token)
 		{
 			ft_memmove(temp->content, temp->content + 1, ft_strlen(temp->content) - 2);
 			temp->content[ft_strlen(temp->content) - 2] = '\0';
-			// temp->label = NOMAL_STRING;
+			// temp->label = NORMAL_STRING;
 			temp->label = 9 * (temp->label / 9);
 		}
 		temp = temp->next;
@@ -217,11 +217,11 @@ void merge_string(t_list **lexer_token)
 	temp = *lexer_token;
 	while (temp != NULL)
 	{
-		if (temp->label % 9 == NOMAL_STRING)
+		if (temp->label % 9 == NORMAL_STRING)
 		{
-			temp->label = NOMAL_STRING;
+			temp->label = NORMAL_STRING;
 			colony = temp->next;
-			while (colony != NULL && colony->label % 9 == NOMAL_STRING)
+			while (colony != NULL && colony->label % 9 == NORMAL_STRING)
 			{
 				str = ft_strjoin(temp->content, colony->content);
 				free(temp->content);
@@ -241,7 +241,7 @@ void delete_blank(t_list **lexer_token)
 	t_list	*prev;
 	t_list	*temp;
 
-	while ((*lexer_token)->label == BLANK)
+	while ((*lexer_token) != NULL && (*lexer_token)->label == BLANK)
 	{
 		prev = *lexer_token;
 		*lexer_token = (*lexer_token)->next;
@@ -263,137 +263,211 @@ void delete_blank(t_list **lexer_token)
 	}
 }
 
+// 리다이랙션 뒤에 스트링 없으면 오류
+int check_redirection(t_list *lexer_token)
+{
+	while (lexer_token != NULL)
+	{
+		if (REDIR_IN <= lexer_token->label && lexer_token->label <= REDIR_DOUBLE_OUT)
+		{
+			if (lexer_token->next == NULL || lexer_token->next->label != NORMAL_STRING)
+			{
+				return (1);
+			}
+		}
+		lexer_token = lexer_token->next;
+	}
+	return (0);
+}
 
-// int	main(int argc, char *argv[], char *envp[])
-// {
-// 	argc++; argc--;
-// 	argv += 0;
-// 	t_list *lexer_token = NULL;
-// 	// lexer("  cat <<eof >file1 && cat file1 && abc || wc <file1 | cat >file2 ", &lexer_token);
+// 파이푸 두개 (| |) 연속으로 있으면 오류
+int check_double_pipe(t_list *lexer_token)
+{
+	if (lexer_token != NULL && lexer_token->label == PIPE)
+		return (1); // 맨앞에 파이프인경우 1 리턴
+	while (lexer_token != NULL)
+	{
+		if (lexer_token->label == PIPE)
+		{
+			if (lexer_token->next == NULL || lexer_token->next->label == PIPE)
+			{
+				return (1);
+			}
+		}
+		lexer_token = lexer_token->next;
+	}
+	return (0);
+}
+
+// 파이프 갯수로 파서 토큰 갯수 얻기
+int parser_token_size(t_list *lexer_token)
+{
+	int len;
+
+	len = 1;
+	while (lexer_token != NULL)
+	{
+		if (lexer_token->label == PIPE)
+			len++;
+		lexer_token = lexer_token->next;
+	}
+	return (len);
+}
+
+// 파서토큰 메모리 할당 받기
+t_parser_token *init_parser_token(int size)
+{
+	t_parser_token	*parser_token;
+	int				i;
+
+	parser_token = (t_parser_token *)malloc(sizeof(t_parser_token) * size);
+	if (parser_token == NULL)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		parser_token[i].cmd = NULL;
+		parser_token[i].in = NULL;
+		parser_token[i].out = NULL;
+		i++;
+	}
+	return (parser_token);
+}
+
+// 파서토큰 연결해주기 (우선 각 파서토큰의 cmd에 모든 연결리스트 노드 연결)
+void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token)
+{
+	t_list	*prev;
+	t_list	*temp;
+	t_list	*del;
+	int		i;
+
+	temp = *lexer_token;
+	prev = temp;
+	parser_token[0].cmd = temp;
+	i = 0;
+	while (temp != NULL)
+	{
+		if (temp->label == PIPE)
+		{
+			del = temp;
+			parser_token[++i].cmd = temp->next;
+			prev->next = NULL;
+			ft_lstdelone(del, free);
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+// 파서 토큰 할당 해제 해주는 함수
+void	free_parser_token(t_parser_token *parser_token, int len)
+{
+	int		i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (parser_token[i].cmd != NULL)
+			ft_lstclear(&(parser_token[i].cmd), free);
+		if (parser_token[i].in != NULL)
+			ft_lstclear(&(parser_token[i].in), free);
+		if (parser_token[i].out != NULL)
+			ft_lstclear(&(parser_token[i].out), free);
+		i++;
+	}
+	free(parser_token);
+}
+
+static void move_front_in_redirection(t_parser_token *parser_token)
+{
+	t_list	*prev;
+
+	parser_token->in = parser_token->cmd;
+	prev = parser_token->cmd->next;
+	while (prev->next != NULL && (prev->next->label == REDIR_IN || prev->next->label == REDIR_HEREDOC))
+		prev = prev->next->next;
+	parser_token->cmd = prev->next;
+	prev->next = NULL;
+}
+
+static void move_in_redirection(t_parser_token *parser_token)
+{
+	t_list	*temp;
+	t_list	*prev;
 	
-// 	// char str[100] = "\n      echo    '321'$USER     \"123\"\"$PATH\"   \'$USER\' $USER$USER\"$USER$USER\" ";
-// 	t_env	*env_list;
-// 	env_list = init_env_list(envp);
+	if (parser_token->cmd != NULL && (parser_token->cmd->label == REDIR_IN || parser_token->cmd->label == REDIR_HEREDOC)) // | | 사이에 아무것도 없는 경우 없음
+		move_front_in_redirection(parser_token);
+	if (parser_token->cmd == NULL)
+		return ;
+	prev = parser_token->cmd;
+	temp = parser_token->cmd->next;
+	while (temp != NULL)
+	{
+		if (temp->label == REDIR_IN || temp->label == REDIR_HEREDOC)
+		{
+			prev->next = temp->next->next;
+			ft_lstadd_back(&(parser_token->in), temp);
+			temp->next->next = NULL;
+			temp = prev;
+			continue ;
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+static void move_front_out_redirection(t_parser_token *parser_token)
+{
+	t_list	*prev;
+
+	parser_token->out = parser_token->cmd;
+	prev = parser_token->cmd->next;
+	while (prev->next != NULL && (prev->next->label == REDIR_OUT || prev->next->label == REDIR_DOUBLE_OUT))
+		prev = prev->next->next;
+	parser_token->cmd = prev->next;
+	prev->next = NULL;
+}
+
+static void move_out_redirection(t_parser_token *parser_token)
+{
+	t_list	*temp;
+	t_list	*prev;
 	
-// 	char str[5000];
-
-// 	t_list *temp = lexer_token;
-// 	int node_index = 0;
-// 	char node_label[20];
-
-// 	while (1)
-// 	{
-// 		gets(str);
-
-// 		//	lexer
-// 		lexer(str, &lexer_token);
-// 		labeling(lexer_token);
-// 		if (check_odd_quote(lexer_token))
-// 		{
-// 			ft_lstclear(&lexer_token, free);
-// 			printf("odd quote is not allowed!\n");
-// 			continue ;
-// 		}
-
-// 		//	parsser
-// 		replace_env(lexer_token, env_list);
-// 		remove_quote(&lexer_token);
-// 		merge_string(&lexer_token);
-// 		delete_blank(&lexer_token);
-
-// 		temp = lexer_token;
-// 		node_index = 0;
-// 		while (temp != NULL)
-// 		{
-						
-// 			if      (temp->label == 0) ft_strlcpy( node_label , "NOMAL_STRING",20);
-// 			else if (temp->label == 1) ft_strlcpy( node_label , "DOUBLE_QUOTE",20);
-// 			else if (temp->label == 2) ft_strlcpy( node_label , "SINGLE_QUOTE",20);
-// 			else if (temp->label == 3) ft_strlcpy( node_label , "BLANK",20);
-// 			else if (temp->label == 4) ft_strlcpy( node_label , "PIPE",20);
-// 			else if (temp->label == 5) ft_strlcpy( node_label , "REDIR_IN",20);
-// 			else if (temp->label == 6) ft_strlcpy( node_label , "REDIR_HEREDOC",20);
-// 			else if (temp->label == 7) ft_strlcpy( node_label , "REDIR_OUT",20);
-// 			else if (temp->label == 8) ft_strlcpy( node_label , "REDIR_DOUBLE_OUT",20);
-			
-// 			printf("%2d 번째 노드 : [%s] <- (%s)\n", node_index++, temp->content, node_label);
-// 			temp = temp->next;
-// 		}
-
-// 		ft_lstclear(&lexer_token, free);
-// 	}
-// }
+	if (parser_token->cmd != NULL && (parser_token->cmd->label == REDIR_OUT || parser_token->cmd->label == REDIR_DOUBLE_OUT)) // | | 사이에 아무것도 없는 경우 없음
+		move_front_out_redirection(parser_token);
+	if (parser_token->cmd == NULL)
+		return ;
+	prev = parser_token->cmd;
+	temp = parser_token->cmd->next;
+	while (temp != NULL)
+	{
+		if (temp->label == REDIR_OUT || temp->label == REDIR_DOUBLE_OUT)
+		{
+			prev->next = temp->next->next;
+			ft_lstadd_back(&(parser_token->out), temp);
+			temp->next->next = NULL;
+			temp = prev;
+			continue ;
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
 
 
+// cmd에 있는 노드들에 리다이랙션 기호들이 있으면 in, out 으로 옮겨주기
+void sort_redirection(t_parser_token *parser_token, int len)
+{ // 미완성
+	int		i;
+	t_parser_token	*temp;
 
-// t_env	*init_env_list(char **envp)
-// {
-// 	int		i;
-// 	char	**temp;
-// 	t_env	*env_node;
-// 	t_env	*env_list;
-
-// 	i = 0;
-// 	env_list = NULL; // 아무것도 안들어갔을 때 널 리턴
-// 	while (envp[i] != NULL)
-// 	{
-// 		temp = ft_split(envp[i], '=');
-// 		env_node = make_env_node(temp[0], temp[1]);
-// 		if (!env_node)
-// 		{
-// 			ft_putstr_fd("malloc error\n", STDERR_FILENO);
-// 			exit(1);
-// 		}
-// 		env_list_add_node(&env_list, env_node);
-// 		free(temp);
-// 		temp = NULL;
-// 		i++;
-// 	}
-// 	return (env_list);
-// }
-
-// t_env	*make_env_node(char *key, char *value)
-// {
-// 	t_env	*env_node;
-
-// 	env_node = (t_env *)malloc(sizeof(t_env));
-// 	if (!env_node)
-// 		return (NULL);
-// 	env_node->key = key;
-// 	env_node->value = value;
-// 	env_node->next = NULL;
-// 	return (env_node);
-// }
-
-// void	env_list_add_node(t_env **list, t_env *node)
-// {
-// 	t_env	*temp;
-
-// 	if (!node || !list)
-// 		return ;
-// 	if (*list == NULL) // 첫번째 노드
-// 		*list = node;
-// 	else
-// 	{
-// 		temp = *list;
-// 		while (temp->next != NULL)
-// 			temp = temp->next;
-// 		temp->next = node;
-// 	}
-// }
-
-// char	*get_env_value(t_env *env_list, char *key)
-// {
-// 	t_env	*temp;
-
-// 	if (!key) // 정해성이 추가했음, replace_env함수에서 substr 실패시 이 로직이 있으면 유용해 보임
-// 		return (NULL);
-// 	temp = env_list;
-// 	while (temp)
-// 	{
-// 		if (ft_strncmp(temp->key, key, ft_strlen(key) + 1) == 0)
-// 			return (temp->value);
-// 		temp = temp->next;
-// 	}
-// 	return (NULL);
-// }
+	i = 0;
+	while (i < len)
+	{
+		temp = &parser_token[i];
+		move_in_redirection(temp);
+		move_out_redirection(temp);
+		i++;
+	}
+}
