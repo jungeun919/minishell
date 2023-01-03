@@ -117,9 +117,9 @@ void	exec_cmd(t_list *lexer_token, t_env *env_list)
 	run_execve_cmd(cmds[i], env_list);
 	// test
 
-	char	**cmd_list;
-	cmd_list = convert_token_to_str_list(token);
-	run_execve_cmd(cmd_list, env_list);
+	// char	**cmd_list;
+	// cmd_list = convert_token_to_str_list(token);
+	// run_execve_cmd(cmd_list, env_list);
 }
 
 char	**convert_token_to_str_list(t_execute_unit *token)
