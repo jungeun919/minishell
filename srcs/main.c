@@ -29,7 +29,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_list	*temp;
 	int		node_index;
 	char	node_label[20];
-	t_parser_token	*parser_token;
+	// t_parser_token	*parser_token;
 
 	while (1)
 	{
@@ -92,6 +92,7 @@ int	main(int argc, char *argv[], char *envp[])
 			temp = temp->next;
 		} // for test
 
+		/* 잠깐 주석처리 하겠습니다 -jungchoi
 		int len = parser_token_size(lexer_token);
 		printf("len : %d\n", len);
 		parser_token = init_parser_token(len);
@@ -130,6 +131,7 @@ int	main(int argc, char *argv[], char *envp[])
 		} // for test
 
 		free_parser_token(parser_token, len);
+		*/
 
 		/* execute cmd */
 		if (is_builtin(lexer_token)) // lexer_token 나중에 넘길 구조체로 변경할 것

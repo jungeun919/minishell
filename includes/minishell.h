@@ -37,6 +37,8 @@ typedef struct s_env
 typedef struct s_execute_unit
 {
 	char	**command;
+	char	**in;
+	char	**out;
 	// char	*type;
 	int		in_fd;
 	int		out_fd;
@@ -74,6 +76,17 @@ void	free_split(char **str);
 void	error_exit(char *str, int status);
 /* execve test */
 
+// redir
+void	set_redir(t_execute_unit *token, t_env *env_list);
+void	get_infile(char *limiter, t_env *env_list);
+char	*replace_env_heredoc(char *str, t_env *env_list);
+void	set_redir_in(char *redir_sign, char *filename);
+void	set_redir_out(char *redir_sign, char *filename);
+
+// exec_pipe
+void	make_pipe(char **cmd_list, t_env *env_list);
+void	child_process(int *fd, char **cmd_list, t_env *env_list);
+void	parent_process(int *fd);
 
 
 typedef struct s_parser_token
