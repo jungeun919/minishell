@@ -10,8 +10,8 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	printf("%c\n", *argv[0]);
 
-	t_env	*env_list;
-	env_list = init_env_list(envp);
+	// t_env	*env_list;
+	// env_list = init_env_list(envp);
 
 	/* set ECHOCTL on/off */
 	struct termios	term;
@@ -29,7 +29,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_list	*temp;
 	int		node_index;
 	char	node_label[20];
-	// t_parser_token	*parser_token;
+	t_parser_token	*parser_token;
 
 	while (1)
 	{
@@ -92,7 +92,6 @@ int	main(int argc, char *argv[], char *envp[])
 			temp = temp->next;
 		} // for test
 
-		/* 잠깐 주석처리 하겠습니다 -jungchoi
 		int len = parser_token_size(lexer_token);
 		printf("len : %d\n", len);
 		parser_token = init_parser_token(len);
@@ -130,23 +129,54 @@ int	main(int argc, char *argv[], char *envp[])
 			printf("(null)\n");
 		} // for test
 
-		free_parser_token(parser_token, len);
-		*/
+		// free_parser_token(parser_token, len);
 
-		/* execute cmd */
-		if (is_builtin(lexer_token)) // lexer_token 나중에 넘길 구조체로 변경할 것
-			exec_builtin(lexer_token, env_list);
-		else
-			exec_cmd(lexer_token, env_list);
-		/* execute cmd */
+		t_exec_token	*token;
+
+		token = (t_exec_token *)malloc(sizeof(t_exec_token) * len);
+
+		int	i = 0;
+		while (i < len)
+		{
+			token[i].parser_token = &(parser_token[i]);
+			token[i].cmd = make_2d_array(parser_token[i].cmd);
+			i++;
+		}
+
+		// /* execute cmd */
+		// if (is_builtin(lexer_token)) // lexer_token 나중에 넘길 구조체로 변경할 것
+		// 	exec_builtin(lexer_token, env_list);
+		// else
+		// 	exec_cmd(parser_token, env_list, len);
+		// /* execute cmd */
 		
-		if (ft_strlen(cmd) >= 1)
-			add_history(cmd);
-		free(cmd);
-		cmd = NULL;
-		// system("leaks minishell");
+		// if (ft_strlen(cmd) >= 1)
+		// 	add_history(cmd);
+		// free(cmd);
+		// cmd = NULL;
+		// // system("leaks minishell");
 	}
 	/* get command line */
 
 	return (0);
+}
+
+char	**make_2d_array(t_list *cmd_list)
+{
+	int		i;
+	char	**cmd;
+	t_list	*temp;
+
+	cmd = (char **)malloc(sizeof(char *) * ft_lstsize(cmd_list));
+	if (!cmd)
+		return (NULL);
+	i = 0;
+	temp = cmd_list;
+	while (temp != NULL)
+	{
+		cmd[i] = (temp->content);
+		i++;
+		temp = temp->next;
+	}
+	return (cmd);
 }
