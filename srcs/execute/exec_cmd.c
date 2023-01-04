@@ -1,75 +1,18 @@
 
 #include "minishell.h"
 
-void	exec_cmd(t_parser_token *parser_token, t_env *env_list, int len)
+void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
+	// set_redir(token, env_list);
+	int	i;
 
-	// int		i;
-
-	
-
-	// cmds = (char***)malloc(sizeof(char **) * len+1);
-	// i = 0;
-	// while (i < len)
-	// {
-	// 	temp = parser_token;
-	// 	int size = ft_lstsize(temp->cmd);
-	// 	cmds[i] = (char **)malloc(sizeof(char *) * size);
-	// 	while (temp != NULL)
-	// 	{
-	// 		/* code */
-	// 	}
-		
-	// }
-	
-	// // cmd_list = convert_token_to_str_list(parser_token);
-	// // cmds[0] = cmd_list;
-	// // cmd_list2 = convert_token_to_str_list(token2);
-	// // cmds[1] = cmd_list2;
-	// // cmd_list3 = convert_token_to_str_list(token3);
-	// // cmds[2] = cmd_list3;
-	// // cmds[3] = NULL;
-	// // setting example input
-
-	// lexer_token->content = "";
-
-	// // test
-	// // set_redir(token, env_list);
-	// int	i = 0;
-	// while (i < 2) // i < cmd_count - 1로 변경
-	// {
-	// 	make_pipe(cmds[i], env_list);
-	// 	i++;
-	// }
-	// run_execve_cmd(cmds[i], env_list);
-	// // test
-
-	// // char	**cmd_list;
-	// // cmd_list = convert_token_to_str_list(token);
-	// // run_execve_cmd(cmd_list, env_list);
-}
-
-char	**convert_token_to_str_list(t_parser_token *token)
-{
-	int		i;
-	char	**cmd_str;
-
-	if (token == NULL)
-		return (NULL);
-	// i = 0;
-	// while (token->cmd->content[i] != NULL)
-	// 	i++;
-	cmd_str = (char **)malloc(sizeof(char *) * (ft_strlen(token->cmd->content) + 1));
-	if (!cmd_str)
-		return (NULL);
 	i = 0;
-	while (token->cmd->content[i] != NULL)
+	while (i < len - 1)
 	{
-		cmd_str[i] = &token->cmd->content[i];
+		make_pipe(token[i].cmd, env_list);
 		i++;
 	}
-	cmd_str[i] = NULL;
-	return (cmd_str);
+	run_execve_cmd(token[i].cmd, env_list);
 }
 
 void	run_execve_cmd(char **cmd_list, t_env *env_list)
@@ -85,7 +28,7 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 		free_split(env);
 		return ;
 	}
-	
+
 	cmd = ft_strjoin("/", cmd_list[0]);
 	path = get_path(cmd, env);
 	if (!path)

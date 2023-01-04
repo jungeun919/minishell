@@ -1,17 +1,17 @@
 
 #include "minishell.h"
 
-int	ft_unset(t_execute_unit *argv, t_env *env_list)
+int	ft_unset(char **cmd, t_env *env_list)
 {
 	int	i;
 
-	if (argv->command[1] == NULL) // not enough arguments
+	if (cmd[1] == NULL) // not enough arguments
 		return (0);
 	i = 1;
-	while (argv->command[i])
+	while (cmd[i])
 	{
-		if (is_key_in_env_list(argv->command[i], env_list))
-			delete_node(argv->command[i], &env_list);
+		if (is_key_in_env_list(cmd[i], env_list))
+			delete_node(cmd[i], &env_list);
 		i++;
 	}
 	return (1);

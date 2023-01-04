@@ -1,9 +1,9 @@
 
 #include "minishell.h"
 
-int	ft_env(t_execute_unit *argv, t_env *env_list)
+int	ft_env(char **cmd, t_env *env_list)
 {
-	if (argv->command[1] != NULL)
+	if (cmd[1] != NULL)
 		return (0); // too many argument
 	print_env_list(env_list);
 	return (0);

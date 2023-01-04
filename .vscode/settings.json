@@ -2,6 +2,8 @@
     "files.associations": {
         "signal.h": "c",
         "history.h": "c",
-        "minishell.h": "c"
+        "minishell.h": "c",
+        "__locale": "c",
+        "ios": "c"
     }
 }

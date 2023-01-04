@@ -31,8 +31,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-
-
 typedef struct s_parser_token
 {
 	t_list *cmd;
@@ -40,12 +38,12 @@ typedef struct s_parser_token
 	t_list *out;
 }	t_parser_token;
 
-/* builtin test */
 typedef struct s_exec_token
 {
 	t_parser_token	*parser_token;
 	char			**cmd;
 }	t_exec_token;
+
 
 // lexer
 void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
@@ -69,6 +67,9 @@ void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token);
 void	free_parser_token(t_parser_token *parser_token, int len);
 void	sort_redirection(t_parser_token *parser_token, int len);
 
+// exec_token
+char	**make_2d_array(t_list *cmd_list);
+
 // env
 t_env	*init_env_list(char **envp);
 t_env	*make_env_node(char *key, char *value);
@@ -80,53 +81,46 @@ char	*get_env_value(t_env *env_list, char *key);
 void	setting_signal(void);
 void	sig_handler(int signal);
 
+// exec_builtin
+int		is_builtin(t_exec_token *token);
+void	exec_builtin(t_exec_token *token, t_env *env_list);
 
-char	**make_2d_array(t_list *cmd_list);
+// env
+int		ft_env(char **cmd, t_env *env_list);
+void	print_env_list(t_env *env_list);
 
-// int		is_builtin(t_list *lexer_token);
-// void	exec_builtin(t_list *lexer_token, t_env *env_list);
+// export
+int		ft_export(char **cmd, t_env *env_list);
+void	execute_export(char *key, char *value, t_env *env_list);
+int		is_key_in_env_list(char *key, t_env *env_list);
+int		is_valid_format_key(char *key);
+void	update_value(char *key, char *value, t_env **env_list);
 
-// // env
-// int		ft_env(t_execute_unit *argv, t_env *env_list);
-// int	ft_env(t_parser_token *argv, t_env *env_list);
+// unset
+int		ft_unset(char **cmd, t_env *env_list);
+void	delete_node(char *key, t_env **env_list);
+t_env	*get_node(char *key, t_env *env_list);
 
-// void	print_env_list(t_env *env_list);
+// exec_cmd
+void	exec_cmd(t_exec_token *token, t_env *env_list, int len);
+// char	**convert_token_to_str_list(t_execute_unit *token);
+void	run_execve_cmd(char **cmd_list, t_env *env_list);
+char	**convert_env_list_to_str_list(t_env *env_list);
+void	join_key_and_value(char **env_str, t_env *env_list);
+char	*get_path(char *cmd, char **env);
+void	free_split(char **str);
+void	error_exit(char *str, int status);
 
-// // export
-// int		ft_export(t_execute_unit *argv, t_env *env_list);
-// void	execute_export(char *key, char *value, t_env *env_list);
-// int		is_key_in_env_list(char *key, t_env *env_list);
-// int		is_valid_format_key(char *key);
-// void	update_value(char *key, char *value, t_env **env_list);
-
-// // unset
-// int		ft_unset(t_execute_unit *argv, t_env *env_list);
-// void	delete_node(char *key, t_env **env_list);
-// t_env	*get_node(char *key, t_env *env_list);
-// /* builtin test */
-
-// /* execve test */
-// void	exec_cmd(t_parser_token *parser_token, t_env *env_list, int len);
-// char    **convert_token_to_str_list(t_execute_unit *token);
-// void	run_execve_cmd(char **cmd_list, t_env *env_list);
-// char	**convert_env_list_to_str_list(t_env *env_list);
-// void    join_key_and_value(char **env_str, t_env *env_list);
-// char	*get_path(char *cmd, char **env);
-// void	free_split(char **str);
-// void	error_exit(char *str, int status);
-// /* execve test */
-
-// // redir
+// redir
 // void	set_redir(t_execute_unit *token, t_env *env_list);
 // void	get_infile(char *limiter, t_env *env_list);
 // char	*replace_env_heredoc(char *str, t_env *env_list);
 // void	set_redir_in(char *redir_sign, char *filename);
 // void	set_redir_out(char *redir_sign, char *filename);
 
-// // exec_pipe
-// void	make_pipe(char **cmd_list, t_env *env_list);
-// void	child_process(int *fd, char **cmd_list, t_env *env_list);
-// void	parent_process(int *fd);
-
+// exec_pipe
+void	make_pipe(char **cmd_list, t_env *env_list);
+void	child_process(int *fd, char **cmd_list, t_env *env_list);
+void	parent_process(int *fd);
 
 #endif

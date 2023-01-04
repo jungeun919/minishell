@@ -2,23 +2,23 @@
 #include "minishell.h"
 
 // 리턴값 정의 필요
-int	ft_export(t_execute_unit *argv, t_env *env_list)
+int	ft_export(char **cmd, t_env *env_list)
 {
-	int				i;
-	int				j;
-	char			*key;
-	char			*value;
+	int		i;
+	int		j;
+	char	*key;
+	char	*value;
 
-	if (argv->command[1] == NULL) // export만 입력했을 때 목록 표시
+	if (cmd[1] == NULL) // export만 입력했을 때 목록 표시
 		print_env_list(env_list);
 	i = 1;
-	while (argv->command[i] != NULL)
+	while (cmd[i] != NULL)
 	{
 		j = 0;
-		while (argv->command[i][j] && argv->command[i][j] != '=')
+		while (cmd[i][j] && cmd[i][j] != '=')
 			j++;
-		key = ft_substr(argv->command[i], 0, j); // 할당 실패했을 때 처리할건지? 일단 함수 안에서 널 체크하는 정도로만 작성
-		value = ft_substr(argv->command[i], j + 1, ft_strlen(argv->command[i]) - j - 1);
+		key = ft_substr(cmd[i], 0, j); // 할당 실패했을 때 처리할건지? 일단 함수 안에서 널 체크하는 정도로만 작성
+		value = ft_substr(cmd[i], j + 1, ft_strlen(cmd[i]) - j - 1);
 		execute_export(key, value, env_list);
 		i++;
 	}

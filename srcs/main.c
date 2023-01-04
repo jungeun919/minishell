@@ -10,8 +10,8 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	printf("%c\n", *argv[0]);
 
-	// t_env	*env_list;
-	// env_list = init_env_list(envp);
+	t_env	*env_list;
+	env_list = init_env_list(envp);
 
 	/* set ECHOCTL on/off */
 	struct termios	term;
@@ -143,18 +143,18 @@ int	main(int argc, char *argv[], char *envp[])
 			i++;
 		}
 
-		// /* execute cmd */
-		// if (is_builtin(lexer_token)) // lexer_token 나중에 넘길 구조체로 변경할 것
-		// 	exec_builtin(lexer_token, env_list);
-		// else
-		// 	exec_cmd(parser_token, env_list, len);
-		// /* execute cmd */
+		/* execute cmd */
+		if (is_builtin(token)) // lexer_token 나중에 넘길 구조체로 변경할 것
+			exec_builtin(token, env_list);
+		else
+			exec_cmd(token, env_list, len);
+		/* execute cmd */
 		
-		// if (ft_strlen(cmd) >= 1)
-		// 	add_history(cmd);
-		// free(cmd);
-		// cmd = NULL;
-		// // system("leaks minishell");
+		if (ft_strlen(cmd) >= 1)
+			add_history(cmd);
+		free(cmd);
+		cmd = NULL;
+		// system("leaks minishell");
 	}
 	/* get command line */
 
@@ -167,16 +167,17 @@ char	**make_2d_array(t_list *cmd_list)
 	char	**cmd;
 	t_list	*temp;
 
-	cmd = (char **)malloc(sizeof(char *) * ft_lstsize(cmd_list));
+	cmd = (char **)malloc(sizeof(char *) * (ft_lstsize(cmd_list) + 1));
 	if (!cmd)
 		return (NULL);
 	i = 0;
 	temp = cmd_list;
 	while (temp != NULL)
 	{
-		cmd[i] = (temp->content);
+		cmd[i] = temp->content;
 		i++;
 		temp = temp->next;
 	}
+	cmd[i] = NULL;
 	return (cmd);
 }
