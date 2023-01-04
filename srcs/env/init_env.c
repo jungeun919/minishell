@@ -12,14 +12,21 @@ t_env	*init_env_list(char **envp)
 	env_list = NULL; // 아무것도 안들어갔을 때 널 리턴
 	while (envp[i] != NULL)
 	{
-		temp = ft_split(envp[i], '=');
+		temp = ft_split(envp[i], '='); // split 실패시 문제 !
+		// if (temp == NULL)
+		//     lstclear(env_list);
+		//     exit();
 		env_node = make_env_node(temp[0], temp[1]);
 		if (!env_node)
 		{
+			// free(temp[0]); free(temp[1]); free(temp);
+			// lstclear(env_list);
 			ft_putstr_fd("malloc error\n", STDERR_FILENO);
 			exit(1);
 		}
 		env_list_add_node(&env_list, env_node);
+		// free(temp[0]);
+		// free(temp[1]);
 		free(temp);
 		temp = NULL;
 		i++;
