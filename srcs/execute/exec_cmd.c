@@ -3,15 +3,15 @@
 
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
-	// set_redir(token, env_list);
 	int	i;
 
 	i = 0;
 	while (i < len - 1)
 	{
-		make_pipe(token[i].cmd, env_list);
+		make_pipe(token[i], env_list);
 		i++;
 	}
+	set_redir(token[i].parser_token, env_list);
 	run_execve_cmd(token[i].cmd, env_list);
 }
 

@@ -112,15 +112,15 @@ void	free_split(char **str);
 void	error_exit(char *str, int status);
 
 // redir
-// void	set_redir(t_execute_unit *token, t_env *env_list);
-// void	get_infile(char *limiter, t_env *env_list);
-// char	*replace_env_heredoc(char *str, t_env *env_list);
-// void	set_redir_in(char *redir_sign, char *filename);
-// void	set_redir_out(char *redir_sign, char *filename);
+void	set_redir(t_parser_token *parser_token, t_env *env_list);
+void	get_infile(char *limiter, t_env *env_list);
+char	*replace_env_heredoc(char *str, t_env *env_list);
+void	set_redir_in(char *redir_sign, char *filename);
+void	set_redir_out(char *redir_sign, char *filename);
 
 // exec_pipe
-void	make_pipe(char **cmd_list, t_env *env_list);
-void	child_process(int *fd, char **cmd_list, t_env *env_list);
+void	make_pipe(t_exec_token token, t_env *env_list);
+void	child_process(int *fd, t_exec_token token, t_env *env_list);
 void	parent_process(int *fd);
 
 #endif

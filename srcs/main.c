@@ -143,11 +143,13 @@ int	main(int argc, char *argv[], char *envp[])
 			i++;
 		}
 
+		exec_cmd(token, env_list, len);
+
 		/* execute cmd */
-		if (is_builtin(token)) // lexer_token 나중에 넘길 구조체로 변경할 것
-			exec_builtin(token, env_list);
-		else
-			exec_cmd(token, env_list, len);
+		// if (is_builtin(token))
+		// 	exec_builtin(token, env_list);
+		// else
+		// 	exec_cmd(token, env_list, len);
 		/* execute cmd */
 		
 		if (ft_strlen(cmd) >= 1)
