@@ -81,6 +81,8 @@ char	*get_env_value(t_env *env_list, char *key);
 // utils
 void	setting_signal(void);
 void	sig_handler(int signal);
+void	set_echoctl_off(void);
+void	set_echoctl_on(void);
 
 // exec_builtin
 int		is_builtin(t_exec_token *token);

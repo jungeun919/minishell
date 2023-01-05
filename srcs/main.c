@@ -8,18 +8,12 @@ int	main(int argc, char *argv[], char *envp[])
 		ft_putstr_fd("argument error\n", STDERR_FILENO);
 		return (0);
 	}
-	printf("%c\n", *argv[0]);
+	(void)argv;
 
 	t_env	*env_list;
 	env_list = init_env_list(envp);
 
-	/* set ECHOCTL on/off */
-	struct termios	term;
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~(ECHOCTL); // 제어문자 반향
-	tcsetattr(STDIN_FILENO, TCSANOW, &term); // 변경 속성 바로 적용
-	/* set ECHOCTL on/off */
-
+	set_echoctl_off();
 	setting_signal();
 	
 	/* get command line */

@@ -18,3 +18,21 @@ void	sig_handler(int signal)
 		rl_redisplay();
 	}
 }
+
+void	set_echoctl_off(void) // ctrl+c not print
+{
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void	set_echoctl_on(void) // ctrl+c print
+{
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag |= (ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
