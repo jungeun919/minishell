@@ -13,8 +13,6 @@ int	main(int argc, char *argv[], char *envp[])
 	t_env	*env_list;
 	env_list = init_env_list(envp);
 
-	set_echoctl_off();
-	setting_signal();
 	
 	/* get command line */
 	char *cmd;
@@ -27,6 +25,9 @@ int	main(int argc, char *argv[], char *envp[])
 
 	while (1)
 	{
+		set_echoctl_off();
+		setting_signal();
+
 		cmd = readline("minishell$ ");
 		// cmd = "echo << $USER";
 
@@ -37,6 +38,15 @@ int	main(int argc, char *argv[], char *envp[])
 			printf("exit");
 			exit(0);
 		}
+
+		if (!(*cmd)) // blank
+		{
+			free(cmd);
+			continue ;
+		}
+
+		if (ft_strlen(cmd) >= 1)
+			add_history(cmd);
 
 		/* lexer main */
 		lexer_token = NULL;
@@ -138,18 +148,8 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 
 		exec_cmd(token, env_list, len);
-
-		/* execute cmd */
-		// if (is_builtin(token))
-		// 	exec_builtin(token, env_list);
-		// else
-		// 	exec_cmd(token, env_list, len);
-		/* execute cmd */
 		
-		if (ft_strlen(cmd) >= 1)
-			add_history(cmd);
 		free(cmd);
-		cmd = NULL;
 		// system("leaks minishell");
 	}
 	/* get command line */

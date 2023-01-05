@@ -6,11 +6,17 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	int	i;
 
 	i = 0;
-	while (i < len)
+	while (i < len - 1)
 	{
 		make_pipe(token[i], env_list);
 		i++;
 	}
+
+	set_redir(token[i].parser_token, env_list);
+	if (is_builtin(&token[i]))
+		exec_builtin(&token[i], env_list);
+	else
+		run_execve_cmd(token[i].cmd, env_list);	
 }
 
 void	run_execve_cmd(char **cmd_list, t_env *env_list)
