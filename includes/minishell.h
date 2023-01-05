@@ -74,6 +74,7 @@ char	**make_2d_array(t_list *cmd_list);
 t_env	*init_env_list(char **envp);
 t_env	*make_env_node(char *key, char *value);
 void	env_list_add_node(t_env **list, t_env *node);
+void	free_env_list(t_env *env_list);
 
 char	*get_env_value(t_env *env_list, char *key);
 
