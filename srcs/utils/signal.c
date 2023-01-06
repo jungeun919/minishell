@@ -12,10 +12,19 @@ void	sig_handler(int signal)
 	// printf("signal: %d\n", signal);
 	if (signal == SIGINT)
 	{
-		printf("\n");
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
+	}
+}
+
+void	heredoc_sig_handler(int signal)
+{
+	if (signal == SIGINT)
+	{
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		exit(1);
 	}
 }
 

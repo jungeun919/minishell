@@ -3,20 +3,50 @@
 
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
-	int	i;
+	pid_t	*pids;
+	pids = (pid_t *)malloc(sizeof(pid_t) * len);
 
-	i = 0;
-	while (i < len - 1)
+	int		**fds;
+	fds = (int **)malloc(sizeof(int *) * len);
+	int	i = 0;
+	while (i < len)
 	{
-		make_pipe(token[i], env_list);
+		fds[i] = (int *)malloc(sizeof(int) * 2);
+		i++;
+	}
+	i = 0;
+	while (i < len)
+	{
+		pipe(fds[i]);
 		i++;
 	}
 
-	set_redir(token[i].parser_token, env_list);
-	if (is_builtin(&token[i]))
-		exec_builtin(&token[i], env_list);
-	else
-		run_execve_cmd(token[i].cmd, env_list);	
+	i = 0;
+	while (i < len)
+	{
+		exec_pipe(token[i], i, pids, fds, env_list, len);
+		i++;
+	}
+
+	i = 0;
+	while (i < len)
+	{
+		close(fds[i][0]);
+		close(fds[i][1]);
+		i++;
+	}
+
+	i = 0;
+	int	status;
+	while (1)
+	{
+		if (wait(&status) < 0)
+		{
+			status = 1;
+			break ;
+		}
+		i++;
+	}
 }
 
 void	run_execve_cmd(char **cmd_list, t_env *env_list)

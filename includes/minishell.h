@@ -44,6 +44,7 @@ typedef struct s_exec_token
 	char			**cmd;
 }	t_exec_token;
 
+extern int	g_exit_status;
 
 // lexer
 void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
@@ -81,6 +82,7 @@ char	*get_env_value(t_env *env_list, char *key);
 // utils
 void	setting_signal(void);
 void	sig_handler(int signal);
+void	heredoc_sig_handler(int signal);
 void	set_echoctl_off(void);
 void	set_echoctl_on(void);
 
@@ -117,13 +119,21 @@ void	error_exit(char *str, int status);
 // redir
 void	set_redir(t_parser_token *parser_token, t_env *env_list);
 void	get_infile(char *limiter, t_env *env_list);
+void	heredoc_child_process(char *limiter, t_env *env_list);
 char	*replace_env_heredoc(char *str, t_env *env_list);
 void	set_redir_in(char *redir_sign, char *filename);
 void	set_redir_out(char *redir_sign, char *filename);
 
 // exec_pipe
-void	make_pipe(t_exec_token token, t_env *env_list);
-void	child_process(int *fd, t_exec_token token, t_env *env_list);
-void	parent_process(int *fd);
+// void	make_pipe(t_exec_token token, t_env *env_list);
+// void	make_pipe(t_exec_token token, int i, int len, t_env *env_list);
+// void	child_process(int *fd, t_exec_token token, t_env *env_list);
+// void	child_process(int *fd, int i, int len, t_exec_token token, t_env *env_list);
+// void	parent_process(int *fd);
+// void	parent_process(int *fd, int i, int len);
+
+void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len);
+void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len);
+// void	parent_process(int **fds, int i);
 
 #endif
