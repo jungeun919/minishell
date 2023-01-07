@@ -9,8 +9,6 @@ void	set_redir(t_parser_token *parser_token, t_env *env_list)
 	in = parser_token->in;
 	while (in != NULL)
 	{
-		// if (ft_strncmp(in->content, "<<", 3) == 0)
-		// 	get_infile(in->next->content, env_list);
 		set_redir_in(in->content, in->next->content);
 		in = in->next->next;
 	}
@@ -21,90 +19,6 @@ void	set_redir(t_parser_token *parser_token, t_env *env_list)
 		out = out->next->next;
 	}
 	(void)env_list;
-}
-
-// void	get_infile(char *limiter, t_env *env_list)
-// {
-// 	int		fd;
-// 	char	*line;
-
-// 	fd = open(".here_doc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1)
-// 		error_exit("open error\n", 1);
-// 	while (1)
-// 	{
-// 		line = readline("> ");
-// 		if (line)
-// 		{
-// 			if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
-// 			{
-// 				free(line);
-// 				break ;
-// 			}
-// 			line = replace_env_heredoc(line, env_list);
-// 			// printf("line : %s\n", line);
-// 			write(fd, line, ft_strlen(line));
-// 			write(fd, "\n", 1);
-// 			free(line);
-// 		}
-// 		else
-// 			break ;
-// 	}
-// 	close(fd);
-// }
-
-void	get_infile(char *limiter, t_env *env_list)
-{
-	pid_t	pid;
-
-	// signal(SIGINT, SIG_IGN);
-	pid = fork();
-	if (pid == -1)
-		error_exit("fork error\n", 1);
-	if (pid == 0)
-	{
-		signal(SIGINT, heredoc_sig_handler);
-		heredoc_child_process(limiter, env_list);
-		exit(0);
-	}
-	else
-	{
-		int	status;
-		wait(&status);
-		fprintf(stderr, "heredoc pid : %d\n", pid);
-		// waitpid(pid, &status, WNOHANG);
-	}
-}
-
-void	heredoc_child_process(char *limiter, t_env *env_list)
-{
-	int		fd;
-	char	*line;
-
-	fd = open(".here_doc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		error_exit("open error\n", 1);
-	fprintf(stderr, "heredoc fd : %d\n", fd);
-	while (1)
-	{
-		line = readline("> ");
-		// fprintf(stderr, "line : %s\n", line);
-		if (line)
-		{
-			if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
-			{
-				free(line);
-				break ;
-			}
-			line = replace_env_heredoc(line, env_list);
-			write(fd, line, ft_strlen(line));
-			write(fd, "\n", 1);
-			free(line);
-		}
-		else
-			break ;
-	}
-	// close(fd);
 }
 
 char	*replace_env_heredoc(char *str, t_env *env_list)
@@ -136,10 +50,7 @@ void	set_redir_in(char *redir_sign, char *filename)
 	if (ft_strncmp(redir_sign, "<", 2) == 0)
 		fd = open(filename, O_RDONLY);
 	else if (ft_strncmp(redir_sign, "<<", 3) == 0)
-	{
 		fd = open(".here_doc_temp", O_RDONLY);
-		fprintf(stderr, "testttttt\n");
-	}
 
 	if (fd == -1)
 	{

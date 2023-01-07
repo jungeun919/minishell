@@ -19,7 +19,7 @@ UTILS_DIR = utils
 LEXER_SRCS = lexer.c labeling.c check_odd_quote.c lexer_error.c
 PARSER_SRCS = check.c delete_blank.c merge_string.c parser_token.c remove_quote.c replace_env.c sort_redirection.c
 BUILTIN_SRCS = env.c export.c unset.c
-EXEC_SRCS = exec_builtin.c exec_cmd.c redir.c exec_pipe.c
+EXEC_SRCS = exec_builtin.c exec_cmd.c exec_pipe.c redir.c heredoc.c
 ENV_SRCS = init_env.c utils.c
 UTILS_SRCS = signal.c
 

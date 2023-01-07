@@ -3,64 +3,20 @@
 
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
-	int	j = 0;
-	t_list	*in;
-	while (j < len)
-	{
-		in = token[j].parser_token->in;
-		while (in != NULL)
-		{
-			if (ft_strncmp(in->content, "<<", 3) == 0)
-				get_infile(in->next->content, env_list);
-			in = in->next->next;
-		}
-		j++;
-	}
-
 	pid_t	*pids;
-	pids = (pid_t *)malloc(sizeof(pid_t) * len);
-
 	int		**fds;
-	fds = (int **)malloc(sizeof(int *) * len);
-	int	i = 0;
-	while (i < len)
-	{
-		fds[i] = (int *)malloc(sizeof(int) * 2);
-		i++;
-	}
-	i = 0;
-	while (i < len)
-	{
-		pipe(fds[i]);
-		i++;
-	}
+	int		i;
 
+	set_heredoc_input(token, env_list, len);
+	init_exec_info(&pids, &fds, len);
 	i = 0;
 	while (i < len)
 	{
 		exec_pipe(token[i], i, pids, fds, env_list, len);
 		i++;
 	}
-
-	i = 0;
-	while (i < len)
-	{
-		close(fds[i][0]);
-		close(fds[i][1]);
-		i++;
-	}
-
-	i = 0;
-	int	status;
-	while (1)
-	{
-		if (wait(&status) < 0)
-		{
-			status = 1;
-			break ;
-		}
-		i++;
-	}
+	close_all_fds(fds, len);
+	wait_all_childs();
 }
 
 void	run_execve_cmd(char **cmd_list, t_env *env_list)
@@ -82,9 +38,8 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 	if (!path)
 	{
 		free(cmd);
-		return ;
+		return ; // error_exit("path error\n", 1);
 	}
-		// error_exit("path error\n", 1);
 	if (execve(path, cmd_list, env) == -1)
 		error_exit("execve error\n", 127);
 }

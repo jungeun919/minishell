@@ -108,7 +108,6 @@ t_env	*get_node(char *key, t_env *env_list);
 
 // exec_cmd
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len);
-// char	**convert_token_to_str_list(t_execute_unit *token);
 void	run_execve_cmd(char **cmd_list, t_env *env_list);
 char	**convert_env_list_to_str_list(t_env *env_list);
 void	join_key_and_value(char **env_str, t_env *env_list);
@@ -118,22 +117,20 @@ void	error_exit(char *str, int status);
 
 // redir
 void	set_redir(t_parser_token *parser_token, t_env *env_list);
-void	get_infile(char *limiter, t_env *env_list);
-void	heredoc_child_process(char *limiter, t_env *env_list);
 char	*replace_env_heredoc(char *str, t_env *env_list);
 void	set_redir_in(char *redir_sign, char *filename);
 void	set_redir_out(char *redir_sign, char *filename);
 
-// exec_pipe
-// void	make_pipe(t_exec_token token, t_env *env_list);
-// void	make_pipe(t_exec_token token, int i, int len, t_env *env_list);
-// void	child_process(int *fd, t_exec_token token, t_env *env_list);
-// void	child_process(int *fd, int i, int len, t_exec_token token, t_env *env_list);
-// void	parent_process(int *fd);
-// void	parent_process(int *fd, int i, int len);
+// heredoc
+void	set_heredoc_input(t_exec_token *token, t_env *env_list, int len);
+void	get_infile(char *limiter, t_env *env_list);
+void	heredoc_child_process(char *limiter, t_env *env_list);
 
+// exec_pipe
+void	init_exec_info(pid_t **pids, int ***fds, int len);
+void	close_all_fds(int **fds, int len);
+void	wait_all_childs(void);
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len);
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len);
-// void	parent_process(int **fds, int i);
 
 #endif
