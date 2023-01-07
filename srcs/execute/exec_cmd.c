@@ -3,6 +3,20 @@
 
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
+	int	j = 0;
+	t_list	*in;
+	while (j < len)
+	{
+		in = token[j].parser_token->in;
+		while (in != NULL)
+		{
+			if (ft_strncmp(in->content, "<<", 3) == 0)
+				get_infile(in->next->content, env_list);
+			in = in->next->next;
+		}
+		j++;
+	}
+
 	pid_t	*pids;
 	pids = (pid_t *)malloc(sizeof(pid_t) * len);
 

@@ -12,12 +12,17 @@ void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_lis
 		error_exit("fork error\n", 1);
 	if (pids[i] == 0)
 		child_process(fds, i, token, env_list, len);
+	// int	status;
+	// wait(&status);
 	// waitpid(pids[i], &status, 0);
-	// fprintf()
+	fprintf(stderr, "[%s] pid : %d\n", token.cmd[0], pids[i]);
 }
 
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len)
 {
+	fprintf(stderr, "%s : fds[%d][read] : %d\n", token.cmd[0], i, fds[i][0]);
+	fprintf(stderr, "%s : fds[%d][write] : %d\n", token.cmd[0], i, fds[i][1]);
+
 	if (i != 0)
 	{
 		close(fds[i - 1][1]);

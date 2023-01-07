@@ -20,7 +20,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_list	*lexer_token;
 	t_list	*temp;
 	int		node_index;
-	char	node_label[20];
+	// char	node_label[20];
 	t_parser_token	*parser_token;
 
 	while (1)
@@ -52,6 +52,8 @@ int	main(int argc, char *argv[], char *envp[])
 		lexer_token = NULL;
 		temp = lexer_token;
 		node_index = 0;
+		(void)node_index;
+		(void)temp;
 
 		lexer(cmd, &lexer_token);
 		labeling(lexer_token);
@@ -75,6 +77,7 @@ int	main(int argc, char *argv[], char *envp[])
 			continue ;
 		}
 
+		/*
 		temp = lexer_token;
 		node_index = 0;
 		while (temp != NULL) // for test
@@ -95,9 +98,10 @@ int	main(int argc, char *argv[], char *envp[])
 			printf("%2d 번째 노드 : [%s] <- (%s)\n", node_index++, temp->content, node_label);
 			temp = temp->next;
 		} // for test
+		*/
 
 		int len = parser_token_size(lexer_token);
-		printf("len : %d\n", len);
+		// printf("len : %d\n", len);
 		parser_token = init_parser_token(len);
 		if (parser_token == NULL)
 			clear_and_exit(&lexer_token);// 에러처리 필요
@@ -105,6 +109,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 		sort_redirection(parser_token, len);
 
+		/*
 		for (int i = 0; i < len; i++){ // for test
 			printf("%d 번째 파서 토큰 ------------------------ \n", i);
 			printf("cmd : ");
@@ -132,6 +137,7 @@ int	main(int argc, char *argv[], char *envp[])
 			}
 			printf("(null)\n");
 		} // for test
+		*/
 
 		// free_parser_token(parser_token, len);
 
