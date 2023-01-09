@@ -25,7 +25,7 @@ void	get_infile(char *limiter, t_env *env_list)
 	pid_t	pid;
 	int		status;
 
-	// signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		error_exit("fork error\n", 1);

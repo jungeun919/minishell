@@ -9,13 +9,13 @@ t_env	*init_env_list(char **envp)
 	t_env	*env_list;
 
 	i = 0;
-	env_list = NULL; // 아무것도 안들어갔을 때 널 리턴
+	env_list = NULL;
 	while (envp[i] != NULL)
 	{
-		temp = ft_split(envp[i], '='); // split 실패시 문제 !
+		temp = ft_split(envp[i], '=');
 		if (temp == NULL)
 		{
-			free_env_list(env_list);
+			free_env_list(&env_list);
 			exit(1);
 		}
 		env_node = make_env_node(temp[0], temp[1]);
@@ -24,14 +24,11 @@ t_env	*init_env_list(char **envp)
 			free(temp[0]);
 			free(temp[1]);
 			free(temp);
-			free_env_list(env_list);
+			free_env_list(&env_list);
 			exit(1);
 		}
 		env_list_add_node(&env_list, env_node);
-		// free(temp[0]);
-		// free(temp[1]);
 		free(temp);
-		temp = NULL;
 		i++;
 	}
 	return (env_list);

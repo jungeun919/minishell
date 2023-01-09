@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 12:30:23 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 18:10:58 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/09 20:10:50 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 void	clear_parser_and_exit(t_parser_token *parser_token, int len)
 {
 	free_parser_token(parser_token, len);
-	// env_list 도 free 해줄것
+	free_env_list(&(g_info.env_list));
 	exit(0);
 }

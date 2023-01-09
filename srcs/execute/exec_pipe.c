@@ -1,25 +1,30 @@
 
 #include "minishell.h"
 
-void	init_exec_info(pid_t **pids, int ***fds, int len)
+int	init_exec_info(pid_t **pids, int ***fds, int len)
 {
 	int	i;
 
 	*pids = (pid_t *)malloc(sizeof(pid_t) * len);
 	*fds = (int **)malloc(sizeof(int *) * len);
+	if (*pids == NULL || *fds == NULL)
+		return (free_init_exec_info(pids, fds, -1));
 	i = 0;
 	while (i < len)
 	{
 		(*fds)[i] = (int *)malloc(sizeof(int) * 2);
+		if ((*fds)[i] == NULL)
+			return (free_init_exec_info(pids, fds, i));
 		i++;
 	}
 	i = 0;
 	while (i < len)
 	{
 		if (pipe((*fds)[i]) == -1)
-			error_exit("pipe error\n", 1);
+			return (free_init_exec_info(pids, fds, len - 1));
 		i++;
 	}
+	return (0);
 }
 
 void	close_all_fds(int **fds, int len)
@@ -57,7 +62,7 @@ void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_lis
 	if (pids[i] == -1)
 		error_exit("fork error\n", 1);
 	if (pids[i] == 0)
-		child_process(fds, i, token, env_list, len);
+		child_process(fds, i, token, env_list, len);	
 }
 
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len)
@@ -85,5 +90,5 @@ void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int le
 	if (is_builtin(&token))
 		exec_builtin(&token, env_list);
 	else
-		run_execve_cmd(token.cmd, env_list);	
+		run_execve_cmd(token.cmd, env_list);
 }

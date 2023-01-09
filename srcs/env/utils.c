@@ -17,15 +17,18 @@ char	*get_env_value(t_env *env_list, char *key)
 	return (NULL);
 }
 
-void	free_env_list(t_env *env_list)
+void	free_env_list(t_env **env_list)
 {
 	t_env	*temp;
 
-	while (env_list != NULL)
+	if (!env_list)
+		return ;
+	while (*env_list)
 	{
-		temp = env_list->next;
-		free(env_list);
-		env_list = NULL;
-		env_list = temp;
+		temp = (*env_list)->next;
+		free((*env_list)->key);
+		free((*env_list)->value);
+		free(*env_list);
+		*env_list = temp;
 	}
 }

@@ -94,7 +94,7 @@ void	free_all_token(t_exec_token *exec_token, t_parser_token *parser_token, int 
 t_env	*init_env_list(char **envp);
 t_env	*make_env_node(char *key, char *value);
 void	env_list_add_node(t_env **list, t_env *node);
-void	free_env_list(t_env *env_list);
+void	free_env_list(t_env **env_list);
 
 char	*get_env_value(t_env *env_list, char *key);
 
@@ -108,6 +108,7 @@ void	set_echoctl_on(void);
 void	free_2d_array(char **str);
 void	error_exit(char *str, int status);
 int		error_return(char *str);
+int	free_init_exec_info(pid_t **pids, int ***fds, int i);
 
 char	*read_cmd(void);
 
@@ -132,7 +133,7 @@ void	delete_node(char *key, t_env **env_list);
 t_env	*get_node(char *key, t_env *env_list);
 
 // exec_cmd
-void	exec_cmd(t_exec_token *token, t_env *env_list, int len);
+int		exec_cmd(t_exec_token *token, t_env *env_list, int len);
 void	run_execve_cmd(char **cmd_list, t_env *env_list);
 char	**convert_env_list_to_str_list(t_env *env_list);
 void	join_key_and_value(char **env_str, t_env *env_list);
@@ -150,7 +151,7 @@ void	get_infile(char *limiter, t_env *env_list);
 void	heredoc_child_process(char *limiter, t_env *env_list);
 
 // exec_pipe
-void	init_exec_info(pid_t **pids, int ***fds, int len);
+int		init_exec_info(pid_t **pids, int ***fds, int len);
 void	close_all_fds(int **fds, int len);
 void	wait_all_childs(int len);
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len);

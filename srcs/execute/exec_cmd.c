@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
+int	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
 	pid_t	*pids;
 	int		**fds;
@@ -17,28 +17,27 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	}
 	close_all_fds(fds, len);
 	wait_all_childs(len);
+	free_init_exec_info(&pids, &fds, len - 1);
+	unlink(".here_doc_temp");
+	return (0);
 }
 
 void	run_execve_cmd(char **cmd_list, t_env *env_list)
 {
 	char	*cmd;
 	char	*path;
-
 	char	**env;
-	env = convert_env_list_to_str_list(env_list);
 	
 	if (!cmd_list)
-	{
-		free_2d_array(env);
 		return ;
-	}
-
 	cmd = ft_strjoin("/", cmd_list[0]);
+	env = convert_env_list_to_str_list(env_list);
 	path = get_path(cmd, env);
+	free(cmd);
 	if (!path)
 	{
-		free(cmd);
-		return ; // error_exit("path error\n", 1);
+		ft_putstr_fd("command not found\n", STDERR_FILENO);
+		return ;
 	}
 	if (execve(path, cmd_list, env) == -1)
 		error_exit("execve error\n", 127);
