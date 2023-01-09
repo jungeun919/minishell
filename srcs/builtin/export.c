@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	ft_export(char **cmd, t_env *env_list)
+int	ft_export(char **cmd)
 {
 	int		i;
 	int		j;
@@ -9,7 +9,7 @@ int	ft_export(char **cmd, t_env *env_list)
 	char	*value;
 
 	if (cmd[1] == NULL) // export만 입력했을 때 목록 표시
-		print_env_list(env_list);
+		print_env_list();
 	i = 1;
 	while (cmd[i] != NULL)
 	{
@@ -18,18 +18,18 @@ int	ft_export(char **cmd, t_env *env_list)
 			j++;
 		key = ft_substr(cmd[i], 0, j); // 할당 실패했을 때 처리할건지? 일단 함수 안에서 널 체크하는 정도로만 작성
 		value = ft_substr(cmd[i], j + 1, ft_strlen(cmd[i]) - j - 1);
-		execute_export(key, value, env_list);
+		execute_export(key, value);
 		i++;
 	}
 	return (0);
 }
 
-void	execute_export(char *key, char *value, t_env *env_list)
+void	execute_export(char *key, char *value)
 {
 	t_env	*node;
 
-	if (is_key_in_env_list(key, env_list))
-		update_value(key, value, &env_list);
+	if (is_key_in_env_list(key))
+		update_value(key, value);
 	else
 	{
 		if (!(is_valid_format_key(key)))
@@ -41,17 +41,17 @@ void	execute_export(char *key, char *value, t_env *env_list)
 		node = make_env_node(key, value);
 		if (!node)
 			return ; // errno 설정 관련 추가?
-		env_list_add_node(&env_list, node);
+		env_list_add_node(&(g_info.env_list), node);
 	}
 }
 
-int	is_key_in_env_list(char *key, t_env *env_list)
+int	is_key_in_env_list(char *key)
 {
 	t_env	*temp;
 
 	if (!key)
 		return (0);
-	temp = env_list;
+	temp = g_info.env_list;
 	while (temp)
 	{
 		if (ft_strncmp(temp->key, key, ft_strlen(key) + 1) == 0)
@@ -77,13 +77,13 @@ int	is_valid_format_key(char *key)
 	return (1);
 }
 
-void	update_value(char *key, char *value, t_env **env_list)
+void	update_value(char *key, char *value)
 {
 	t_env	*temp;
 
 	if (!key || !value)
 		return ;
-	temp = *env_list;
+	temp = g_info.env_list;
 	while (temp)
 	{
 		if (ft_strncmp(temp->key, key, ft_strlen(key) + 1) == 0)

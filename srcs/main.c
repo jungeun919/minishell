@@ -6,7 +6,7 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 21:44:51 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/09 22:21:28 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc != 1)
 		return (error_return("argument error\n"));
 	g_info.env_list = init_env_list(envp);
+	// env_list_add_node(make_env_node("?", "0"), g_info.env_list);
 	g_info.exit_status = 0;
+	
 	while (1)
 	{
 		cmd = read_cmd();	

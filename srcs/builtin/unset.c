@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	ft_unset(char **cmd, t_env *env_list)
+int	ft_unset(char **cmd)
 {
 	int	i;
 
@@ -10,20 +10,20 @@ int	ft_unset(char **cmd, t_env *env_list)
 	i = 1;
 	while (cmd[i])
 	{
-		if (is_key_in_env_list(cmd[i], env_list))
-			delete_node(cmd[i], &env_list);
+		if (is_key_in_env_list(cmd[i]))
+			delete_node(cmd[i]);
 		i++;
 	}
 	return (0);
 }
 
-void	delete_node(char *key, t_env **env_list)
+void	delete_node(char *key)
 {
 	t_env	*temp;
 	t_env	*del_node;
 
-	temp = *env_list;
-	del_node = get_node(key, *env_list);
+	temp = g_info.env_list;
+	del_node = get_node(key);
 	if (!del_node)
 		return ;
 	while (temp)
@@ -40,11 +40,11 @@ void	delete_node(char *key, t_env **env_list)
 	}
 }
 
-t_env	*get_node(char *key, t_env *env_list)
+t_env	*get_node(char *key)
 {
 	t_env	*temp;
 
-	temp = env_list;
+	temp = g_info.env_list;
 	while (temp)
 	{
 		if (ft_strncmp(temp->key, key, ft_strlen(key) + 1) == 0)

@@ -54,6 +54,7 @@ void	wait_all_childs(int len)
 			break ;
 		}
 	}
+
 }
 
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len)

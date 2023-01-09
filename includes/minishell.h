@@ -114,23 +114,23 @@ char	*read_cmd(void);
 
 // exec_builtin
 int		is_builtin(t_exec_token *token);
-void	exec_builtin(t_exec_token *token, t_env *env_list);
+void	exec_builtin(t_exec_token *token);
 
 // env
-int		ft_env(char **cmd, t_env *env_list);
-void	print_env_list(t_env *env_list);
+int		ft_env(char **cmd);
+void	print_env_list();
 
 // export
-int		ft_export(char **cmd, t_env *env_list);
-void	execute_export(char *key, char *value, t_env *env_list);
-int		is_key_in_env_list(char *key, t_env *env_list);
+int		ft_export(char **cmd);
+void	execute_export(char *key, char *value);
+int		is_key_in_env_list(char *key);
 int		is_valid_format_key(char *key);
-void	update_value(char *key, char *value, t_env **env_list);
+void	update_value(char *key, char *value);
 
 // unset
-int		ft_unset(char **cmd, t_env *env_list);
-void	delete_node(char *key, t_env **env_list);
-t_env	*get_node(char *key, t_env *env_list);
+int		ft_unset(char **cmd);
+void	delete_node(char *key);
+t_env	*get_node(char *key);
 
 // exec_cmd
 int		exec_cmd(t_exec_token *token, t_env *env_list, int len);

@@ -3,13 +3,12 @@
 
 void	setting_signal()
 {
-	signal(SIGINT, sig_handler); // ctrl + c
-	signal(SIGQUIT, SIG_IGN); // ctrl + /
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	sig_handler(int signal)
 {
-	// printf("signal: %d\n", signal);
 	if (signal == SIGINT)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
@@ -28,7 +27,7 @@ void	heredoc_sig_handler(int signal)
 	}
 }
 
-void	set_echoctl_off(void) // ctrl+c not print
+void	set_echoctl_off(void)
 {
 	struct termios	term;
 
@@ -37,7 +36,7 @@ void	set_echoctl_off(void) // ctrl+c not print
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void	set_echoctl_on(void) // ctrl+c print
+void	set_echoctl_on(void)
 {
 	struct termios	term;
 

@@ -6,32 +6,28 @@ t_env	*init_env_list(char **envp)
 	int		i;
 	char	**temp;
 	t_env	*env_node;
-	t_env	*env_list;
 
-	i = 0;
-	env_list = NULL;
-	while (envp[i] != NULL)
+	i = -1;
+	g_info.env_list = NULL;
+	while (envp[++i] != NULL)
 	{
 		temp = ft_split(envp[i], '=');
 		if (temp == NULL)
 		{
-			free_env_list(&env_list);
+			free_env_list(&(g_info.env_list));
 			exit(1);
 		}
 		env_node = make_env_node(temp[0], temp[1]);
 		if (env_node == NULL)
 		{
-			free(temp[0]);
-			free(temp[1]);
-			free(temp);
-			free_env_list(&env_list);
+			free_2d_array(temp);
+			free_env_list(&(g_info.env_list));
 			exit(1);
 		}
-		env_list_add_node(&env_list, env_node);
+		env_list_add_node(&(g_info.env_list), env_node);
 		free(temp);
-		i++;
 	}
-	return (env_list);
+	return (g_info.env_list);
 }
 
 t_env	*make_env_node(char *key, char *value)

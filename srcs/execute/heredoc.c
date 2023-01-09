@@ -25,7 +25,6 @@ void	get_infile(char *limiter, t_env *env_list)
 	pid_t	pid;
 	int		status;
 
-	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		error_exit("fork error\n", 1);
@@ -43,6 +42,7 @@ void	heredoc_child_process(char *limiter, t_env *env_list)
 	int		fd;
 	char	*line;
 
+	signal(SIGINT, SIG_IGN);
 	fd = open(".here_doc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		error_exit("open error\n", 1);
