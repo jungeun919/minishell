@@ -6,16 +6,11 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:57:51 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 13:12:04 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/09 13:31:24 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-# define ODD_QUOTE_ERROR 1
-# define NO_STR_AFTER_REDIR_ERROR 2
-# define DOUBLE_PIPE_ERROR 3
-
 
 int	parsing(t_list **lexer_token, char *cmd, t_env *env_list)
 {

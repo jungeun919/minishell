@@ -24,6 +24,11 @@
 # define AFTER_HEREDOC_DQ 10
 # define AFTER_HEREDOC_SQ 11
 
+// parsing_error_code
+# define ODD_QUOTE_ERROR 1
+# define NO_STR_AFTER_REDIR_ERROR 2
+# define DOUBLE_PIPE_ERROR 3
+
 typedef struct s_env
 {
 	char			*key;
