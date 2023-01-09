@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 17:53:07 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/09 18:13:06 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	main(int argc, char *argv[], char *envp[])
 	g_info.env_list = init_env_list(envp);
 	g_info.exit_status = 0;
 	while (1)
-	{	
+	{
+		cmd = read_cmd();
+		
+		/*
 		set_echoctl_off();
 		setting_signal();
 		cmd = readline("minishell$ ");
@@ -43,6 +46,8 @@ int	main(int argc, char *argv[], char *envp[])
 			free(cmd);
 			continue ;
 		}
+		*/
+	
 		if (ft_strlen(cmd) >= 1)
 			add_history(cmd);
 		

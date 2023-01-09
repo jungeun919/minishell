@@ -14,7 +14,7 @@ void	sig_handler(int signal)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_on_new_line();
-		rl_replace_line("", 1);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }

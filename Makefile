@@ -21,15 +21,15 @@ PARSER_SRCS = check.c delete_blank.c merge_string.c parser_token.c remove_quote.
 BUILTIN_SRCS = env.c export.c unset.c
 EXEC_SRCS = exec_builtin.c exec_cmd.c exec_pipe.c redir.c heredoc.c
 ENV_SRCS = init_env.c utils.c
-UTILS_SRCS = signal.c error.c
+UTILS_SRCS = signal.c error.c read.c
 
 # readline
-# LDFLAGS = -L/opt/homebrew/opt/readline/lib
-# CPPFLAGS = -I/opt/homebrew/opt/readline/include
+LDFLAGS = -L/opt/homebrew/opt/readline/lib
+CPPFLAGS = -I/opt/homebrew/opt/readline/include
 # LDFLAGS = -L/goinfre/$(USER)/.brew/opt/readline/lib
 # CPPFLAGS = -I/goinfre/$(USER)/.brew/opt/readline/include
-LDFLAGS=-L/Users/hajeong/.brew/opt/readline/lib
-CPPFLAGS=-I/Users/hajeong/.brew/opt/readline/include
+# LDFLAGS=-L/Users/hajeong/.brew/opt/readline/lib
+# CPPFLAGS=-I/Users/hajeong/.brew/opt/readline/include
 READ_LIB = -lreadline
 
 LIBFT_DIR = libs/libft

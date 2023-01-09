@@ -109,6 +109,8 @@ void	free_2d_array(char **str);
 void	error_exit(char *str, int status);
 int		error_return(char *str);
 
+char	*read_cmd(void);
+
 // exec_builtin
 int		is_builtin(t_exec_token *token);
 void	exec_builtin(t_exec_token *token, t_env *env_list);
