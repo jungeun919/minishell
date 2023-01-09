@@ -49,7 +49,13 @@ typedef struct s_exec_token
 	char			**cmd;
 }	t_exec_token;
 
-extern int	g_exit_status;
+typedef struct s_info
+{
+	t_env	*env_list;
+	int		exit_status;
+}	t_info;
+
+t_info	g_info;
 
 // lexer
 void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
