@@ -9,7 +9,8 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libs/libft/libft.h"
+# include "../libft/libft.h"
+# include "../libft/get_next_line.h"
 
 # define NORMAL_STRING 0
 # define DOUBLE_QUOTE 1
@@ -24,6 +25,12 @@
 # define AFTER_HEREDOC_DQ 10
 # define AFTER_HEREDOC_SQ 11
 
+# define STDIN 			0
+# define STDOUT 		1
+# define STDERR 		2
+
+# define COLOR_YELLOW	"\033[33m"
+# define END_COLOR		"\033[0m"
 // parsing_error_code
 # define ODD_QUOTE_ERROR 1
 # define NO_STR_AFTER_REDIR_ERROR 2
