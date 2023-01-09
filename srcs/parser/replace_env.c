@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/02 13:36:32 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/09 14:55:39 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	replace_env(t_list *l_tok, t_env *envlst)
 			l_tok->content = str;
 			free(key);
 			if (l_tok->content == NULL)
-				clear_and_exit(&l_tok);
+				clear_lexer_and_exit(&l_tok);
 		}
 		if (l_tok && (!ft_strchr(l_tok->content, '$') || l_tok->label == 2))
 			l_tok = l_tok->next;

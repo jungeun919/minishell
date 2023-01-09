@@ -16,7 +16,7 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 		i++;
 	}
 	close_all_fds(fds, len);
-	wait_all_childs();
+	wait_all_childs(len);
 }
 
 void	run_execve_cmd(char **cmd_list, t_env *env_list)
@@ -29,7 +29,7 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 	
 	if (!cmd_list)
 	{
-		free_split(env);
+		free_2d_array(env);
 		return ;
 	}
 
@@ -113,31 +113,12 @@ char	*get_path(char *cmd, char **env)
 			return (NULL);
 		if (access(path, X_OK) == 0)
 		{
-			free_split(split_path);
+			free_2d_array(split_path);
 			return (path);
 		}
 		free(path);
 		i++;
 	}
-	free_split(split_path);
+	free_2d_array(split_path);
 	return (NULL);
-}
-
-void	free_split(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
-}
-
-void	error_exit(char *str, int status)
-{
-	ft_putstr_fd(str, 2);
-	exit(status);
 }

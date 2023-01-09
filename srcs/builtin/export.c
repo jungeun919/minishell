@@ -1,7 +1,6 @@
 
 #include "minishell.h"
 
-// 리턴값 정의 필요
 int	ft_export(char **cmd, t_env *env_list)
 {
 	int		i;
@@ -22,7 +21,7 @@ int	ft_export(char **cmd, t_env *env_list)
 		execute_export(key, value, env_list);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 void	execute_export(char *key, char *value, t_env *env_list)

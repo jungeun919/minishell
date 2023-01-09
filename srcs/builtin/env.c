@@ -1,10 +1,11 @@
 
 #include "minishell.h"
 
+// return value -> 0 : success, 1 : fail
 int	ft_env(char **cmd, t_env *env_list)
 {
 	if (cmd[1] != NULL)
-		return (0); // too many argument
+		return (error_return("too many arguments\n"));
 	print_env_list(env_list);
 	return (0);
 }

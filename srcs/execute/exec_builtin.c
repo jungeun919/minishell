@@ -17,14 +17,15 @@ int	is_builtin(t_exec_token *token)
 void	exec_builtin(t_exec_token *token, t_env *env_list)
 {
 	char	*cmd;
+	int		status;
 
 	cmd = token->cmd[0];
+	status = 0;
 	if (ft_strncmp(cmd, "env", 4) == 0)
-		ft_env(token->cmd, env_list);
-
+		status = ft_env(token->cmd, env_list);
 	else if (ft_strncmp(cmd, "export", 7) == 0)
-		ft_export(token->cmd, env_list);
-
+		status = ft_export(token->cmd, env_list);
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
-		ft_unset(token->cmd, env_list);
+		status = ft_unset(token->cmd, env_list);
+	exit(status);
 }

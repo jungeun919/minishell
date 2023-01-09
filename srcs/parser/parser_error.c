@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_error.c                                      :+:      :+:    :+:   */
+/*   parser_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 12:30:23 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 15:06:36 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/09 17:08:21 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_temp_clear_and_exit(t_list **lexer_token, char *temp)
+void	clear_parser_and_exit(t_parser_token *parser_token, int len)
 {
-	if (temp != NULL)
-		free(temp);
-	ft_lstclear(lexer_token, free);
-	// env_list 도 free 해줄것
-	exit(0);
-}
-
-void	clear_lexer_and_exit(t_list **lexer_token)
-{
-	ft_lstclear(lexer_token, free);
+	// (void)len;
+	free_parser_token(parser_token, len);
 	// env_list 도 free 해줄것
 	exit(0);
 }

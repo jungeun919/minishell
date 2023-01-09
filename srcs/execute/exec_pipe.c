@@ -35,11 +35,13 @@ void	close_all_fds(int **fds, int len)
 	}
 }
 
-void	wait_all_childs(void)
+void	wait_all_childs(int len)
 {
+	int	i;
 	int	status;
 
-	while (1)
+	i = 0;
+	while (i < len)
 	{
 		if (wait(&status) < 0)
 		{
@@ -83,5 +85,5 @@ void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int le
 	if (is_builtin(&token))
 		exec_builtin(&token, env_list);
 	else
-		run_execve_cmd(token.cmd, env_list);
+		run_execve_cmd(token.cmd, env_list);	
 }

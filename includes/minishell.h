@@ -59,7 +59,7 @@ t_info	g_info;
 
 // lexer
 void	free_temp_clear_and_exit(t_list **lexer_token, char *temp);
-void	clear_and_exit(t_list **lexer_token);
+void	clear_lexer_and_exit(t_list **lexer_token);
 void	lexer(char *str, t_list **lexer_token);
 void	labeling(t_list *lexer_token);
 void	labeling_after_heredoc(t_list *lexer_token);
@@ -79,10 +79,15 @@ int		parser_token_size(t_list *lexer_token);
 t_parser_token *init_parser_token(int size);
 void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token);
 void	free_parser_token(t_parser_token *parser_token, int len);
+
 void	sort_redirection(t_parser_token *parser_token, int len);
+void	clear_parser_and_exit(t_parser_token *parser_token, int len);
 
 // exec_token
+t_exec_token	*make_exec_token(t_parser_token *parser_token, t_exec_token **exec_token, int len);
 char	**make_2d_array(t_list *cmd_list);
+void	free_all_token(t_exec_token *exec_token, t_parser_token *parser_token, int len);
+
 
 // env
 t_env	*init_env_list(char **envp);
@@ -98,6 +103,10 @@ void	sig_handler(int signal);
 void	heredoc_sig_handler(int signal);
 void	set_echoctl_off(void);
 void	set_echoctl_on(void);
+
+void	free_2d_array(char **str);
+void	error_exit(char *str, int status);
+int		error_return(char *str);
 
 // exec_builtin
 int		is_builtin(t_exec_token *token);
@@ -125,8 +134,6 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list);
 char	**convert_env_list_to_str_list(t_env *env_list);
 void	join_key_and_value(char **env_str, t_env *env_list);
 char	*get_path(char *cmd, char **env);
-void	free_split(char **str);
-void	error_exit(char *str, int status);
 
 // redir
 void	set_redir(t_parser_token *parser_token, t_env *env_list);
@@ -142,7 +149,7 @@ void	heredoc_child_process(char *limiter, t_env *env_list);
 // exec_pipe
 void	init_exec_info(pid_t **pids, int ***fds, int len);
 void	close_all_fds(int **fds, int len);
-void	wait_all_childs(void);
+void	wait_all_childs(int len);
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len);
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len);
 

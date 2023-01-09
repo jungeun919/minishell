@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 13:56:50 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/09 17:18:28 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argv;
 	if (argc != 1)
-	{
-		ft_putstr_fd("argument error\n", STDERR_FILENO);
-		return (0);
-	}
+		return (error_return("argument error\n"));
 	g_info.env_list = init_env_list(envp);
 	g_info.exit_status = 0;
 	while (1)
-	{
+	{	
 		set_echoctl_off();
 		setting_signal();
 		cmd = readline("minishell$ ");
@@ -48,28 +45,40 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 		if (ft_strlen(cmd) >= 1)
 			add_history(cmd);
+		
 		lexer_token = NULL;
 		if (parsing_error_handle(parsing(&lexer_token, cmd, g_info.env_list), &lexer_token))
 			continue ;
 		len = parser_token_size(lexer_token);
 		parser_token = init_parser_token(len);
 		if (parser_token == NULL)
-			clear_and_exit(&lexer_token);
+			clear_lexer_and_exit(&lexer_token);
 		make_parser_token(&lexer_token, parser_token);
 		sort_redirection(parser_token, len);
-		token = (t_exec_token *)malloc(sizeof(t_exec_token) * len);
-		int	i = 0; // 
-		while (i < len)//
-		{//
-			token[i].parser_token = &(parser_token[i]);//
-			token[i].cmd = make_2d_array(parser_token[i].cmd);//
-			i++;//
-		}//
+
+		token = make_exec_token(parser_token, &token, len);
+		if (token == NULL)
+			clear_parser_and_exit(parser_token, len);
+
 		exec_cmd(token, g_info.env_list, len);
-		// free t_exec_token
-		free_parser_token(parser_token, len);
+		free_all_token(token, parser_token, len);
 		free(cmd);
 	}
+}
+
+t_exec_token	*make_exec_token(t_parser_token *parser_token, t_exec_token **exec_token, int len)
+{
+	int	i;
+
+	*exec_token = (t_exec_token *)malloc(sizeof(t_exec_token) * len);
+	i = 0;
+	while (i < len)
+	{
+		(*exec_token)[i].parser_token = &(parser_token[i]);
+		(*exec_token)[i].cmd = make_2d_array(parser_token[i].cmd);
+		i++;
+	}
+	return (*exec_token);
 }
 
 char	**make_2d_array(t_list *cmd_list)
@@ -91,4 +100,19 @@ char	**make_2d_array(t_list *cmd_list)
 	}
 	cmd[i] = NULL;
 	return (cmd);
+}
+
+void	free_all_token(t_exec_token *exec_token, t_parser_token *parser_token, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (exec_token[i].cmd != NULL)
+			free(exec_token[i].cmd);
+		i++;
+	}
+	free_parser_token(parser_token, len);
+	free(exec_token);
 }

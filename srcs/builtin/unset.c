@@ -5,7 +5,7 @@ int	ft_unset(char **cmd, t_env *env_list)
 {
 	int	i;
 
-	if (cmd[1] == NULL) // not enough arguments
+	if (cmd[1] == NULL)
 		return (0);
 	i = 1;
 	while (cmd[i])
@@ -14,7 +14,7 @@ int	ft_unset(char **cmd, t_env *env_list)
 			delete_node(cmd[i], &env_list);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 void	delete_node(char *key, t_env **env_list)
