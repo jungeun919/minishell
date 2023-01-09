@@ -62,6 +62,8 @@ void	merge_string(t_list **lexer_token);
 void	delete_blank(t_list **lexer_token);
 int		check_redirection(t_list *lexer_token);
 int		check_double_pipe(t_list *lexer_token);
+int		parsing(t_list **lexer_token, char *cmd, t_env *env_list);
+int		parsing_error_handle(int code, t_list **lexer_token);
 int		parser_token_size(t_list *lexer_token);
 t_parser_token *init_parser_token(int size);
 void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token);

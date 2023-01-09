@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
+/*   Updated: 2023/01/09 13:30:05 by hajeong          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -18,8 +30,8 @@ int	main(int argc, char *argv[], char *envp[])
 	char *cmd;
 
 	t_list	*lexer_token;
-	t_list	*temp;
-	int		node_index;
+	// t_list	*temp;
+	// int		node_index;
 	// char	node_label[20];
 	t_parser_token	*parser_token;
 
@@ -49,33 +61,36 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(cmd);
 
 		/* lexer main */
+		// lexer_token = NULL;
+		// temp = lexer_token;
+		// node_index = 0;
+		// (void)node_index;
+		// (void)temp;
+
+		// lexer(cmd, &lexer_token);
+		// labeling(lexer_token);
+		// labeling_after_heredoc(lexer_token);
+		// if (check_odd_quote(lexer_token))
+		// {
+		// 	ft_lstclear(&lexer_token, free);
+		// 	printf("odd quote is not allowed!\n");
+		// 	continue ;
+		// }
+
+		// //	parsser
+		// replace_env(lexer_token, env_list);
+		// remove_quote(&lexer_token);
+		// merge_string(&lexer_token);
+		// delete_blank(&lexer_token);
+		// if (check_redirection(lexer_token) || check_double_pipe(lexer_token))
+		// {
+		// 	printf("no string after redirection! or double pipe\n");
+		// 	ft_lstclear(&lexer_token, free);
+		// 	continue ;
+		// }
 		lexer_token = NULL;
-		temp = lexer_token;
-		node_index = 0;
-		(void)node_index;
-		(void)temp;
-
-		lexer(cmd, &lexer_token);
-		labeling(lexer_token);
-		labeling_after_heredoc(lexer_token);
-		if (check_odd_quote(lexer_token))
-		{
-			ft_lstclear(&lexer_token, free);
-			printf("odd quote is not allowed!\n");
+		if (parsing_error_handle(parsing(&lexer_token, cmd, env_list), &lexer_token))
 			continue ;
-		}
-
-		//	parsser
-		replace_env(lexer_token, env_list);
-		remove_quote(&lexer_token);
-		merge_string(&lexer_token);
-		delete_blank(&lexer_token);
-		if (check_redirection(lexer_token) || check_double_pipe(lexer_token))
-		{
-			printf("no string after redirection! or double pipe\n");
-			ft_lstclear(&lexer_token, free);
-			continue ;
-		}
 
 		/*
 		temp = lexer_token;
@@ -106,7 +121,6 @@ int	main(int argc, char *argv[], char *envp[])
 		if (parser_token == NULL)
 			clear_and_exit(&lexer_token);// 에러처리 필요
 		make_parser_token(&lexer_token, parser_token);
-
 		sort_redirection(parser_token, len);
 
 		/*
@@ -154,7 +168,7 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 
 		exec_cmd(token, env_list, len);
-		
+		free_parser_token(parser_token, len);
 		free(cmd);
 		// system("leaks minishell");
 	}
