@@ -40,20 +40,29 @@ void	close_all_fds(int **fds, int len)
 	}
 }
 
-void	wait_all_childs(int len)
+void	wait_all_childs(pid_t *pids, int len)
 {
-	int	i;
-	int	status;
+	int		status;
+	pid_t	pid;
 
-	i = 0;
-	while (i < len)
+	while (1)
 	{
-		if (wait(&status) < 0)
-		{
-			status = 1;
+		pid = waitpid(-1, &status, 0);
+		if (pid == -1)
 			break ;
-		}
+		if (WIFEXITED(status))
+			g_info.exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_info.exit_status = WCOREFLAG | WTERMSIG(status);
+
+		if (pid != pids[len - 1])
+			continue ;
 	}
+	pid = waitpid(-1, &status, 0);
+	if (WIFEXITED(status))
+		g_info.exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_info.exit_status = WCOREFLAG | WTERMSIG(status);
 }
 
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len)
