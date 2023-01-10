@@ -21,7 +21,7 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 		i++;
 	}
 	close_all_fds(fds, len);
-	wait_all_childs(len);
+	wait_all_childs(); //
 	free_init_exec_info(&pids, &fds, len - 1);
 	unlink(".here_doc_temp");
 	return ;
@@ -44,8 +44,9 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 		ft_putstr_fd("command not found\n", STDERR_FILENO);
 		return ;
 	}
-	if (execve(path, cmd_list, env) == -1)
-		error_exit("execve error\n", 127);
+	execve(path, cmd_list, env);
+	// if (execve(path, cmd_list, env) == -1)
+		// error_exit("execve error\n", 127);
 }
 
 char	**convert_env_list_to_str_list(t_env *env_list)

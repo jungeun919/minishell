@@ -40,21 +40,68 @@ void	close_all_fds(int **fds, int len)
 	}
 }
 
-void	wait_all_childs(int len)
+void	wait_all_childs()
 {
-	int	i;
-	int	status;
+	int		status;
+	pid_t	pid;
 
-	i = 0;
-	while (i < len)
+	while (1)
 	{
-		if (wait(&status) < 0)
-		{
-			status = 1;
+		pid = waitpid(-1, &status, 0);
+		if (pid == -1)
 			break ;
-		}
+		if (WIFEXITED(status))
+			g_info.exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_info.exit_status = WCOREFLAG | WTERMSIG(status);
+		if (pid != g_info.last_pid)
+			continue ;
 	}
 }
+
+// void	wait_all_childs(pid_t *pids, int len)
+// {
+// 	int	i;
+// 	int	status;
+	
+// 	i = 0;
+// 	while (i < len)
+// 	{
+// 		// if (wait(&status) == pids[len - 1])
+// 		wait(&status);
+// 		i++;
+// 	}
+// 	if (WIFEXITED(status))
+// 	{
+// 		g_info.exit_status = WEXITSTATUS(status);
+// 		return ;
+// 	}
+// 	if (WIFSIGNALED(status))
+// 	{
+// 		if (WTERMSIG(status) == SIGQUIT)
+// 			printf("Quit: 3\n");
+// 		else
+// 			printf("\n");
+// 		g_info.exit_status = WTERMSIG(status) + 128;
+// 		return ;
+// 	}
+// 	g_info.exit_status = WEXITSTATUS(status);
+// 	return ;
+
+// 	// if (status == 2)
+// 	// {
+// 	// 	printf("\n");
+// 	// 	g_info.exit_status = status + 128;
+// 	// }
+// 	// else if (status == 3)
+// 	// {
+// 	// 	printf("Quit: %d\n", status);
+// 	// 	g_info.exit_status = status + 128;
+// 	// }
+// 	// else
+// 	// 	g_info.exit_status = status >> 8;
+// }
+
 
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len)
 {
@@ -67,6 +114,8 @@ void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_lis
 
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len)
 {
+	if (i == len - 1)
+		g_info.last_pid = getpid();
 	if (i != 0)
 	{
 		close(fds[i - 1][1]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungchoi <jungchoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 21:44:51 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/10 16:58:44 by jungchoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,13 @@ int	main(int argc, char *argv[], char *envp[])
 	g_info.exit_status = 0;
 	while (1)
 	{
-		cmd = read_cmd();	
+		printf("==================exit status : %d\n", g_info.exit_status);
+		cmd = read_cmd();
 		if (ft_strlen(cmd) >= 1)
 			add_history(cmd);
 		if (make_token(&token, cmd, &len) != 0)
+			continue ;
+		if (token->parser_token->cmd == NULL)
 			continue ;
 		exec_cmd(token, g_info.env_list, len);
 		free_all_token(token, token->parser_token, len);

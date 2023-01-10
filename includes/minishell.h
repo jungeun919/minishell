@@ -53,6 +53,7 @@ typedef struct s_info
 {
 	t_env	*env_list;
 	int		exit_status;
+	pid_t	last_pid;
 }	t_info;
 
 t_info	g_info;
@@ -153,7 +154,7 @@ void	heredoc_child_process(char *limiter, t_env *env_list);
 // exec_pipe
 int		init_exec_info(pid_t **pids, int ***fds, int len);
 void	close_all_fds(int **fds, int len);
-void	wait_all_childs(int len);
+void	wait_all_childs(void);
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len);
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len);
 
