@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:05:17 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/10 18:19:16 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/10 19:57:58 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	put_quote(char *str, int fd)
 int	check_option(char *content)
 {
 	int	i;
-	int flag;
+	int	flag;
 
 	flag = 0;
 	if (ft_strncmp(content, "-n", 2) != 0)
@@ -41,8 +41,6 @@ int	check_option(char *content)
 			flag++;
 		i++;
 	}
-//	printf("flag : %d\n", flag);
-//	printf("i : %d\n", i);
 	if (flag + 2 == i)
 		return (1);
 	else
@@ -69,30 +67,36 @@ int	ft_echo(t_exec_token *token)
 {
 	int	i;
 	int	option;
-	//int	flag;
 
+	i = 0;
 	option = 0;
-	//flag = 0;
 	if (token->cmd[1] == NULL)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		return (0);
 	}
-	if (token->cmd[1])
-		option = check_option(token->cmd[1]);
-	if (option)
-		i = 2;
-	else
-		i = 1;
 	while (token->cmd[i] != NULL)
 	{
+		if (check_option(token->cmd[i]))
+			option++;
+		i++;
+	}
+	i = option + 1;
+	printf("%d\n", i);
+	printf("%s =================\n", token->cmd[1]);
+	printf("%s =================\n", token->cmd[2]);
+	printf("%s =================\n", token->cmd[3]);
+
+
+	while (token->cmd[i] != NULL)
+	{
+		printf("%s -------------\n", token->cmd[i]);
 		ft_putstr_fd(token->cmd[i], STDOUT_FILENO);
-		//put_echostr(&(token->cmd[i]));
 		if (token->cmd[i + 1] != NULL)
 			write(1, " ", 1);
 		i++;
 	}
-	if (!option)
+	if (option == 0)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	return (1);
 }
