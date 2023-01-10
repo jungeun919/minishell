@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:05:17 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/10 15:59:03 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/10 18:19:16 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,25 @@ void	put_quote(char *str, int fd)
 
 int	check_option(char *content)
 {
-	if (ft_strncmp(content, "-n", 2) == 0)
+	int	i;
+	int flag;
+
+	flag = 0;
+	if (ft_strncmp(content, "-n", 2) != 0)
+		flag = 1;
+	i = 2;
+	while (content[i])
+	{
+		if (content[i] == 'n')
+			flag++;
+		i++;
+	}
+//	printf("flag : %d\n", flag);
+//	printf("i : %d\n", i);
+	if (flag + 2 == i)
 		return (1);
-	return (0);
+	else
+		return (0);
 }
 
 void	put_echostr(char **cmd)
@@ -45,7 +61,7 @@ void	put_echostr(char **cmd)
 			ft_putstr_fd(cmd[i], STDOUT_FILENO);
 			ft_putstr_fd(" ", STDOUT_FILENO);
 		}
-			i++;
+		i++;
 	}
 }
 
@@ -53,8 +69,10 @@ int	ft_echo(t_exec_token *token)
 {
 	int	i;
 	int	option;
+	//int	flag;
 
 	option = 0;
+	//flag = 0;
 	if (token->cmd[1] == NULL)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
@@ -62,16 +80,19 @@ int	ft_echo(t_exec_token *token)
 	}
 	if (token->cmd[1])
 		option = check_option(token->cmd[1]);
-	i = 1;
+	if (option)
+		i = 2;
+	else
+		i = 1;
 	while (token->cmd[i] != NULL)
 	{
-		put_echostr(&(token->cmd[i]));
-		if (option)
-			i += 2;
-		else
-			i++;
-		if (!option)
-			ft_putstr_fd("\n", STDOUT_FILENO);
+		ft_putstr_fd(token->cmd[i], STDOUT_FILENO);
+		//put_echostr(&(token->cmd[i]));
+		if (token->cmd[i + 1] != NULL)
+			write(1, " ", 1);
+		i++;
 	}
+	if (!option)
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	return (1);
 }
