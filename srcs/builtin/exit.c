@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:05:31 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/10 16:33:05 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/10 16:41:23 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ int		ft_isdigit_str(char *str)
 void	ft_exit_errcode(void)
 {
 	ft_putstr_fd("exit\n", STDERR);
-	//g_info.byebye = 18;
-	//printf("=============%d\n", g_info.byebye);
 	exit(g_info.exit_status);
 }
 
@@ -72,10 +70,7 @@ int	ft_exit(char **cmd)
 	while (cmd[i] != NULL)
 		i++;
 	if (i == 1)
-	{
-		printf("=================\n");
 		ft_exit_errcode();
-	}
 	else if (i == 2 && ft_isdigit_str(cmd[1]))
 		g_info.exit_status = ft_atoi(cmd[1]);
 	else if (i > 2 && ft_isdigit_str(cmd[1]))
