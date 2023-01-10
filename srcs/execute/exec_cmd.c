@@ -1,12 +1,17 @@
 
 #include "minishell.h"
 
-int	exec_cmd(t_exec_token *token, t_env *env_list, int len)
+void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
 	pid_t	*pids;
 	int		**fds;
 	int		i;
 
+	if (len == 1 && is_builtin(token))
+	{
+		exec_builtin(token, env_list);
+		return ;
+	}
 	set_heredoc_input(token, env_list, len);
 	init_exec_info(&pids, &fds, len);
 	i = 0;
@@ -19,7 +24,7 @@ int	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	wait_all_childs(len);
 	free_init_exec_info(&pids, &fds, len - 1);
 	unlink(".here_doc_temp");
-	return (0);
+	return ;
 }
 
 void	run_execve_cmd(char **cmd_list, t_env *env_list)
@@ -27,7 +32,7 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 	char	*cmd;
 	char	*path;
 	char	**env;
-	
+
 	if (!cmd_list)
 		return ;
 	cmd = ft_strjoin("/", cmd_list[0]);

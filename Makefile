@@ -5,7 +5,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 INCLUDES_DIR = includes
-LIBS_DIR = libs
+LIBS_DIR = ./libft
 SRCS_DIR = srcs
 
 # srcs directory
@@ -18,21 +18,16 @@ UTILS_DIR = utils
 
 LEXER_SRCS = lexer.c labeling.c check_odd_quote.c lexer_error.c
 PARSER_SRCS = check.c delete_blank.c merge_string.c parser_token.c remove_quote.c replace_env.c sort_redirection.c parsing.c parser_error.c make_token.c
-BUILTIN_SRCS = env.c export.c unset.c
+BUILTIN_SRCS = env.c export.c unset.c cd.c echo.c exit.c pwd.c
 EXEC_SRCS = exec_builtin.c exec_cmd.c exec_pipe.c redir.c heredoc.c
 ENV_SRCS = init_env.c utils.c
 UTILS_SRCS = signal.c error.c read.c
 
 # readline
-# LDFLAGS = -L/opt/homebrew/opt/readline/lib
-# CPPFLAGS = -I/opt/homebrew/opt/readline/include
-# LDFLAGS = -L/goinfre/$(USER)/.brew/opt/readline/lib
-# CPPFLAGS = -I/goinfre/$(USER)/.brew/opt/readline/include
-LDFLAGS=-L/Users/hajeong/.brew/opt/readline/lib
-CPPFLAGS=-I/Users/hajeong/.brew/opt/readline/include
+LDFLAGS = -L/opt/homebrew/opt/readline/lib
+CPPFLAGS = -I/opt/homebrew/opt/readline/include
 READ_LIB = -lreadline
 
-LIBFT_DIR = libs/libft
 LIBFT = libft.a
 LIBFT_LIB = -lft
 
@@ -49,19 +44,19 @@ OBJS = $(SRCS:.c=.o)
 all : $(NAME)
 
 $(NAME) : $(OBJS)
-	make -C $(LIBFT_DIR) bonus
-	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) $(READ_LIB) $(LDFLAGS) $(CPPFLAGS) -L $(LIBFT_DIR) $(LIBFT_LIB) -o $@
-	
+	make -C $(LIBS_DIR) bonus
+	$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) $(READ_LIB) $(LDFLAGS) $(CPPFLAGS) -L $(LIBS_DIR) -lft -o $@
+
 %.o : %.c
 	$(CC) $(CFLAGS) -I $(INCLUDES_DIR) $(CPPFLAGS) -c $< -o $@
 
 clean :
 	rm -rf $(OBJS)
-	make -C $(LIBFT_DIR) clean
+	make -C $(LIBS_DIR) clean
 
 fclean : clean
 	rm -rf $(NAME)
-	make -C $(LIBFT_DIR) fclean
+	make -C $(LIBS_DIR) fclean
 
 re :
 	make fclean

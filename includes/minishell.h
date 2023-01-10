@@ -9,7 +9,8 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libs/libft/libft.h"
+# include "../libft/libft.h"
+# include "../libft/get_next_line.h"
 
 # define NORMAL_STRING 0
 # define DOUBLE_QUOTE 1
@@ -24,6 +25,12 @@
 # define AFTER_HEREDOC_DQ 10
 # define AFTER_HEREDOC_SQ 11
 
+# define STDIN 			0
+# define STDOUT 		1
+# define STDERR 		2
+
+# define COLOR_YELLOW	"\033[33m"
+# define END_COLOR		"\033[0m"
 // parsing_error_code
 # define ODD_QUOTE_ERROR 1
 # define NO_STR_AFTER_REDIR_ERROR 2
@@ -108,7 +115,7 @@ void	set_echoctl_on(void);
 void	free_2d_array(char **str);
 void	error_exit(char *str, int status);
 int		error_return(char *str);
-int	free_init_exec_info(pid_t **pids, int ***fds, int i);
+int		free_init_exec_info(pid_t **pids, int ***fds, int i);
 
 char	*read_cmd(void);
 
@@ -133,7 +140,7 @@ void	delete_node(char *key, t_env **env_list);
 t_env	*get_node(char *key, t_env *env_list);
 
 // exec_cmd
-int		exec_cmd(t_exec_token *token, t_env *env_list, int len);
+void	exec_cmd(t_exec_token *token, t_env *env_list, int len);
 void	run_execve_cmd(char **cmd_list, t_env *env_list);
 char	**convert_env_list_to_str_list(t_env *env_list);
 void	join_key_and_value(char **env_str, t_env *env_list);
@@ -156,5 +163,10 @@ void	close_all_fds(int **fds, int len);
 void	wait_all_childs(int len);
 void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len);
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len);
+
+int	ft_exit(char **cmd);
+int	ft_cd(t_exec_token *token);
+int	ft_echo(t_exec_token *token);
+int	ft_pwd(char **cmd);
 
 #endif
