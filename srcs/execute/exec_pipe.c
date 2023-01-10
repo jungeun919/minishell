@@ -91,4 +91,5 @@ void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int le
 		exec_builtin(&token, env_list);
 	else
 		run_execve_cmd(token.cmd, env_list);
+	exit(g_info.exit_status);
 }

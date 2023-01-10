@@ -27,5 +27,5 @@ void	exec_builtin(t_exec_token *token, t_env *env_list)
 		status = ft_export(token->cmd, env_list);
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
 		status = ft_unset(token->cmd, env_list);
-	exit(status);
+	g_info.exit_status = status;
 }

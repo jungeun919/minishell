@@ -24,12 +24,12 @@ ENV_SRCS = init_env.c utils.c
 UTILS_SRCS = signal.c error.c read.c
 
 # readline
-# LDFLAGS = -L/opt/homebrew/opt/readline/lib
-# CPPFLAGS = -I/opt/homebrew/opt/readline/include
+LDFLAGS = -L/opt/homebrew/opt/readline/lib
+CPPFLAGS = -I/opt/homebrew/opt/readline/include
 # LDFLAGS = -L/goinfre/$(USER)/.brew/opt/readline/lib
 # CPPFLAGS = -I/goinfre/$(USER)/.brew/opt/readline/include
-LDFLAGS=-L/Users/hajeong/.brew/opt/readline/lib
-CPPFLAGS=-I/Users/hajeong/.brew/opt/readline/include
+# LDFLAGS=-L/Users/hajeong/.brew/opt/readline/lib
+# CPPFLAGS=-I/Users/hajeong/.brew/opt/readline/include
 READ_LIB = -lreadline
 
 LIBFT_DIR = libs/libft
