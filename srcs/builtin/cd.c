@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:17:57 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 05:34:28 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 07:51:23 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ char	*get_env_path(t_env *env_list, char *key)
 	return (NULL);
 }
 
-char	*get_cd_path(char *key)
+char	*get_cd_path(char**cmd, char *key)
 {
 	char	*path;
 
 	path = get_env_path(g_info.env_list, key);
-	if (!ft_strcmp(key, "HOME"))
+	if (!ft_strcmp(key, "HOME") && cmd[1] != NULL)
 		path = getenv(key);
 	if (!path)
 	{
@@ -86,15 +86,15 @@ int	ft_cd(char **cmd, int flag)
 	char	*path;
 
 	if (cmd[1] == NULL || !ft_strcmp(cmd[1], "~"))
-		path = get_cd_path("HOME");
+		path = get_cd_path(cmd, "HOME");
 	else if (!ft_strncmp(cmd[1], "~/", 2))
 	{
 		flag = 1;
-		path = ft_strjoin(get_cd_path("HOME"), cmd[1] + 1);
+		path = ft_strjoin(get_cd_path(cmd, "HOME"), cmd[1] + 1);
 	}
 	else if (!ft_strcmp(cmd[1], "-"))
 	{
-		path = get_cd_path("OLDPWD");
+		path = get_cd_path(cmd, "OLDPWD");
 		if (path)
 			printf("%s\n", path);
 	}

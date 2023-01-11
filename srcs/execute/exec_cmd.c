@@ -6,7 +6,7 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:36 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 06:27:55 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 07:32:34 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 	char	*path;
 	char	**env;
 
+	set_echoctl_on();
 	if (!cmd_list)
 		return ;
 	env = convert_env_list_to_str_list(env_list);
