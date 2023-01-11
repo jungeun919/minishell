@@ -68,6 +68,7 @@ int		check_odd_quote(t_list *lexer_token);
 //parser
 char	*join_env(char *before, char *value, char *after);
 void	replace_env(t_list *lexer_token, t_env *env_list);
+void	replace_env_exit_status(t_list *l_tok);
 void	remove_quote(t_list **lexer_token);
 void	merge_string(t_list **lexer_token);
 void	delete_blank(t_list **lexer_token);
