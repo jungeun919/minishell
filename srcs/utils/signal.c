@@ -1,15 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 16:43:40 by hajeong           #+#    #+#             */
+/*   Updated: 2023/01/11 16:44:19 by hajeong          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-void	setting_signal()
+void	setting_signal(void)
 {
-	signal(SIGINT, sig_handler); // ctrl + c
-	signal(SIGQUIT, SIG_IGN); // ctrl + /
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	sig_handler(int signal)
 {
-	// printf("signal: %d\n", signal);
 	if (signal == SIGINT)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
@@ -28,7 +38,7 @@ void	heredoc_sig_handler(int signal)
 	}
 }
 
-void	set_echoctl_off(void) // ctrl+c not print
+void	set_echoctl_off(void)
 {
 	struct termios	term;
 
@@ -37,7 +47,7 @@ void	set_echoctl_off(void) // ctrl+c not print
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void	set_echoctl_on(void) // ctrl+c print
+void	set_echoctl_on(void)
 {
 	struct termios	term;
 

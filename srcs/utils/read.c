@@ -1,17 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 16:42:35 by hajeong           #+#    #+#             */
+/*   Updated: 2023/01/11 16:43:16 by hajeong          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*read_cmd()
+char	*read_cmd(void)
 {
 	char	*cmd;
 
 	set_echoctl_off();
 	setting_signal();
 	cmd = readline("minishell$ ");
-	if (!cmd) // ctrl + d
+	if (!cmd)
 	{
-		printf("\033[1A"); // 커서를 위로 한 줄 올리기
-		printf("\033[11C"); // 커서를 앞으로 11만큼 전진시키기
+		printf("\033[1A");
+		printf("\033[11C");
 		printf("exit");
 		free_env_list(&(g_info.env_list));
 		exit(0);
