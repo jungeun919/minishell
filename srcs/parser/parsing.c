@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:57:51 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 19:55:04 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 06:32:29 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ int	parsing_error_handle(int code)
 	else if (code == NO_STR_AFTER_REDIR_ERROR)
 		printf("no string after redirection!\n");
 	else if (code == DOUBLE_PIPE_ERROR)
-		printf("double pipe!\n");
+		printf("error near pipe!\n");
 	return (code);
 }
