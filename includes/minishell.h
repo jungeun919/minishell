@@ -119,6 +119,7 @@ void	exec_builtin(t_exec_token *token, t_env *env_list);
 // env
 int		ft_env(char **cmd, t_env *env_list);
 void	print_env_list(t_env *env_list);
+void	print_env_list_with_export(t_env *env_list);
 
 // export
 int		ft_export(char **cmd, t_env *env_list);
