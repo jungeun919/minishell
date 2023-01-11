@@ -9,9 +9,9 @@ static void	rm_all_heredoc_file()
 	i = 0;
 	while (i < g_info.heredoc_cnt)
 	{
-		filename = ft_strjoin("/tmp/", ft_itoa(i));
-		fprintf(stderr, "unlink %s\n", filename);
+		filename = ft_join_and_free("/tmp/", ft_itoa(i));
 		unlink(filename);
+		free(filename);
 		i++;
 	}
 }

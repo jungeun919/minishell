@@ -6,7 +6,7 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:44:45 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 20:18:48 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/12 02:37:50 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ void			set_heredoc_input(t_exec_token *token, \
 				t_env *env_list, int len);
 void			get_infile(int num, char *limiter, t_env *env_list);
 void			heredoc_child_process(int num, char *limiter, t_env *env_list);
+char			*ft_join_and_free(char *buffer, char *buf);
 
 // exec_pipe
 int				init_exec_info(pid_t **pids, int ***fds, int len);

@@ -1,6 +1,15 @@
 
 #include "minishell.h"
 
+char	*ft_join_and_free(char *buffer, char *buf)
+{
+	char	*temp;
+
+	temp = ft_strjoin(buffer, buf);
+	free(buf);
+	return (temp);
+}
+
 void	set_heredoc_input(t_exec_token *token, t_env *env_list, int len)
 {
 	int		i;
@@ -47,8 +56,9 @@ void	heredoc_child_process(int num, char *limiter, t_env *env_list)
 	char	*line;
 
 	signal(SIGINT, SIG_IGN);
-	filename = ft_strjoin("/tmp/", ft_itoa(num));
+	filename = ft_join_and_free("/tmp/", ft_itoa(num));
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	free(filename);
 	if (fd == -1)
 		error_exit("open error\n", 1);
 	line = readline("> ");
