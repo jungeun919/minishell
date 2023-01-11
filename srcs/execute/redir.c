@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 17:19:50 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:26:50 by sanghan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	set_redir(t_parser_token *parser_token, t_env *env_list)
 {
@@ -26,15 +37,15 @@ char	*replace_env_heredoc(char *str, t_env *env_list)
 	char	*key;
 	char	*key_end;
 	char	*temp;
-	
+
 	while (ft_strchr(str, '$'))
 	{
-		key = ft_strchr(str, '$'); // $의 인덱스
-		key_end = key + 1; // 환경변수 끝 하나 뒤 인덱스 ("012$PATH 345") <- key = '$', key_end = ' '
+		key = ft_strchr(str, '$');
+		key_end = key + 1;
 		while (ft_isalnum(*key_end))
 			key_end++;
-		key = ft_substr(key, 1, (int)(key_end - key - 1)); // $다음 인덱스 부터 저장
-		temp = join_env(str, get_env_value(env_list,key), key_end);
+		key = ft_substr(key, 1, (int)(key_end - key - 1));
+		temp = join_env(str, get_env_value(env_list, key), key_end);
 		free(str);
 		str = temp;
 		free(key);
@@ -51,14 +62,10 @@ void	set_redir_in(char *redir_sign, char *filename)
 		fd = open(filename, O_RDONLY);
 	else if (ft_strncmp(redir_sign, "<<", 3) == 0)
 		fd = open(".here_doc_temp", O_RDONLY);
-
 	if (fd == -1)
-	{
-		// printf("%s: no such file or directory\n", filename);
 		error_exit("open error\n", 1);
-	}
 	if (dup2(fd, STDIN_FILENO) == -1)
-		error_exit("dup2 error\n", 1);    
+		error_exit("dup2 error\n", 1);
 	close(fd);
 }
 
@@ -72,10 +79,7 @@ void	set_redir_out(char *redir_sign, char *filename)
 	else if (ft_strncmp(redir_sign, ">>", 3) == 0)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-	{
-		// printf("%s: no such file or directory\n", filename);
 		error_exit("open error\n", 1);
-	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		error_exit("dup2 error\n", 1);
 	close(fd);

@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 17:18:27 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:18:28 by sanghan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
-// return value -> 0 : success, 1 : fail
 int	ft_env(char **cmd, t_env *env_list)
 {
 	if (cmd[1] != NULL)

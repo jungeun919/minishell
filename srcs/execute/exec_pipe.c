@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipe.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 17:19:45 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:27:11 by sanghan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	init_exec_info(pid_t **pids, int ***fds, int len)
 {
@@ -54,7 +65,6 @@ void	wait_all_childs(pid_t *pids, int len)
 			g_info.exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			g_info.exit_status = WCOREFLAG | WTERMSIG(status);
-
 		if (pid != pids[len - 1])
 			continue ;
 	}
@@ -65,16 +75,18 @@ void	wait_all_childs(pid_t *pids, int len)
 		g_info.exit_status = WCOREFLAG | WTERMSIG(status);
 }
 
-void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_list, int len)
+void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, \
+		t_env *env_list, int len)
 {
 	pids[i] = fork();
 	if (pids[i] == -1)
 		error_exit("fork error\n", 1);
 	if (pids[i] == 0)
-		child_process(fds, i, token, env_list, len);	
+		child_process(fds, i, token, env_list, len);
 }
 
-void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len)
+void	child_process(int **fds, int i, t_exec_token token, t_env \
+		*env_list, int len)
 {
 	if (i != 0)
 	{

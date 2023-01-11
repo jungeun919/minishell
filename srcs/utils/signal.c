@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 16:43:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:44:19 by hajeong          ###   ########.fr       */
+/*   Created: 2023/01/11 17:28:11 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:28:14 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	setting_signal(void)
 {

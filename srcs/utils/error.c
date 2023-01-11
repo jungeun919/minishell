@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 16:43:25 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:43:35 by hajeong          ###   ########.fr       */
+/*   Created: 2023/01/11 17:28:06 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:28:09 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	free_2d_array(char **str)
 {

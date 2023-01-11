@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   read.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 16:42:35 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:43:16 by hajeong          ###   ########.fr       */
+/*   Created: 2023/01/11 17:27:57 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:28:21 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 char	*read_cmd(void)
 {

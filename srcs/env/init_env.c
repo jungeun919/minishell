@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 16:40:39 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:41:42 by hajeong          ###   ########.fr       */
+/*   Created: 2023/01/11 17:19:16 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:24:13 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 t_env	*init_env_list(char **envp)
 {
@@ -64,7 +64,7 @@ void	env_list_add_node(t_env **list, t_env *node)
 
 	if (!node || !list)
 		return ;
-	if (*list == NULL) // 첫번째 노드
+	if (*list == NULL)
 		*list = node;
 	else
 	{

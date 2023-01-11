@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 16:44:45 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:50:02 by hajeong          ###   ########.fr       */
+/*   Created: 2023/01/11 17:20:35 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:22:10 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libs/libft/libft.h"
+# include "../libft/libft.h"
+# include "../libft/get_next_line.h"
 
 # define NORMAL_STRING 0
 # define DOUBLE_QUOTE 1
@@ -35,6 +36,12 @@
 # define AFTER_HEREDOC_DQ 10
 # define AFTER_HEREDOC_SQ 11
 
+# define STDIN 			0
+# define STDOUT 		1
+# define STDERR 		2
+
+# define COLOR_YELLOW	"\033[33m"
+# define END_COLOR		"\033[0m"
 // parsing_error_code
 # define ODD_QUOTE_ERROR 1
 # define NO_STR_AFTER_REDIR_ERROR 2
@@ -88,8 +95,8 @@ int				parsing(t_list **lexer_token, char *cmd, t_env *env_list);
 int				parsing_error_handle(int code);
 int				parser_token_size(t_list *lexer_token);
 t_parser_token	*init_parser_token(int size);
-void			make_parser_token(t_list **lexer_token, \
-				t_parser_token *parser_token);
+void			make_parser_token(t_list **lexer_token, t_parser_token *\
+				parser_token);
 void			free_parser_token(t_parser_token *parser_token, int len);
 int				make_token(t_exec_token **token, char *cmd, int *len);
 
@@ -97,17 +104,18 @@ void			sort_redirection(t_parser_token *parser_token, int len);
 void			clear_parser_and_exit(t_parser_token *parser_token, int len);
 
 // exec_token
-t_exec_token	*make_exec_token(t_parser_token *parser_token, \
-				t_exec_token **exec_token, int len);
+t_exec_token	*make_exec_token(t_parser_token *parser_token, t_exec_token \
+				**exec_token, int len);
 char			**make_2d_array(t_list *cmd_list);
-void			free_all_token(t_exec_token *exec_token, \
-				t_parser_token *parser_token, int len);
+void			free_all_token(t_exec_token *exec_token, t_parser_token \
+				*parser_token, int len);
 
 // env
 t_env			*init_env_list(char **envp);
 t_env			*make_env_node(char *key, char *value);
 void			env_list_add_node(t_env **list, t_env *node);
 void			free_env_list(t_env **env_list);
+
 char			*get_env_value(t_env *env_list, char *key);
 
 // utils
@@ -146,10 +154,10 @@ void			delete_node(char *key, t_env **env_list);
 t_env			*get_node(char *key, t_env *env_list);
 
 // echo
-int				ft_echo(t_exec_token *token);
+int				ft_echo(char **cmd);
 
 // cd
-void			cd(char **cmds);
+int				ft_cd(char **cmd);
 
 // exec_cmd
 void			exec_cmd(t_exec_token *token, t_env *env_list, int len);
@@ -165,8 +173,8 @@ void			set_redir_in(char *redir_sign, char *filename);
 void			set_redir_out(char *redir_sign, char *filename);
 
 // heredoc
-void			set_heredoc_input(t_exec_token *token, \
-				t_env *env_list, int len);
+void			set_heredoc_input(t_exec_token *token, t_env *env_list, \
+				int len);
 void			get_infile(char *limiter, t_env *env_list);
 void			heredoc_child_process(char *limiter, t_env *env_list);
 
@@ -174,9 +182,11 @@ void			heredoc_child_process(char *limiter, t_env *env_list);
 int				init_exec_info(pid_t **pids, int ***fds, int len);
 void			close_all_fds(int **fds, int len);
 void			wait_all_childs(pid_t *pids, int len);
-void			exec_pipe(t_exec_token token, int i, pid_t *pids, \
-				int **fds, t_env *env_list, int len);
-void			child_process(int **fds, int i, t_exec_token token, \
+void			exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, \
 				t_env *env_list, int len);
+void			child_process(int **fds, int i, t_exec_token token, t_env \
+				*env_list, int len);
 
+int				ft_exit(char **cmd);
+int				ft_pwd(char **cmd);
 #endif

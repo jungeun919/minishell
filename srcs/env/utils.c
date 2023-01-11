@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 16:41:55 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:42:08 by hajeong          ###   ########.fr       */
+/*   Created: 2023/01/11 17:19:26 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:24:19 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 char	*get_env_value(t_env *env_list, char *key)
 {

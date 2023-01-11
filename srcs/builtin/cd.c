@@ -1,18 +1,16 @@
-# include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 17:17:57 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:17:58 by sanghan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	is_option(char *line)
-{
-	if (line && *line == '-' && line + 1)
-		return (1);
-	return (0);
-}
-
-static void	minish_exit(char *msg, int code)
-{
-	ft_putstr_fd("minish: ", STDERR_FILENO);
-	perror(msg);
-	exit(code);
-}
+#include "../../includes/minishell.h"
 
 static char	abstract_opt(char *line)
 {
@@ -56,7 +54,9 @@ static char	*find_real_path(char *path)
 		real_path = ft_strdup(path);
 	if (real_path == 0)
 	{
-		minish_exit("minish: ft_strdup", 1);
+		ft_putstr_fd("minish: ", STDERR_FILENO);
+		perror("minish: ft_strdup");
+		exit(1);
 	}
 	return (real_path);
 }
@@ -91,26 +91,24 @@ static void	set_cd_env(void)
 	env_list_add_node(&g_info.env_list, node);
 }
 
-void	cd(char **cmds)
+int	ft_cd(char **cmd)
 {
 	int		ret;
 	char	*real_path;
 
-	if (is_option(cmds[1]))
+	if (cmd[1] && *cmd[1] == '-' && cmd[1] + 1)
 	{
-		perror_opt(cmds[0], abstract_opt(cmds[1]), "cd [-] [dir]");
-		return ;
+		perror_opt(cmd[0], abstract_opt(cmd[1]), "cd [-] [dir]");
+		return (0);
 	}
-	real_path = find_real_path(cmds[1]);
+	real_path = find_real_path(cmd[1]);
 	ret = chdir(real_path);
 	free(real_path);
 	if (ret == -1)
 	{
 		perror("minishell: cd");
-
-		g_info.exit_status = 2;
-		return ;
+		return (2);
 	}
 	set_cd_env();
-	g_info.exit_status = 0;
+	return (0);
 }

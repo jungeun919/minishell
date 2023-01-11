@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 12:30:23 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 20:08:26 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/11 16:42:40 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	free_temp_clear_and_exit(t_list **lexer_token, char *temp)
 {

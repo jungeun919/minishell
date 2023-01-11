@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 17:18:43 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:23:11 by sanghan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	ft_export(char **cmd, t_env *env_list)
 {
@@ -16,7 +27,7 @@ int	ft_export(char **cmd, t_env *env_list)
 		j = 0;
 		while (cmd[i][j] && cmd[i][j] != '=')
 			j++;
-		key = ft_substr(cmd[i], 0, j); // 할당 실패했을 때 처리할건지? 일단 함수 안에서 널 체크하는 정도로만 작성
+		key = ft_substr(cmd[i], 0, j);
 		value = ft_substr(cmd[i], j + 1, ft_strlen(cmd[i]) - j - 1);
 		execute_export(key, value, env_list);
 		i++;
@@ -40,7 +51,7 @@ void	execute_export(char *key, char *value, t_env *env_list)
 		}
 		node = make_env_node(key, value);
 		if (!node)
-			return ; // errno 설정 관련 추가?
+			return ;
 		env_list_add_node(&env_list, node);
 	}
 }

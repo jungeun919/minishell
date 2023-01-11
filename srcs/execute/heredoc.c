@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 17:19:48 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:26:58 by sanghan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	set_heredoc_input(t_exec_token *token, t_env *env_list, int len)
 {
@@ -64,5 +75,4 @@ void	heredoc_child_process(char *limiter, t_env *env_list)
 		else
 			break ;
 	}
-	// close(fd);
 }

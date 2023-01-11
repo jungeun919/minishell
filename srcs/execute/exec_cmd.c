@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/11 17:19:36 by sanghan           #+#    #+#             */
+/*   Updated: 2023/01/11 17:26:09 by sanghan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
@@ -8,9 +19,9 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	int		i;
 
 	if (len == 1 && is_builtin(token))
-		return exec_builtin(token, env_list);
+		return (exec_builtin(token, env_list));
 	set_heredoc_input(token, env_list, len);
-	if (token->parser_token->cmd == NULL) // hi
+	if (token->parser_token->cmd == NULL)
 		return ;
 	init_exec_info(&pids, &fds, len);
 	i = 0;
@@ -31,7 +42,7 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 	char	*cmd;
 	char	*path;
 	char	**env;
-	
+
 	if (!cmd_list)
 		return ;
 	env = convert_env_list_to_str_list(env_list);

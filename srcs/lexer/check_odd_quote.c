@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check_odd_quote.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:38:37 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/11 17:15:34 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	check_odd_quote(t_list *lexer_token)
 {
@@ -26,7 +26,7 @@ int	check_odd_quote(t_list *lexer_token)
 				return (1);
 			if (lexer_token->content[0] != lexer_token->content[len - 1])
 				return (1);
-		}			
+		}
 		lexer_token = lexer_token->next;
 	}
 	return (0);

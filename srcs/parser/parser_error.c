@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 12:30:23 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 20:10:50 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/11 16:44:31 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	clear_parser_and_exit(t_parser_token *parser_token, int len)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   make_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 17:39:29 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:39:56 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/11 17:27:37 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	make_token(t_exec_token **token, char *cmd, int *len)
 {

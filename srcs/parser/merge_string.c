@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   merge_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 20:06:05 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/11 16:44:21 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 // parser 2-2 -> 문자열 병합
 void	merge_string(t_list **lexer_token)
