@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   delete_blank.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/12 05:13:16 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 05:18:03 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
 void	delete_blank(t_list **lexer_token)
 {
 	t_list	*prev;
