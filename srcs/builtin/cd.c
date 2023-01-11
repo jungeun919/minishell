@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:17:57 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 03:16:57 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 05:34:28 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*get_cd_path(char *key)
 	char	*path;
 
 	path = get_env_path(g_info.env_list, key);
-	if (!strcmp(key, "HOME"))
+	if (!ft_strcmp(key, "HOME"))
 		path = getenv(key);
 	if (!path)
 	{
