@@ -126,6 +126,7 @@ void	exec_builtin(t_exec_token *token, t_env *env_list);
 // env
 int		ft_env(char **cmd, t_env *env_list);
 void	print_env_list(t_env *env_list);
+void	print_env_list_with_export(t_env *env_list);
 
 // export
 int		ft_export(char **cmd, t_env *env_list);
@@ -165,8 +166,8 @@ void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, t_env *env_lis
 void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int len);
 
 int	ft_exit(char **cmd);
-int	ft_cd(t_exec_token *token);
-int	ft_echo(t_exec_token *token);
+int	ft_cd(char **cmd);
+int	ft_echo(char **cmd);
 int	ft_pwd(char **cmd);
 
 #endif

@@ -6,72 +6,109 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 12:59:28 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/09 20:08:30 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 15:18:54 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *prev_path;
-
-int	cd_chdir(char *cwd, char *path)
+static char	abstract_opt(char *line)
 {
-	int	res;
-
-	res = 0;
-	prev_path = cwd;
-	res = chdir(path);
-	if (res == -1)
+	line++;
+	while (*line && *(line + 1))
 	{
-		ft_putstr_fd("minsh: cd:", STDERR_FILENO);
-		ft_putstr_fd(path, STDERR_FILENO);
-		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
+		if (*line != *(line + 1))
+			return (0);
+		line++;
 	}
-	return (res);
+	return (*line);
 }
 
-int	cd_prev(char *temp, char *cwd)
+static void	perror_opt(char *cmd, char opt, char *usage)
 {
-	int	res;
-
-	res = 0;
-	temp = cwd;
-	res = chdir(prev_path);
-	prev_path = temp;
-	if (res == -1)
-	{
-		ft_putstr_fd("minsh: cd: OLPWD not set\n", STDERR_FILENO);
-		return (-1);
-	}
-	return (res);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(": -", STDERR_FILENO);
+	ft_putchar_fd(opt, STDERR_FILENO);
+	ft_putendl_fd(": invalid option", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(": usage: ", STDERR_FILENO);
+	ft_putendl_fd(usage, STDERR_FILENO);
+	g_info.exit_status = 2;
 }
 
-int	ft_cd(t_exec_token *token)
+static char	*find_real_path(char *path)
 {
-	char		*path;
-	int			res;
-	static char	*cwd;
-	char		*temp;
-	int			i;
+	char	*home;
+	char	*real_path;
 
-	i = 1;
-	res = 0;
-	temp = NULL;
-	cwd = getcwd(NULL, 0);
-	if (token->cmd[1] == NULL)
-		return (0);
-	while (token->cmd[i] != NULL)
+	if (!path)
 	{
-		prev_path = cwd;
-		chdir(getenv("HOME"));
-		cwd = getcwd(NULL, 0);
-		return (0);
-		i++;
+		home = get_env_value(g_info.env_list, "HOME");
+		if (!home)
+			real_path = ft_strdup("");
+		else
+			real_path = ft_strdup(home);
 	}
-	path = token->parser_token->cmd->next->content;
-	if (ft_strncmp(path, "-", 2) == 0)
-		res = cd_prev(temp, cwd);
 	else
-		cd_chdir(cwd, path);
-	return (res);
+		real_path = ft_strdup(path);
+	if (real_path == 0)
+	{
+		ft_putstr_fd("minish: ", STDERR_FILENO);
+		perror("minish: ft_strdup");
+		exit(1);
+	}
+	return (real_path);
+}
+
+static void	set_cd_env(void)
+{
+	char	*oldpwd;
+	char	*pwd;
+	char	*real_path;
+	t_env	*node;
+
+	oldpwd = get_env_value(g_info.env_list, "OLDPWD");
+	pwd = get_env_value(g_info.env_list, "PWD");
+	if (oldpwd)
+		delete_node("OLDPWD", &g_info.env_list);
+	node = make_env_node(ft_strdup("OLDPWD"), ft_strdup(pwd));
+	if (!node)
+		return ;
+	env_list_add_node(&g_info.env_list, node);
+	if (pwd)
+		delete_node("PWD", &g_info.env_list);
+	real_path = getcwd(NULL, 0);
+	if (!real_path)
+	{
+		perror("minishell: cd: ");
+		g_info.exit_status = 2;
+		return ;
+	}
+	node = make_env_node(ft_strdup("PWD"), ft_strdup(real_path));
+	if (!node)
+		return ;
+	env_list_add_node(&g_info.env_list, node);
+}
+
+int	ft_cd(char **cmd)
+{
+	int		ret;
+	char	*real_path;
+
+	if (cmd[1] && *cmd[1] == '-' && cmd[1] + 1)
+	{
+		perror_opt(cmd[0], abstract_opt(cmd[1]), "cd [-] [dir]");
+		return (0);
+	}
+	real_path = find_real_path(cmd[1]);
+	ret = chdir(real_path);
+	free(real_path);
+	if (ret == -1)
+	{
+		perror("minishell: cd");
+		return (2);
+	}
+	set_cd_env();
+	return (0);
 }

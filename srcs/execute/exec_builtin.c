@@ -32,11 +32,11 @@ void	exec_builtin(t_exec_token *token, t_env *env_list)
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
 		status = ft_unset(token->cmd, env_list);
 	else if (ft_strncmp(cmd, "cd", 3) == 0)
-		status = ft_cd(token);
+		status = ft_cd(token->cmd);
 	else if (ft_strncmp(cmd, "pwd", 4) == 0)
 		status = ft_pwd(token->cmd);
 	else if (ft_strncmp(cmd, "echo", 5) == 0)
-		status = ft_echo(token);
+		status = ft_echo(token->cmd);
 	else if (ft_strncmp(cmd, "exit", 9) == 0)
 		status = ft_exit(token->cmd);
 	g_info.exit_status = status;

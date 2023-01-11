@@ -8,11 +8,10 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	int		i;
 
 	if (len == 1 && is_builtin(token))
-	{
-		exec_builtin(token, env_list);
-		return ;
-	}
+		return (exec_builtin(token, env_list));
 	set_heredoc_input(token, env_list, len);
+	if (token->parser_token->cmd == NULL)
+		return ;
 	init_exec_info(&pids, &fds, len);
 	i = 0;
 	while (i < len)
@@ -35,17 +34,26 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 
 	if (!cmd_list)
 		return ;
-	cmd = ft_strjoin("/", cmd_list[0]);
 	env = convert_env_list_to_str_list(env_list);
-	path = get_path(cmd, env);
-	free(cmd);
+	if (ft_strchr(cmd_list[0], '/'))
+		path = cmd_list[0];
+	else
+	{
+		cmd = ft_strjoin("/", cmd_list[0]);
+		path = get_path(cmd, env);
+		free(cmd);
+	}
 	if (!path)
 	{
-		ft_putstr_fd("command not found\n", STDERR_FILENO);
-		return ;
+		if (execve(path, cmd_list, env) == -1)
+			error_exit("command not found\n", 127);
 	}
-	if (execve(path, cmd_list, env) == -1)
-		error_exit("execve error\n", 127);
+	else
+	{
+		free_2d_array(env);
+		free(path);
+		error_exit("command not found\n", 127);
+	}
 }
 
 char	**convert_env_list_to_str_list(t_env *env_list)

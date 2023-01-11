@@ -21,3 +21,18 @@ void	print_env_list(t_env *env_list)
 		temp = temp->next;
 	}
 }
+
+void	print_env_list_with_export(t_env *env_list)
+{
+	t_env	*temp;
+
+	temp = env_list;
+	while (temp)
+	{
+		printf("declare -x %s", temp->key);
+		if (temp->value != NULL)
+			printf("=\"%s\"", temp->value);
+		printf("\n");
+		temp = temp->next;
+	}
+}
