@@ -46,23 +46,19 @@ void	heredoc_child_process(char *limiter, t_env *env_list)
 	fd = open(".here_doc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		error_exit("open error\n", 1);
-	while (1)
+	line = readline("> ");
+	while (line)
 	{
-		line = readline("> ");
-		if (line)
+		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 		{
-			if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
-			{
-				free(line);
-				break ;
-			}
-			line = replace_env_heredoc(line, env_list);
-			write(fd, line, ft_strlen(line));
-			write(fd, "\n", 1);
 			free(line);
-		}
-		else
 			break ;
+		}
+		line = replace_env_heredoc(line, env_list);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+		line = readline("> ");
 	}
 	// close(fd);
 }
