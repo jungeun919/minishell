@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/12 02:22:14 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 05:13:27 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char	*join_env_free(char *before, char *value, char *after)
 	return (str);
 }
 
-// parser 1 -> 환경변수 교체
 void	replace_env(t_list *l_tok, t_env *envlst)
 {
 	char	*key;

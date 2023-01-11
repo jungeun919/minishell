@@ -6,13 +6,12 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:45:00 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 05:13:24 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// parser 2-1 -> 따옴표 지우기
 void	remove_quote(t_list **lexer_token)
 {
 	t_list	*temp;
