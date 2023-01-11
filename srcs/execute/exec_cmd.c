@@ -34,17 +34,26 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 	
 	if (!cmd_list)
 		return ;
-	cmd = ft_strjoin("/", cmd_list[0]);
 	env = convert_env_list_to_str_list(env_list);
-	path = get_path(cmd, env);
-	free(cmd);
+	if (ft_strchr(cmd_list[0], '/'))
+		path = cmd_list[0];
+	else
+	{
+		cmd = ft_strjoin("/", cmd_list[0]);
+		path = get_path(cmd, env);
+		free(cmd);
+	}
 	if (path)
 	{
 		if (execve(path, cmd_list, env) == -1)
-			error_exit("execve error\n", 127);
+			error_exit("command not found\n", 127);
 	}
 	else
+	{
+		free_2d_array(env);
+		free(path);
 		error_exit("command not found\n", 127);
+	}
 }
 
 char	**convert_env_list_to_str_list(t_env *env_list)

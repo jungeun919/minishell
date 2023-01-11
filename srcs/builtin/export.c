@@ -8,8 +8,8 @@ int	ft_export(char **cmd, t_env *env_list)
 	char	*key;
 	char	*value;
 
-	if (cmd[1] == NULL) // export만 입력했을 때 목록 표시
-		print_env_list(env_list);
+	if (cmd[1] == NULL)
+		print_env_list_with_export(env_list);
 	i = 1;
 	while (cmd[i] != NULL)
 	{
