@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:50 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 20:42:51 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 00:00:45 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,11 @@ void	set_redir_in(t_exec_token *token, char *redir_sign, char *filename)
 		fd = open(filename, O_RDONLY);
 	else if (ft_strncmp(redir_sign, "<<", 3) == 0)
 	{
-		heredoc_filename = ft_strjoin("/tmp/", ft_itoa(token->heredoc_num));
-		fprintf(stderr, "heredoc_filename : %s\n", heredoc_filename);
+		heredoc_filename = ft_join_and_free("/tmp/", \
+		ft_itoa(token->heredoc_num));
 		token->heredoc_num++;
 		fd = open(heredoc_filename, O_RDONLY);
+		free(heredoc_filename);
 	}
 	if (fd == -1)
 		error_exit("no such file or directory\n", 1);

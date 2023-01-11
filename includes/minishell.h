@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:20:35 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 20:49:34 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 23:53:26 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ void			set_heredoc_input(t_exec_token *token, t_env *env_list, \
 				int len);
 void			get_infile(int num, char *limiter, t_env *env_list);
 void			heredoc_child_process(int num, char *limiter, t_env *env_list);
+char			*ft_join_and_free(char *buffer, char *buf);
 // exec_pipe
 int				init_exec_info(pid_t **pids, int ***fds, int len);
 void			close_all_fds(int **fds, int len);

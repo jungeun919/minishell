@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:28:06 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 20:47:39 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 23:59:49 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	rm_all_heredoc_file(void)
 	i = 0;
 	while (i < g_info.heredoc_cnt)
 	{
-		filename = ft_strjoin("/tmp/", ft_itoa(i));
-		fprintf(stderr, "unlink %s\n", filename);
+		filename = ft_join_and_free("/tmp/", ft_itoa(i));
 		unlink(filename);
+		free(filename);
 		i++;
 	}
 }
