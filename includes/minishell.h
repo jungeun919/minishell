@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:20:35 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 18:19:12 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:02:39 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void			make_parser_token(t_list **lexer_token, t_parser_token *\
 				parser_token);
 void			free_parser_token(t_parser_token *parser_token, int len);
 int				make_token(t_exec_token **token, char *cmd, int *len);
+void			replace_env_exit_status(t_list *l_tok);
 
 void			sort_redirection(t_parser_token *parser_token, int len);
 void			clear_parser_and_exit(t_parser_token *parser_token, int len);
@@ -182,7 +183,7 @@ void			heredoc_child_process(char *limiter, t_env *env_list);
 int				init_exec_info(pid_t **pids, int ***fds, int len);
 void			close_all_fds(int **fds, int len);
 void			wait_all_childs(pid_t *pids, int len);
-void			exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, int len);
+void			exec_pipe(t_exec_token *token, pid_t *pids, int **fds, int len);
 void			child_process(int **fds, int i, t_exec_token token, int len);
 
 int				ft_exit(char **cmd);

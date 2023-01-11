@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:57:51 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:44:49 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 19:55:04 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	parsing(t_list **lexer_token, char *cmd, t_env *env_list)
 		ft_lstclear(lexer_token, free);
 		return (ODD_QUOTE_ERROR);
 	}
+	replace_env_exit_status(*lexer_token);
 	replace_env(*lexer_token, env_list);
 	remove_quote(lexer_token);
 	merge_string(lexer_token);

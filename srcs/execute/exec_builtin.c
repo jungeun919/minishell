@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:33 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 17:24:37 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 19:39:53 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	is_builtin(t_exec_token *token)
 {
 	char	*cmd;
 
+	if (token->parser_token->cmd == NULL)
+		return (0);
 	cmd = token->parser_token->cmd->content;
 	if (ft_strncmp(cmd, "env", 4) == 0 || \
 		ft_strncmp(cmd, "export", 7) == 0 || \

@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:45 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 18:19:59 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:01:58 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,20 @@ void	wait_all_childs(pid_t *pids, int len)
 		g_info.exit_status = WCOREFLAG | WTERMSIG(status);
 }
 
-void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, int len)
+void	exec_pipe(t_exec_token *token, pid_t *pids, int **fds, int len)
 {
-	pids[i] = fork();
-	if (pids[i] == -1)
-		error_exit("fork error\n", 1);
-	if (pids[i] == 0)
-		child_process(fds, i, token, len);
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		pids[i] = fork();
+		if (pids[i] == -1)
+			error_exit("fork error\n", 1);
+		if (pids[i] == 0)
+			child_process(fds, i, token[i], len);
+		i++;
+	}
 }
 
 void	child_process(int **fds, int i, t_exec_token token, int len)

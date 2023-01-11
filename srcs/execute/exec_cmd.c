@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:36 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 18:19:30 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:05:02 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
 	pid_t	*pids;
 	int		**fds;
-	int		i;
 
 	if (len == 1 && is_builtin(token))
 		return (exec_builtin(token, env_list));
@@ -24,12 +23,7 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	if (token->parser_token->cmd == NULL)
 		return ;
 	init_exec_info(&pids, &fds, len);
-	i = 0;
-	while (i < len)
-	{
-		exec_pipe(token[i], i, pids, fds, len);
-		i++;
-	}
+	exec_pipe(token, pids, fds, len);
 	close_all_fds(fds, len);
 	wait_all_childs(pids, len);
 	free_init_exec_info(&pids, &fds, len - 1);
@@ -54,11 +48,8 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 		path = get_path(cmd, env);
 		free(cmd);
 	}
-	if (path)
-	{
-		if (execve(path, cmd_list, env) == -1)
-			error_exit("command not found\n", 127);
-	}
+	if (path && execve(path, cmd_list, env) == -1)
+		error_exit("command not found\n", 127);
 	else
 	{
 		free_2d_array(env);
@@ -128,8 +119,8 @@ char	*get_path(char *cmd, char **env)
 	while (env[i] && (ft_strncmp("PATH", env[i], 4) != 0))
 		i++;
 	split_path = ft_split(env[i] + 5, ':');
-	i = 0;
-	while (split_path[i])
+	i = -1;
+	while (split_path[++i])
 	{
 		path = ft_strjoin(split_path[i], cmd);
 		if (!path)
@@ -140,7 +131,6 @@ char	*get_path(char *cmd, char **env)
 			return (path);
 		}
 		free(path);
-		i++;
 	}
 	free_2d_array(split_path);
 	return (NULL);
