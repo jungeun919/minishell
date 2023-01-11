@@ -6,7 +6,7 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:44:45 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/12 02:37:50 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/12 02:50:31 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int				check_odd_quote(t_list *lexer_token);
 
 //parser
 char			*join_env(char *before, char *value, char *after);
+char			*join_env_free(char *before, char *value, char *after);
 void			replace_env(t_list *lexer_token, t_env *env_list);
 void			replace_env_exit_status(t_list *l_tok);
 void			remove_quote(t_list **lexer_token);
@@ -164,6 +165,7 @@ char			*get_path(char *cmd, char **env);
 // redir
 void			set_redir(t_exec_token *token, t_env *env_list);
 char			*replace_env_heredoc(char *str, t_env *env_list);
+char			*replace_env_heredoc_exit_status(char *str);
 void			set_redir_in(t_exec_token *token, char *redir_sign, char *filename);
 void			set_redir_out(char *redir_sign, char *filename);
 

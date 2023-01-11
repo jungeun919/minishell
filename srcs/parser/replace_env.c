@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 19:49:17 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 03:04:53 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,33 @@ char	*join_env(char *before, char *value, char *after)
 	while (*after)
 		*join++ = *after++;
 	*join = '\0';
+	return (str);
+}
+
+char	*join_env_free(char *before, char *value, char *after)
+{
+	char	*str;
+	char	*join;
+	char	*temp;
+
+	if (!value)
+		value = ft_strdup("");
+	if (!before | !value | !after)
+		return (0);
+	str = (char *)malloc(sizeof(char) * (ft_strlen(before) \
+	+ ft_strlen(value) + ft_strlen(after) + 1));
+	if (!str)
+		return (NULL);
+	join = str;
+	while (*before && *before != '$')
+		*join++ = *before++;
+	temp = value;
+	while (*temp)
+		*join++ = *temp++;
+	while (*after)
+		*join++ = *after++;
+	*join = '\0';
+	free(value);
 	return (str);
 }
 
@@ -81,7 +108,7 @@ void	replace_env_exit_status(t_list *l_tok)
 			key = ft_strchr(l_tok->content, '$');
 			key_end = key + 2;
 			key = ft_substr(key, 1, (int)(1));
-			str = join_env(l_tok->content, ft_itoa(g_info.exit_status), key_end);
+			str = join_env_free(l_tok->content, ft_itoa(g_info.exit_status), key_end);
 			free(l_tok->content);
 			l_tok->content = str;
 			free(key);

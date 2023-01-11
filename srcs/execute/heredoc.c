@@ -69,6 +69,7 @@ void	heredoc_child_process(int num, char *limiter, t_env *env_list)
 			free(line);
 			break ;
 		}
+		line = replace_env_heredoc_exit_status(line);
 		line = replace_env_heredoc(line, env_list);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);

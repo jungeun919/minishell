@@ -42,6 +42,25 @@ char	*replace_env_heredoc(char *str, t_env *env_list)
 	return (str);
 }
 
+char	*replace_env_heredoc_exit_status(char *str)
+{
+	char	*key;
+	char	*key_end;
+	char	*temp;
+
+	while (ft_strnstr(str, "$?", ft_strlen(str)))
+	{
+		key = ft_strchr(str, '$');
+		key_end = key + 2;
+		key = ft_substr(key, 1, (int)(1));
+		temp = join_env_free(str, ft_itoa(g_info.exit_status), key_end);
+		free(str);
+		str = temp;
+		free(key);
+	}
+	return (str);
+}
+
 void	set_redir_in(t_exec_token *token, char *redir_sign, char *filename)
 {
 	int		fd;
