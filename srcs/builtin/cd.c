@@ -1,5 +1,12 @@
 # include "minishell.h"
 
+static int	is_option(char *line)
+{
+	if (line && *line == '-' && line + 1)
+		return (1);
+	return (0);
+}
+
 static void	minish_exit(char *msg, int code)
 {
 	ft_putstr_fd("minish: ", STDERR_FILENO);
@@ -84,13 +91,6 @@ static void	set_cd_env(void)
 	env_list_add_node(&g_info.env_list, node);
 }
 
-static int	is_option(char *line)
-{
-	if (line && *line == '-' && line + 1)
-		return (1);
-	return (0);
-}
-
 void	cd(char **cmds)
 {
 	int		ret;
@@ -107,7 +107,7 @@ void	cd(char **cmds)
 	if (ret == -1)
 	{
 		perror("minishell: cd");
-		
+
 		g_info.exit_status = 2;
 		return ;
 	}

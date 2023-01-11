@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungchoi <jungchoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/10 20:25:09 by jungchoi         ###   ########.fr       */
+/*   Updated: 2023/01/11 13:31:44 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(cmd);
 		if (make_token(&token, cmd, &len) != 0)
 			continue ;
-		if (token->parser_token->cmd == NULL)
-			continue ;
+		// if (token->parser_token->cmd == NULL) // hi
+		// 	continue ;
 		exec_cmd(token, g_info.env_list, len);
 		free_all_token(token, token->parser_token, len);
 		free(cmd);
