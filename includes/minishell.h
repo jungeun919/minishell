@@ -135,6 +135,9 @@ t_env	*get_node(char *key, t_env *env_list);
 // echo
 int		ft_echo(t_exec_token *token);
 
+// cd
+void	cd(char **cmds);
+
 // exec_cmd
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len);
 void	run_execve_cmd(char **cmd_list, t_env *env_list);
