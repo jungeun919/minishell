@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:36 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 17:26:09 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 18:19:30 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	i = 0;
 	while (i < len)
 	{
-		exec_pipe(token[i], i, pids, fds, env_list, len);
+		exec_pipe(token[i], i, pids, fds, len);
 		i++;
 	}
 	close_all_fds(fds, len);

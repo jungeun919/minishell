@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:45 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 17:27:11 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 18:19:59 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,16 @@ void	wait_all_childs(pid_t *pids, int len)
 		g_info.exit_status = WCOREFLAG | WTERMSIG(status);
 }
 
-void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, \
-		t_env *env_list, int len)
+void	exec_pipe(t_exec_token token, int i, pid_t *pids, int **fds, int len)
 {
 	pids[i] = fork();
 	if (pids[i] == -1)
 		error_exit("fork error\n", 1);
 	if (pids[i] == 0)
-		child_process(fds, i, token, env_list, len);
+		child_process(fds, i, token, len);
 }
 
-void	child_process(int **fds, int i, t_exec_token token, t_env \
-		*env_list, int len)
+void	child_process(int **fds, int i, t_exec_token token, int len)
 {
 	if (i != 0)
 	{
@@ -107,10 +105,10 @@ void	child_process(int **fds, int i, t_exec_token token, t_env \
 		close(fds[i][1]);
 		i++;
 	}
-	set_redir(token.parser_token, env_list);
+	set_redir(token.parser_token, g_info.env_list);
 	if (is_builtin(&token))
-		exec_builtin(&token, env_list);
+		exec_builtin(&token, g_info.env_list);
 	else
-		run_execve_cmd(token.cmd, env_list);
+		run_execve_cmd(token.cmd, g_info.env_list);
 	exit(g_info.exit_status);
 }

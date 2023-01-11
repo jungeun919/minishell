@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:48 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 17:26:58 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 18:20:01 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	get_infile(char *limiter, t_env *env_list)
 	if (pid == 0)
 	{
 		signal(SIGINT, heredoc_sig_handler);
-		heredoc_child_process(limiter, env_list);
+		heredoc_(limiter, env_list);
 		exit(0);
 	}
 	wait(&status);
