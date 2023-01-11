@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:36 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 20:48:23 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 06:27:55 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	int		**fds;
 
 	if (len == 1 && is_builtin(token))
-		return (exec_builtin(token, env_list));
+	{
+		set_redir(token);
+		exec_builtin(token, env_list);
+		if (dup2(STDIN_FILENO, STDOUT_FILENO) == -1)
+			printf("dup2 error\n");
+		return ;
+	}
 	set_heredoc_input(token, env_list, len);
 	if (token->parser_token->cmd == NULL)
 		return ;

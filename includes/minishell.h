@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:20:35 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 03:09:17 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 06:16:53 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void			join_key_and_value(char **env_str, t_env *env_list);
 char			*get_path(char *cmd, char **env);
 
 // redir
-void			set_redir(t_exec_token *token, t_env *env_list);
+void			set_redir(t_exec_token *token);
 char			*replace_env_heredoc(char *str, t_env *env_list);
 char			*replace_env_heredoc_exit_status(char *str);
 void			set_redir_in(t_exec_token *token, char *redir_sign, \

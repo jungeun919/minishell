@@ -6,13 +6,13 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:50 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 01:59:50 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 06:25:24 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	set_redir(t_exec_token *token, t_env *env_list)
+void	set_redir(t_exec_token *token)
 {
 	t_list	*in;
 	t_list	*out;
@@ -29,7 +29,6 @@ void	set_redir(t_exec_token *token, t_env *env_list)
 		set_redir_out(out->content, out->next->content);
 		out = out->next->next;
 	}
-	(void)env_list;
 }
 
 char	*replace_env_heredoc(char *str, t_env *env_list)
