@@ -1,6 +1,21 @@
 
 #include "minishell.h"
 
+static void	rm_all_heredoc_file()
+{
+	int		i;
+	char	*filename;
+
+	i = 0;
+	while (i < g_info.heredoc_cnt)
+	{
+		filename = ft_strjoin("/tmp/", ft_itoa(i));
+		fprintf(stderr, "unlink %s\n", filename);
+		unlink(filename);
+		i++;
+	}
+}
+
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
 	pid_t	*pids;
@@ -22,7 +37,7 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	close_all_fds(fds, len);
 	wait_all_childs(pids, len);
 	free_init_exec_info(&pids, &fds, len - 1);
-	unlink(".here_doc_temp");
+	rm_all_heredoc_file();
 	return ;
 }
 

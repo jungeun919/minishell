@@ -95,7 +95,7 @@ void	child_process(int **fds, int i, t_exec_token token, t_env *env_list, int le
 		close(fds[i][1]);
 		i++;
 	}
-	set_redir(token.parser_token, env_list);
+	set_redir(&token, env_list);
 	if (is_builtin(&token))
 		exec_builtin(&token, env_list);
 	else

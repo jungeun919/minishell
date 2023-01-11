@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 13:31:44 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:12:25 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	main(int argc, char *argv[], char *envp[])
 	g_info.exit_status = 0;
 	while (1)
 	{
+		g_info.heredoc_cnt = 0;
 		printf("==================exit status : %d\n", g_info.exit_status);
 		cmd = read_cmd();	
 		if (ft_strlen(cmd) >= 1)
@@ -40,18 +41,36 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 }
 
+static int	get_heredoc_num(int num, t_parser_token *parser_token)
+{
+	t_list	*in;
+
+	in = parser_token->in;
+	while (in != NULL)
+	{
+		if (ft_strncmp(in->content, "<<", 3) == 0)
+			num++;
+		in = in->next->next;
+	}
+	return (num);
+}
+
 t_exec_token	*make_exec_token(t_parser_token *parser_token, t_exec_token **exec_token, int len)
 {
 	int	i;
+	int	num;
 
 	*exec_token = (t_exec_token *)malloc(sizeof(t_exec_token) * len);
 	if (*exec_token == NULL)
 		return NULL;
 	i = 0;
+	num = 0;
 	while (i < len)
 	{
 		(*exec_token)[i].parser_token = &(parser_token[i]);
 		(*exec_token)[i].cmd = make_2d_array(parser_token[i].cmd);
+		(*exec_token)[i].heredoc_num = num;
+		num = get_heredoc_num(num, &parser_token[i]);
 		i++;
 	}
 	return (*exec_token);

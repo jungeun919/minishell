@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:44:45 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 19:51:54 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:18:48 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,14 @@ typedef struct s_exec_token
 {
 	t_parser_token	*parser_token;
 	char			**cmd;
+	int				heredoc_num;
 }	t_exec_token;
 
 typedef struct s_info
 {
 	t_env	*env_list;
 	int		exit_status;
+	int		heredoc_cnt;
 }	t_info;
 
 t_info	g_info;
@@ -79,6 +81,7 @@ int				check_odd_quote(t_list *lexer_token);
 //parser
 char			*join_env(char *before, char *value, char *after);
 void			replace_env(t_list *lexer_token, t_env *env_list);
+void			replace_env_exit_status(t_list *l_tok);
 void			remove_quote(t_list **lexer_token);
 void			merge_string(t_list **lexer_token);
 void			delete_blank(t_list **lexer_token);
@@ -159,16 +162,16 @@ void			join_key_and_value(char **env_str, t_env *env_list);
 char			*get_path(char *cmd, char **env);
 
 // redir
-void			set_redir(t_parser_token *parser_token, t_env *env_list);
+void			set_redir(t_exec_token *token, t_env *env_list);
 char			*replace_env_heredoc(char *str, t_env *env_list);
-void			set_redir_in(char *redir_sign, char *filename);
+void			set_redir_in(t_exec_token *token, char *redir_sign, char *filename);
 void			set_redir_out(char *redir_sign, char *filename);
 
 // heredoc
 void			set_heredoc_input(t_exec_token *token, \
 				t_env *env_list, int len);
-void			get_infile(char *limiter, t_env *env_list);
-void			heredoc_child_process(char *limiter, t_env *env_list);
+void			get_infile(int num, char *limiter, t_env *env_list);
+void			heredoc_child_process(int num, char *limiter, t_env *env_list);
 
 // exec_pipe
 int				init_exec_info(pid_t **pids, int ***fds, int len);
