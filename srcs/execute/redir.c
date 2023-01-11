@@ -6,24 +6,24 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:50 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 17:26:50 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:42:51 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	set_redir(t_parser_token *parser_token, t_env *env_list)
+void	set_redir(t_exec_token *token, t_env *env_list)
 {
 	t_list	*in;
 	t_list	*out;
 
-	in = parser_token->in;
+	in = token->parser_token->in;
 	while (in != NULL)
 	{
-		set_redir_in(in->content, in->next->content);
+		set_redir_in(token, in->content, in->next->content);
 		in = in->next->next;
 	}
-	out = parser_token->out;
+	out = token->parser_token->out;
 	while (out != NULL)
 	{
 		set_redir_out(out->content, out->next->content);
@@ -53,17 +53,23 @@ char	*replace_env_heredoc(char *str, t_env *env_list)
 	return (str);
 }
 
-void	set_redir_in(char *redir_sign, char *filename)
+void	set_redir_in(t_exec_token *token, char *redir_sign, char *filename)
 {
-	int	fd;
+	int		fd;
+	char	*heredoc_filename;
 
 	fd = -1;
 	if (ft_strncmp(redir_sign, "<", 2) == 0)
 		fd = open(filename, O_RDONLY);
 	else if (ft_strncmp(redir_sign, "<<", 3) == 0)
-		fd = open(".here_doc_temp", O_RDONLY);
+	{
+		heredoc_filename = ft_strjoin("/tmp/", ft_itoa(token->heredoc_num));
+		fprintf(stderr, "heredoc_filename : %s\n", heredoc_filename);
+		token->heredoc_num++;
+		fd = open(heredoc_filename, O_RDONLY);
+	}
 	if (fd == -1)
-		error_exit("open error\n", 1);
+		error_exit("no such file or directory\n", 1);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		error_exit("dup2 error\n", 1);
 	close(fd);

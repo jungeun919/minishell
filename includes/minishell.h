@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:20:35 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 20:02:39 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:49:34 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,14 @@ typedef struct s_exec_token
 {
 	t_parser_token	*parser_token;
 	char			**cmd;
+	int				heredoc_num;
 }	t_exec_token;
 
 typedef struct s_info
 {
 	t_env	*env_list;
 	int		exit_status;
+	int		heredoc_cnt;
 }	t_info;
 
 t_info	g_info;
@@ -130,7 +132,7 @@ void			free_2d_array(char **str);
 void			error_exit(char *str, int status);
 int				error_return(char *str);
 int				free_init_exec_info(pid_t **pids, int ***fds, int i);
-
+void			rm_all_heredoc_file(void);
 char			*read_cmd(void);
 
 // exec_builtin
@@ -168,17 +170,17 @@ void			join_key_and_value(char **env_str, t_env *env_list);
 char			*get_path(char *cmd, char **env);
 
 // redir
-void			set_redir(t_parser_token *parser_token, t_env *env_list);
+void			set_redir(t_exec_token *token, t_env *env_list);
 char			*replace_env_heredoc(char *str, t_env *env_list);
-void			set_redir_in(char *redir_sign, char *filename);
+void			set_redir_in(t_exec_token *token, char *redir_sign, \
+				char *filename);
 void			set_redir_out(char *redir_sign, char *filename);
 
 // heredoc
 void			set_heredoc_input(t_exec_token *token, t_env *env_list, \
 				int len);
-void			get_infile(char *limiter, t_env *env_list);
-void			heredoc_child_process(char *limiter, t_env *env_list);
-
+void			get_infile(int num, char *limiter, t_env *env_list);
+void			heredoc_child_process(int num, char *limiter, t_env *env_list);
 // exec_pipe
 int				init_exec_info(pid_t **pids, int ***fds, int len);
 void			close_all_fds(int **fds, int len);
@@ -188,4 +190,5 @@ void			child_process(int **fds, int i, t_exec_token token, int len);
 
 int				ft_exit(char **cmd);
 int				ft_pwd(char **cmd);
+void			show_shanghai(void);
 #endif

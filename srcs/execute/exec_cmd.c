@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:36 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 20:05:02 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:48:23 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	close_all_fds(fds, len);
 	wait_all_childs(pids, len);
 	free_init_exec_info(&pids, &fds, len - 1);
-	unlink(".here_doc_temp");
+	rm_all_heredoc_file();
 	return ;
 }
 

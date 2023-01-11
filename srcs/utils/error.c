@@ -6,7 +6,7 @@
 /*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:28:06 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/11 17:28:09 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/11 20:47:39 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,19 @@ int	free_init_exec_info(pid_t **pids, int ***fds, int i)
 	if (*fds != NULL)
 		free(*fds);
 	return (1);
+}
+
+void	rm_all_heredoc_file(void)
+{
+	int		i;
+	char	*filename;
+
+	i = 0;
+	while (i < g_info.heredoc_cnt)
+	{
+		filename = ft_strjoin("/tmp/", ft_itoa(i));
+		fprintf(stderr, "unlink %s\n", filename);
+		unlink(filename);
+		i++;
+	}
 }
