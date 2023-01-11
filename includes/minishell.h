@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:20:35 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 02:00:02 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 03:09:17 by sanghan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ t_env			*get_node(char *key, t_env *env_list);
 int				ft_echo(char **cmd);
 
 // cd
-int				ft_cd(char **cmd);
+int				ft_cd(char **cmd, int flag);
 
 // exec_cmd
 void			exec_cmd(t_exec_token *token, t_env *env_list, int len);
