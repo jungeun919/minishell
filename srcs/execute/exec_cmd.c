@@ -6,7 +6,7 @@
 /*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:19:36 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 07:32:34 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 10:48:00 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 	}
 	set_heredoc_input(token, env_list, len);
 	if (token->parser_token->cmd == NULL)
+	{
+		rm_all_heredoc_file();
 		return ;
+	}
 	init_exec_info(&pids, &fds, len);
 	exec_pipe(token, pids, fds, len);
 	close_all_fds(fds, len);

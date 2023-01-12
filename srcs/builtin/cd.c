@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:17:57 by sanghan           #+#    #+#             */
-/*   Updated: 2023/01/12 07:51:23 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/12 11:04:29 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	exec_chdir(char *path, char *old_path)
 	else
 	{
 		printf("minishell: cd: %s No such file or directory\n", path);
+		free(old_path);
 		return (1);
 	}
 }

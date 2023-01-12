@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanghan <sanghan@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 17:39:29 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 17:27:37 by sanghan          ###   ########.fr       */
+/*   Updated: 2023/01/12 11:13:18 by hajeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	make_token(t_exec_token **token, char *cmd, int *len)
 	int				code;
 
 	lexer_token = NULL;
-	code = parsing_error_handle(parsing(&lexer_token, cmd, g_info.env_list));
+	code = parsing_error_handle(parsing(&lexer_token, cmd, g_info.env_list), \
+			cmd);
 	if (code != 0)
 		return (code);
 	*len = parser_token_size(lexer_token);
