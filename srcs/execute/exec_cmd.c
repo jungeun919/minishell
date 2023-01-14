@@ -1,39 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/14 18:52:51 by jungeun           #+#    #+#             */
+/*   Updated: 2023/01/14 18:53:05 by jungeun          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	rm_all_heredoc_file()
-{
-	int		i;
-	char	*filename;
-
-	i = 0;
-	while (i < g_info.heredoc_cnt)
-	{
-		filename = ft_strjoin("/tmp/", ft_itoa(i));
-		fprintf(stderr, "unlink %s\n", filename);
-		unlink(filename);
-		i++;
-	}
-}
 
 void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
 	pid_t	*pids;
 	int		**fds;
-	int		i;
 
 	if (len == 1 && is_builtin(token))
-		return exec_builtin(token, env_list);
-	set_heredoc_input(token, env_list, len);
-	if (token->parser_token->cmd == NULL) // hi
-		return ;
-	init_exec_info(&pids, &fds, len);
-	i = 0;
-	while (i < len)
 	{
-		exec_pipe(token[i], i, pids, fds, env_list, len);
-		i++;
+		set_redir(token);
+		exec_builtin(token, env_list);
+		if (dup2(STDIN_FILENO, STDOUT_FILENO) == -1)
+			printf("dup2 error\n");
+		return ;
 	}
+	set_heredoc_input(token, env_list, len);
+	if (token->parser_token->cmd == NULL)
+	{
+		rm_all_heredoc_file();
+		return ;
+	}
+	init_exec_info(&pids, &fds, len);
+	exec_pipe(token, pids, fds, len);
 	close_all_fds(fds, len);
 	wait_all_childs(pids, len);
 	free_init_exec_info(&pids, &fds, len - 1);
@@ -46,7 +45,8 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 	char	*cmd;
 	char	*path;
 	char	**env;
-	
+
+	set_echoctl_on();
 	if (!cmd_list)
 		return ;
 	env = convert_env_list_to_str_list(env_list);
@@ -58,11 +58,8 @@ void	run_execve_cmd(char **cmd_list, t_env *env_list)
 		path = get_path(cmd, env);
 		free(cmd);
 	}
-	if (path)
-	{
-		if (execve(path, cmd_list, env) == -1)
-			error_exit("command not found\n", 127);
-	}
+	if (path && execve(path, cmd_list, env) == -1)
+		error_exit("command not found\n", 127);
 	else
 	{
 		free_2d_array(env);
@@ -132,8 +129,8 @@ char	*get_path(char *cmd, char **env)
 	while (env[i] && (ft_strncmp("PATH", env[i], 4) != 0))
 		i++;
 	split_path = ft_split(env[i] + 5, ':');
-	i = 0;
-	while (split_path[i])
+	i = -1;
+	while (split_path[++i])
 	{
 		path = ft_strjoin(split_path[i], cmd);
 		if (!path)
@@ -144,7 +141,6 @@ char	*get_path(char *cmd, char **env)
 			return (path);
 		}
 		free(path);
-		i++;
 	}
 	free_2d_array(split_path);
 	return (NULL);

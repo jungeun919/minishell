@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/02 12:58:12 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/14 18:50:11 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// parser 2-1 -> 따옴표 지우기
 void	remove_quote(t_list **lexer_token)
 {
 	t_list	*temp;

@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:40:39 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:41:42 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/14 18:55:23 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	exit_free(char **temp, t_env *env_list)
+{
+	free(temp[0]);
+	free(temp[1]);
+	free(temp);
+	free_env_list(&env_list);
+	exit(1);
+}
 
 t_env	*init_env_list(char **envp)
 {
@@ -31,13 +40,7 @@ t_env	*init_env_list(char **envp)
 		}
 		env_node = make_env_node(temp[0], temp[1]);
 		if (env_node == NULL)
-		{
-			free(temp[0]);
-			free(temp[1]);
-			free(temp);
-			free_env_list(&env_list);
-			exit(1);
-		}
+			exit_free(temp, env_list);
 		env_list_add_node(&env_list, env_node);
 		free(temp);
 		i++;
@@ -64,7 +67,7 @@ void	env_list_add_node(t_env **list, t_env *node)
 
 	if (!node || !list)
 		return ;
-	if (*list == NULL) // 첫번째 노드
+	if (*list == NULL)
 		*list = node;
 	else
 	{

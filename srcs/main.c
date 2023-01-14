@@ -6,17 +6,16 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 20:12:25 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/14 19:00:29 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	char *cmd;
-	int len;
+	char			*cmd;
+	int				len;
 	t_exec_token	*token;
 
 	(void)argv;
@@ -27,14 +26,11 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		g_info.heredoc_cnt = 0;
-		printf("==================exit status : %d\n", g_info.exit_status);
-		cmd = read_cmd();	
+		cmd = read_cmd();
 		if (ft_strlen(cmd) >= 1)
 			add_history(cmd);
 		if (make_token(&token, cmd, &len) != 0)
 			continue ;
-		// if (token->parser_token->cmd == NULL) // hi
-		// 	continue ;
 		exec_cmd(token, g_info.env_list, len);
 		free_all_token(token, token->parser_token, len);
 		free(cmd);
@@ -55,14 +51,15 @@ static int	get_heredoc_num(int num, t_parser_token *parser_token)
 	return (num);
 }
 
-t_exec_token	*make_exec_token(t_parser_token *parser_token, t_exec_token **exec_token, int len)
+t_exec_token	*make_exec_token(t_parser_token *parser_token, \
+				t_exec_token **exec_token, int len)
 {
 	int	i;
 	int	num;
 
 	*exec_token = (t_exec_token *)malloc(sizeof(t_exec_token) * len);
 	if (*exec_token == NULL)
-		return NULL;
+		return (NULL);
 	i = 0;
 	num = 0;
 	while (i < len)
@@ -97,7 +94,8 @@ char	**make_2d_array(t_list *cmd_list)
 	return (cmd);
 }
 
-void	free_all_token(t_exec_token *exec_token, t_parser_token *parser_token, int len)
+void	free_all_token(t_exec_token *exec_token, t_parser_token \
+		*parser_token, int len)
 {
 	int	i;
 

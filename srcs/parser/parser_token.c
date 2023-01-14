@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parser_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 09:58:22 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/09 20:08:30 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/14 18:49:27 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 파이프 갯수로 파서 토큰 갯수 얻기
 int	parser_token_size(t_list *lexer_token)
 {
 	int	len;
@@ -27,7 +26,6 @@ int	parser_token_size(t_list *lexer_token)
 	return (len);
 }
 
-// 파서토큰 메모리 할당 받기
 t_parser_token	*init_parser_token(int size)
 {
 	t_parser_token	*parser_token;
@@ -47,7 +45,6 @@ t_parser_token	*init_parser_token(int size)
 	return (parser_token);
 }
 
-// 파서토큰 연결해주기 (우선 각 파서토큰의 cmd에 모든 연결리스트 노드 연결)
 void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token)
 {
 	t_list	*prev;
@@ -73,7 +70,6 @@ void	make_parser_token(t_list **lexer_token, t_parser_token *parser_token)
 	}
 }
 
-// 파서 토큰 할당 해제 해주는 함수
 void	free_parser_token(t_parser_token *parser_token, int len)
 {
 	int		i;

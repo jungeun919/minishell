@@ -6,7 +6,7 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:44:45 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 20:18:48 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/14 19:01:48 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,37 +80,39 @@ int				check_odd_quote(t_list *lexer_token);
 
 //parser
 char			*join_env(char *before, char *value, char *after);
+char			*join_env_free(char *before, char *value, char *after);
 void			replace_env(t_list *lexer_token, t_env *env_list);
-void			replace_env_exit_status(t_list *l_tok);
 void			remove_quote(t_list **lexer_token);
 void			merge_string(t_list **lexer_token);
 void			delete_blank(t_list **lexer_token);
 int				check_redirection(t_list *lexer_token);
 int				check_double_pipe(t_list *lexer_token);
 int				parsing(t_list **lexer_token, char *cmd, t_env *env_list);
-int				parsing_error_handle(int code);
+int				parsing_error_handle(int code, char *cmd);
 int				parser_token_size(t_list *lexer_token);
 t_parser_token	*init_parser_token(int size);
-void			make_parser_token(t_list **lexer_token, \
-				t_parser_token *parser_token);
+void			make_parser_token(t_list **lexer_token, t_parser_token *\
+				parser_token);
 void			free_parser_token(t_parser_token *parser_token, int len);
 int				make_token(t_exec_token **token, char *cmd, int *len);
+void			replace_env_exit_status(t_list *l_tok);
 
 void			sort_redirection(t_parser_token *parser_token, int len);
 void			clear_parser_and_exit(t_parser_token *parser_token, int len);
 
 // exec_token
-t_exec_token	*make_exec_token(t_parser_token *parser_token, \
-				t_exec_token **exec_token, int len);
+t_exec_token	*make_exec_token(t_parser_token *parser_token, t_exec_token \
+				**exec_token, int len);
 char			**make_2d_array(t_list *cmd_list);
-void			free_all_token(t_exec_token *exec_token, \
-				t_parser_token *parser_token, int len);
+void			free_all_token(t_exec_token *exec_token, t_parser_token \
+				*parser_token, int len);
 
 // env
 t_env			*init_env_list(char **envp);
 t_env			*make_env_node(char *key, char *value);
 void			env_list_add_node(t_env **list, t_env *node);
 void			free_env_list(t_env **env_list);
+
 char			*get_env_value(t_env *env_list, char *key);
 
 // utils
@@ -124,7 +126,7 @@ void			free_2d_array(char **str);
 void			error_exit(char *str, int status);
 int				error_return(char *str);
 int				free_init_exec_info(pid_t **pids, int ***fds, int i);
-
+void			rm_all_heredoc_file(void);
 char			*read_cmd(void);
 
 // exec_builtin
@@ -149,10 +151,10 @@ void			delete_node(char *key, t_env **env_list);
 t_env			*get_node(char *key, t_env *env_list);
 
 // echo
-int				ft_echo(t_exec_token *token);
+int				ft_echo(char **cmd);
 
 // cd
-void			cd(char **cmds);
+int				ft_cd(char **cmd, int flag);
 
 // exec_cmd
 void			exec_cmd(t_exec_token *token, t_env *env_list, int len);
@@ -162,24 +164,27 @@ void			join_key_and_value(char **env_str, t_env *env_list);
 char			*get_path(char *cmd, char **env);
 
 // redir
-void			set_redir(t_exec_token *token, t_env *env_list);
+void			set_redir(t_exec_token *token);
 char			*replace_env_heredoc(char *str, t_env *env_list);
-void			set_redir_in(t_exec_token *token, char *redir_sign, char *filename);
+char			*replace_env_heredoc_exit_status(char *str);
+void			set_redir_in(t_exec_token *token, char *redir_sign, \
+				char *filename);
 void			set_redir_out(char *redir_sign, char *filename);
 
 // heredoc
-void			set_heredoc_input(t_exec_token *token, \
-				t_env *env_list, int len);
-void			get_infile(int num, char *limiter, t_env *env_list);
-void			heredoc_child_process(int num, char *limiter, t_env *env_list);
-
+void			set_heredoc_input(t_exec_token *token, t_env *env_list, \
+				int len);
+void			get_infile(int num, char *limiter, t_env *env_list, int fd);
+char			*heredoc_child_process(char *limiter, t_env *env_list);
+char			*ft_join_and_free(char *buffer, char *buf);
 // exec_pipe
 int				init_exec_info(pid_t **pids, int ***fds, int len);
 void			close_all_fds(int **fds, int len);
 void			wait_all_childs(pid_t *pids, int len);
-void			exec_pipe(t_exec_token token, int i, pid_t *pids, \
-				int **fds, t_env *env_list, int len);
-void			child_process(int **fds, int i, t_exec_token token, \
-				t_env *env_list, int len);
+void			exec_pipe(t_exec_token *token, pid_t *pids, int **fds, int len);
+void			child_process(int **fds, int i, t_exec_token token, int len);
+
+int				ft_exit(char **cmd);
+int				ft_pwd(char **cmd);
 
 #endif

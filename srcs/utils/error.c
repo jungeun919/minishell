@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:43:25 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 16:43:35 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/14 18:45:29 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,19 @@ int	free_init_exec_info(pid_t **pids, int ***fds, int i)
 	if (*fds != NULL)
 		free(*fds);
 	return (1);
+}
+
+void	rm_all_heredoc_file(void)
+{
+	int		i;
+	char	*filename;
+
+	i = 0;
+	while (i < g_info.heredoc_cnt)
+	{
+		filename = ft_join_and_free("/tmp/", ft_itoa(i));
+		unlink(filename);
+		free(filename);
+		i++;
+	}
 }

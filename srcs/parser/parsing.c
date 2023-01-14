@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hajeong <hajeong@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 12:57:51 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/11 19:52:10 by hajeong          ###   ########.fr       */
+/*   Updated: 2023/01/14 18:49:51 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	parsing(t_list **lexer_token, char *cmd, t_env *env_list)
 	return (0);
 }
 
-int	parsing_error_handle(int code)
+int	parsing_error_handle(int code, char *cmd)
 {
 	if (code == 0)
 		return (0);
@@ -49,6 +49,7 @@ int	parsing_error_handle(int code)
 	else if (code == NO_STR_AFTER_REDIR_ERROR)
 		printf("no string after redirection!\n");
 	else if (code == DOUBLE_PIPE_ERROR)
-		printf("double pipe!\n");
+		printf("error near pipe!\n");
+	free(cmd);
 	return (code);
 }
