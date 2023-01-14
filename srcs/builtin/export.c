@@ -6,7 +6,7 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 18:57:16 by jungeun           #+#    #+#             */
-/*   Updated: 2023/01/14 18:57:22 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/14 19:23:50 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,17 @@ void	execute_export(char *key, char *value, t_env *env_list)
 {
 	t_env	*node;
 
+	if (!(is_valid_format_key(key)))
+	{
+		ft_putstr_fd("not a valid identifier\n", STDERR_FILENO);
+		free(key);
+		free(value);
+		return ;
+	}
 	if (is_key_in_env_list(key, env_list))
 		update_value(key, value, &env_list);
 	else
 	{
-		if (!(is_valid_format_key(key)))
-		{
-			free(key);
-			free(value);
-			return ;
-		}
 		node = make_env_node(key, value);
 		if (!node)
 			return ;
