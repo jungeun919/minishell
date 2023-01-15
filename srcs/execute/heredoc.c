@@ -6,7 +6,7 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 18:54:12 by jungeun           #+#    #+#             */
-/*   Updated: 2023/01/14 18:54:32 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/15 00:57:18 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	get_infile(int num, char *limiter, t_env *env_list, int fd)
 
 	pid = fork();
 	if (pid == -1)
-		error_exit("fork error\n", 1);
+		error_return("fork error\n");
 	if (pid == 0)
 	{
 		signal(SIGINT, heredoc_sig_handler);

@@ -6,7 +6,7 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 18:52:51 by jungeun           #+#    #+#             */
-/*   Updated: 2023/01/14 18:53:05 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/14 20:09:11 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,17 @@ void	exec_cmd(t_exec_token *token, t_env *env_list, int len)
 {
 	pid_t	*pids;
 	int		**fds;
+	int		stdio[2];
 
+	set_heredoc_input(token, env_list, len);
 	if (len == 1 && is_builtin(token))
 	{
+		stdio[0] = dup(STDIN_FILENO);
+		stdio[1] = dup(STDOUT_FILENO);
 		set_redir(token);
 		exec_builtin(token, env_list);
-		if (dup2(STDIN_FILENO, STDOUT_FILENO) == -1)
-			printf("dup2 error\n");
-		return ;
-	}
-	set_heredoc_input(token, env_list, len);
-	if (token->parser_token->cmd == NULL)
-	{
+		dup2(stdio[0], STDIN_FILENO);
+		dup2(stdio[1], STDOUT_FILENO);
 		rm_all_heredoc_file();
 		return ;
 	}

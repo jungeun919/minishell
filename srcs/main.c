@@ -6,7 +6,7 @@
 /*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:28:40 by hajeong           #+#    #+#             */
-/*   Updated: 2023/01/14 19:00:29 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/14 19:59:48 by jungeun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ int	main(int argc, char *argv[], char *envp[])
 		if (ft_strlen(cmd) >= 1)
 			add_history(cmd);
 		if (make_token(&token, cmd, &len) != 0)
+			continue ;
+		if (token->parser_token->cmd == NULL && \
+			token->parser_token->in == NULL && \
+			token->parser_token->out == NULL)
 			continue ;
 		exec_cmd(token, g_info.env_list, len);
 		free_all_token(token, token->parser_token, len);
