@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungeun <jungeun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jungchoi <jungchoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 18:55:57 by jungeun           #+#    #+#             */
-/*   Updated: 2023/01/14 18:56:06 by jungeun          ###   ########.fr       */
+/*   Updated: 2023/01/15 14:25:42 by jungchoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
